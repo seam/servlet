@@ -45,12 +45,18 @@
 			<name>Java.NET Maven2 Repository</name>
 			<url>http://download.java.net/maven/2/</url>
 		</repository>
+		<repository>
+			<id>Glassfish</id>
+			<name>Glassfish Maven2 Repository</name>
+			<url>http://download.java.net/maven/glassfish/</url>
+		</repository>
 	</repositories>
 
 	<dependencies>
 
 		<!-- Environment Dependencies -->
 		<dependency>
+			<!-- Required until the Servlet 3.0 API can be resolved in Central -->
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.servlet</artifactId>
 			<version>3.0</version>
@@ -88,9 +94,9 @@
 	</dependencies>
 
 	<scm>
-		<connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/faces/trunk</connection>
-		<developerConnection>scm:svn:https://svn.jboss.org/repos/seam/modules/faces/trunk</developerConnection>
-		<url>http://fisheye.jboss.org/browse/Seam/modules/faces/trunk</url>
+		<connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/servlet/trunk</connection>
+		<developerConnection>scm:svn:https://svn.jboss.org/repos/seam/modules/servlet/trunk</developerConnection>
+		<url>http://fisheye.jboss.org/browse/Seam/modules/servlet/trunk</url> 
 	</scm>
 	
 </project>
