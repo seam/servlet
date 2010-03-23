@@ -43,7 +43,12 @@ import org.jboss.seam.servlet.event.qualifier.ValueBound;
 import org.jboss.seam.servlet.event.qualifier.ValueUnbound;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
 
-@SuppressWarnings("serial")
+/**
+ * A self-registering web-listener that propagates the events to the current CDI Bean Manager event queue 
+ * 
+ * @author Nicklas Karlsson
+ *
+ */
 @WebListener
 public class ServletListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
@@ -53,6 +58,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    // FIXME: hack to work around invalid binding in JBoss AS 6 M2
    private static final List<String> beanManagerLocations = new ArrayList<String>()
    {
+      private static final long serialVersionUID = 1L;
       {
          add("java:comp/BeanManager");
          add("java:app/BeanManager");
@@ -90,10 +96,15 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
       beanManager.fireEvent(payload, qualifiers);
    }
 
+   /**
+    * Session activated / passivated events
+    */
+
    public void sessionDidActivate(HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<DidActivate>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -101,13 +112,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<WillPassivate>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Session attribute events
+    */
 
    public void attributeAdded(HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -115,6 +132,11 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
+
+         /**
+          * 
+          */
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -122,6 +144,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -129,6 +152,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<ValueBound>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -136,13 +160,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<ValueUnbound>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Session created / destroyed events
+    */
 
    public void sessionCreated(HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Created>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -150,13 +180,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Servlet context initialized / destroyed events
+    */
 
    public void contextDestroyed(ServletContextEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -164,13 +200,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<Initialized>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Servlet context attribute events
+    */
 
    public void attributeAdded(ServletContextAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -178,6 +220,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -185,13 +228,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Request created / destroyed events
+    */
 
    public void requestDestroyed(ServletRequestEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -199,13 +248,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<Initialized>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Servlet request attribute events
+    */
 
    public void attributeAdded(ServletRequestAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -213,6 +268,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -220,13 +276,19 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
+
+   /**
+    * Asynchronous events
+    */
 
    public void onComplete(AsyncEvent e) throws IOException
    {
       fireEvent(e, new AnnotationLiteral<Complete>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -234,6 +296,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<Error>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -241,6 +304,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<StartAsync>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 
@@ -248,6 +312,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<Timeout>()
       {
+         private static final long serialVersionUID = 1L;
       });
    }
 

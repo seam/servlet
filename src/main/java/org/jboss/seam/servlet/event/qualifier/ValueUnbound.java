@@ -7,7 +7,16 @@ import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
 
 import javax.inject.Qualifier;
+import javax.servlet.http.HttpSessionBindingEvent;
 
+/**
+ * Qualifies observer method parameters to select events that fire when
+ * values are being unbound from the HTTP session.
+ * 
+ * The event parameter is a {@link HttpSessionBindingEvent}
+ * 
+ * @author Nicklas Karlsson
+ */
 @Qualifier
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
