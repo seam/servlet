@@ -3,6 +3,7 @@ package org.jboss.seam.servlet.event;
 import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.inject.Inject;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import org.jboss.seam.servlet.event.qualifier.AttributeReplaced;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.slf4j.Logger;
 
 /**
  * A manager for acquiring HTTP artifacts
@@ -29,13 +31,18 @@ public class HttpManager
    private HttpServletRequest request;
    private BeanManager beanManager;
 
+   @Inject
+   private Logger log;
+
    protected void requestInitialized(@Observes @Initialized ServletRequestEvent e)
    {
+      log.trace("Servlet request initialized with event #0", e);
       request = (HttpServletRequest) e.getServletRequest();
    }
 
    protected void requestDestroyed(@Observes @Destroyed ServletRequestEvent e)
    {
+      log.trace("Servlet request destroyed with event #0", e);
       request = null;
    }
 
@@ -43,6 +50,7 @@ public class HttpManager
    {
       if (BeanManager.class.getName().equals(e.getName()))
       {
+         log.trace("Bean manager set in servlet context with event #0", e);
          beanManager = (BeanManager) e.getValue();
       }
    }
@@ -51,6 +59,7 @@ public class HttpManager
    {
       if (BeanManager.class.getName().equals(e.getName()))
       {
+         log.trace("Bean manager replaced in servlet context with event #0", e);
          beanManager = (BeanManager) e.getValue();
       }
    }
@@ -59,17 +68,20 @@ public class HttpManager
    {
       if (BeanManager.class.getName().equals(e.getName()))
       {
+         log.trace("Bean manager removed from servlet context with event #0", e);
          beanManager = null;
       }
    }
 
    protected void sessionInitialized(@Observes @Created HttpSessionEvent e)
    {
+      log.trace("HTTP session initalized with event #0", e);
       session = e.getSession();
    }
 
    protected void sessionDestroyed(@Observes @Destroyed HttpSessionEvent e)
    {
+      log.trace("HTTP session destroyed with event #0", e);
       session = null;
    }
 

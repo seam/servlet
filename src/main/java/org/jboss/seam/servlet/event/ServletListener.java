@@ -42,6 +42,7 @@ import org.jboss.seam.servlet.event.qualifier.Timeout;
 import org.jboss.seam.servlet.event.qualifier.ValueBound;
 import org.jboss.seam.servlet.event.qualifier.ValueUnbound;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
+import org.slf4j.Logger;
 
 /**
  * A self-registering web-listener that propagates the events to the current CDI
@@ -55,6 +56,9 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
 {
    @Inject
    private BeanManager beanManager;
+   
+   @Inject
+   private Logger log;
 
    // FIXME: hack to work around invalid binding in JBoss AS 6 M2
    private static final List<String> beanManagerLocations = new ArrayList<String>()
@@ -80,11 +84,13 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
       {
          try
          {
+            log.trace("Looking for Bean Manager at JNDI location #0", location);
             return (BeanManager) new InitialContext().lookup(location);
          }
          catch (NamingException e)
          {
             // No panic, keep trying
+            log.debug("Bean Manager not found at JNDI location #0", location);
          }
       }
       // OK, panic
@@ -93,7 +99,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
 
    private void fireEvent(Object payload, Annotation... qualifiers)
    {
-      System.out.println("Fired event " + payload + " with " + qualifiers);
+      log.trace("Firing event #0 with qualifiers #1", payload, qualifiers);
       beanManager.fireEvent(payload, qualifiers);
    }
 
@@ -133,10 +139,6 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
-
-         /**
-          * 
-          */
          private static final long serialVersionUID = 1L;
       });
    }
