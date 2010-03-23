@@ -10,14 +10,16 @@ import javax.inject.Qualifier;
 import javax.servlet.http.HttpSessionEvent;
 
 /**
- * Qualifies observer method parameters to select events that fire when
- * HTTP sessions are passivated.
+ * Qualifies observer method parameters to select events that fire when HTTP
+ * sessions are passivated.
  * 
  * The event parameter is an {@link HttpSessionEvent}
  * 
  * @author Nicklas Karlsson
  */
 @Qualifier
-@Target({FIELD, PARAMETER})
+@Target( { FIELD, PARAMETER })
 @Retention(RUNTIME)
-public @interface WillPassivate {}
+public @interface WillPassivate
+{
+}

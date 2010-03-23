@@ -44,10 +44,11 @@ import org.jboss.seam.servlet.event.qualifier.ValueUnbound;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
 
 /**
- * A self-registering web-listener that propagates the events to the current CDI Bean Manager event queue 
+ * A self-registering web-listener that propagates the events to the current CDI
+ * Bean Manager event queue
  * 
  * @author Nicklas Karlsson
- *
+ * 
  */
 @WebListener
 public class ServletListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener

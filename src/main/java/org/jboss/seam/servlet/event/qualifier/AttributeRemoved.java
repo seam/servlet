@@ -22,6 +22,8 @@ import javax.servlet.http.HttpSessionBindingEvent;
  * @author Nicklas Karlsson
  */
 @Qualifier
-@Target({FIELD, PARAMETER})
+@Target( { FIELD, PARAMETER })
 @Retention(RUNTIME)
-public @interface AttributeRemoved {}
+public @interface AttributeRemoved
+{
+}

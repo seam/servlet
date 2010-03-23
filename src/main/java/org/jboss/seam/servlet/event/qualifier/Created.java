@@ -11,8 +11,8 @@ import javax.inject.Qualifier;
 import javax.servlet.http.HttpSessionEvent;
 
 /**
- * Qualifies observer method parameters to select events that fire when
- * HTTP sessions are created.
+ * Qualifies observer method parameters to select events that fire when HTTP
+ * sessions are created.
  * 
  * The event parameter is an {@link HttpSessionEvent}
  * 
