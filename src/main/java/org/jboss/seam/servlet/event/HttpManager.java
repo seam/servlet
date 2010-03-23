@@ -1,8 +1,10 @@
 package org.jboss.seam.servlet.event;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletRequestEvent;
@@ -24,16 +26,18 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-@SessionScoped
+@RequestScoped
 public class HttpManager
 {
+   private static final long serialVersionUID = 5191073522575178427L;
+   
    private HttpSession session;
    private HttpServletRequest request;
    private BeanManager beanManager;
 
    @Inject
    private Logger log;
-
+   
    protected void requestInitialized(@Observes @Initialized ServletRequestEvent e)
    {
       log.trace("Servlet request initialized with event #0", e);
@@ -128,6 +132,13 @@ public class HttpManager
          throw new IllegalStateException("The Bean Manager is currently not set");
       }
       return beanManager;
+   }
+
+   @Produces
+   @HttpParam("")
+   String getParamValue(InjectionPoint ip)
+   {
+      return getRequest().getParameter(ip.getAnnotated().getAnnotation(HttpParam.class).value());
    }
 
 }
