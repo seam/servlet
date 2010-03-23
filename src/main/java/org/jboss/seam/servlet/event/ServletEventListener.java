@@ -52,7 +52,7 @@ import org.slf4j.Logger;
  * 
  */
 @WebListener
-public class ServletListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
+public class ServletEventListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
    @Inject
    private BeanManager beanManager;
@@ -70,7 +70,7 @@ public class ServletListener implements HttpSessionActivationListener, HttpSessi
       }
    };
 
-   public ServletListener()
+   public ServletEventListener()
    {
       if (beanManager == null)
       {
