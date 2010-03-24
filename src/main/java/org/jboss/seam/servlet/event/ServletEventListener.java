@@ -7,7 +7,6 @@ import java.util.List;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.inject.Inject;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.servlet.AsyncEvent;
@@ -43,6 +42,7 @@ import org.jboss.seam.servlet.event.qualifier.ValueBound;
 import org.jboss.seam.servlet.event.qualifier.ValueUnbound;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A self-registering web-listener that propagates the events to the current CDI
@@ -54,11 +54,9 @@ import org.slf4j.Logger;
 @WebListener
 public class ServletEventListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
-   @Inject
    private BeanManager beanManager;
-   
-   @Inject
-   private Logger log;
+
+   private Logger log = LoggerFactory.getLogger(ServletEventListener.class);
 
    // FIXME: hack to work around invalid binding in JBoss AS 6 M2
    private static final List<String> beanManagerLocations = new ArrayList<String>()
@@ -72,10 +70,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public ServletEventListener()
    {
-      if (beanManager == null)
-      {
-         beanManager = lookupBeanManager();
-      }
+      beanManager = lookupBeanManager();
    }
 
    private BeanManager lookupBeanManager()

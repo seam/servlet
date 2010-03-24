@@ -72,6 +72,11 @@
 			<artifactId>jsr250-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-extensions</artifactId>
+			<version>1.0.0.Alpha1</version>
+		</dependency>		
 
 		<!-- Test Dependencies -->
 		<dependency>
@@ -90,6 +95,7 @@
 			<groupId>org.jboss.arquillian.container</groupId>
 			<artifactId>arquillian-weld-embedded</artifactId>
 			<version>${arquillian.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
