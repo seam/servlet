@@ -1,4 +1,4 @@
-package org.jboss.seam.servlet.event;
+package org.jboss.seam.servlet;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;

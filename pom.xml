@@ -37,6 +37,7 @@
 
 	<properties>
 		<arquillian.version>1.0.0.Alpha1</arquillian.version>
+		<weld.version>1.0.1-Final</weld.version>
 	</properties>
 
 	<repositories>
@@ -76,6 +77,11 @@
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-extensions</artifactId>
 			<version>1.0.0.Alpha1</version>
+		</dependency>		
+		<dependency>
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-core</artifactId>
+			<version>${weld.version}</version>
 		</dependency>		
 
 		<!-- Test Dependencies -->

@@ -1,4 +1,4 @@
-package org.jboss.seam.servlet.event;
+package org.jboss.seam.servlet;
 
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
