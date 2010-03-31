@@ -1,20 +1,18 @@
 package org.jboss.seam.servlet;
 
-import javax.enterprise.context.RequestScoped;
+import java.io.Serializable;
+
+import javax.enterprise.context.SessionScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
-import javax.servlet.ServletContextAttributeEvent;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.servlet.http.HttpSessionEvent;
 
-import org.jboss.seam.servlet.event.qualifier.AttributeAdded;
-import org.jboss.seam.servlet.event.qualifier.AttributeRemoved;
-import org.jboss.seam.servlet.event.qualifier.AttributeReplaced;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
@@ -26,8 +24,8 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-@RequestScoped
-public class HttpManager
+@SessionScoped
+public class HttpManager implements Serializable
 {
    private static final long serialVersionUID = 5191073522575178427L;
    
@@ -50,43 +48,18 @@ public class HttpManager
       request = null;
    }
 
-   protected void servletContextAttributeAdded(@Observes @AttributeAdded ServletContextAttributeEvent e)
-   {
-      if (BeanManager.class.getName().equals(e.getName()))
-      {
-         log.trace("Bean manager set in servlet context with event #0", e);
-         beanManager = (BeanManager) e.getValue();
-      }
-   }
-
-   protected void servletContextAttributeReplaced(@Observes @AttributeReplaced ServletContextAttributeEvent e)
-   {
-      if (BeanManager.class.getName().equals(e.getName()))
-      {
-         log.trace("Bean manager replaced in servlet context with event #0", e);
-         beanManager = (BeanManager) e.getValue();
-      }
-   }
-
-   protected void servletContextAttributeRemoved(@Observes @AttributeRemoved ServletContextAttributeEvent e)
-   {
-      if (BeanManager.class.getName().equals(e.getName()))
-      {
-         log.trace("Bean manager removed from servlet context with event #0", e);
-         beanManager = null;
-      }
-   }
-
    protected void sessionInitialized(@Observes @Created HttpSessionEvent e)
    {
       log.trace("HTTP session initalized with event #0", e);
       session = e.getSession();
+      beanManager = (BeanManager) session.getServletContext().getAttribute(BeanManager.class.getName());
    }
 
    protected void sessionDestroyed(@Observes @Destroyed HttpSessionEvent e)
    {
       log.trace("HTTP session destroyed with event #0", e);
       session = null;
+      beanManager = null;
    }
 
    /**
