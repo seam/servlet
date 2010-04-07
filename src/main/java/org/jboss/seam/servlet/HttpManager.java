@@ -24,8 +24,8 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-@SessionScoped
-public class HttpManager implements Serializable
+
+public @SessionScoped class HttpManager implements Serializable
 {
    private static final long serialVersionUID = 5191073522575178427L;
    
