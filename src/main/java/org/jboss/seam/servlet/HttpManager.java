@@ -45,17 +45,18 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-public @SessionScoped class HttpManager implements Serializable
+@SessionScoped
+public class HttpManager implements Serializable
 {
    private static final long serialVersionUID = 5191073522575178427L;
-   
+
    private HttpSession session;
    private HttpServletRequest request;
    private BeanManager beanManager;
 
    @Inject
    private Logger log;
-   
+
    protected void requestInitialized(@Observes @Initialized ServletRequestEvent e)
    {
       log.trace("Servlet request initialized with event #0", e);
