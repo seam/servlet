@@ -63,13 +63,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A self-registering web-listener that propagates the events to the current CDI
+ * A servlet listener that propagates the events to the current CDI
  * Bean Manager event queue
  * 
  * @author Nicklas Karlsson
  * 
  */
-@WebListener
 public class ServletEventListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
    @Inject
