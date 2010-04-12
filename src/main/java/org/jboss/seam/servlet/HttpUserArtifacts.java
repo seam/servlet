@@ -23,7 +23,7 @@ package org.jboss.seam.servlet;
 
 import java.io.Serializable;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.InjectionPoint;
@@ -44,7 +44,7 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-@SessionScoped
+@RequestScoped
 public class HttpUserArtifacts implements Serializable
 {
    private static final long serialVersionUID = 5191073522575178427L;
@@ -59,6 +59,7 @@ public class HttpUserArtifacts implements Serializable
    {
       log.trace("Servlet request initialized with event #0", e);
       request = (HttpServletRequest) e.getServletRequest();
+      session = request.getSession();
    }
 
    protected void requestDestroyed(@Observes @Destroyed ServletRequestEvent e)
