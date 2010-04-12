@@ -23,13 +23,10 @@ package org.jboss.seam.servlet.event;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.util.AnnotationLiteral;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
+import javax.inject.Inject;
 import javax.servlet.AsyncEvent;
 import javax.servlet.AsyncListener;
 import javax.servlet.ServletContextAttributeEvent;
@@ -75,49 +72,10 @@ import org.slf4j.LoggerFactory;
 @WebListener
 public class ServletEventListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
+   @Inject
    private BeanManager beanManager;
 
    private Logger log = LoggerFactory.getLogger(ServletEventListener.class);
-
-   // FIXME: hack to work around invalid binding in JBoss AS 6 M2
-   private static final List<String> beanManagerLocations = new ArrayList<String>()
-   {
-      private static final long serialVersionUID = 1L;
-      {
-         add("java:comp/BeanManager");
-         add("java:app/BeanManager");
-      }
-   };
-
-   public ServletEventListener()
-   {
-      beanManager = lookupBeanManager();
-   }
-
-   private BeanManager lookupBeanManager()
-   {
-      for (String location : beanManagerLocations)
-      {
-         try
-         {
-            log.trace("Looking for Bean Manager at JNDI location #0", location);
-            return (BeanManager) new InitialContext().lookup(location);
-         }
-         catch (NamingException e)
-         {
-            // No panic, keep trying
-            log.debug("Bean Manager not found at JNDI location #0", location);
-         }
-      }
-      // OK, panic
-      throw new IllegalArgumentException("Could not find BeanManager in " + beanManagerLocations);
-   }
-
-   private void fireEvent(Object payload, Annotation... qualifiers)
-   {
-      log.trace("Firing event #0 with qualifiers #1", payload, qualifiers);
-      beanManager.fireEvent(payload, qualifiers);
-   }
 
    /**
     * Session activated / passivated events
@@ -333,6 +291,12 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       {
          private static final long serialVersionUID = 1L;
       });
+   }
+
+   private void fireEvent(Object payload, Annotation... qualifiers)
+   {
+      log.trace("Firing event #0 with qualifiers #1", payload, qualifiers);
+      beanManager.fireEvent(payload, qualifiers);
    }
 
 }
