@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.seam.servlet;
+package org.jboss.seam.servlet.http;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
@@ -41,7 +41,7 @@ import javax.inject.Qualifier;
 @Qualifier
 @Retention(RUNTIME)
 @Target( { FIELD, PARAMETER, METHOD })
-public @interface HttpParam
+public @interface RequestParameter
 {
    @Nonbinding
    public String value();

@@ -19,7 +19,7 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.seam.servlet;
+package org.jboss.seam.servlet.http;
 
 import java.io.Serializable;
 
@@ -36,6 +36,7 @@ import javax.servlet.http.HttpSessionEvent;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.jboss.seam.servlet.http.RequestParameter;
 import org.slf4j.Logger;
 
 /**
@@ -91,10 +92,10 @@ public class HttpUserArtifacts implements Serializable
    }
 
    @Produces
-   @HttpParam("")
+   @RequestParameter("")
    protected String getParamValue(InjectionPoint ip)
    {
-      return getRequest().getParameter(ip.getAnnotated().getAnnotation(HttpParam.class).value());
+      return getRequest().getParameter(ip.getAnnotated().getAnnotation(RequestParameter.class).value());
    }
 
 }

@@ -42,6 +42,6 @@ import javax.servlet.AsyncEvent;
 @Qualifier
 @Target( { FIELD, PARAMETER })
 @Retention(RUNTIME)
-public @interface Complete
+public @interface Completed
 {
 }

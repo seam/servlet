@@ -37,7 +37,6 @@ import javax.servlet.ServletRequestAttributeEvent;
 import javax.servlet.ServletRequestAttributeListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
-import javax.servlet.annotation.WebListener;
 import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionAttributeListener;
 import javax.servlet.http.HttpSessionBindingEvent;
@@ -48,7 +47,7 @@ import javax.servlet.http.HttpSessionListener;
 import org.jboss.seam.servlet.event.qualifier.AttributeAdded;
 import org.jboss.seam.servlet.event.qualifier.AttributeRemoved;
 import org.jboss.seam.servlet.event.qualifier.AttributeReplaced;
-import org.jboss.seam.servlet.event.qualifier.Complete;
+import org.jboss.seam.servlet.event.qualifier.Completed;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.DidActivate;
@@ -63,8 +62,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * A servlet listener that propagates the events to the current CDI
- * Bean Manager event queue
+ * A servlet listener that propagates the events to the current CDI Bean Manager
+ * event queue
  * 
  * @author Nicklas Karlsson
  * 
@@ -74,13 +73,13 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
    @Inject
    private BeanManager beanManager;
 
-   private Logger log = LoggerFactory.getLogger(ServletEventListener.class);
+   private final Logger log = LoggerFactory.getLogger(ServletEventListener.class);
 
    /**
     * Session activated / passivated events
     */
 
-   public void sessionDidActivate(HttpSessionEvent e)
+   public void sessionDidActivate(final HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<DidActivate>()
       {
@@ -88,7 +87,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void sessionWillPassivate(HttpSessionEvent e)
+   public void sessionWillPassivate(final HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<WillPassivate>()
       {
@@ -100,7 +99,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Session attribute events
     */
 
-   public void attributeAdded(HttpSessionBindingEvent e)
+   public void attributeAdded(final HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
@@ -108,7 +107,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeRemoved(HttpSessionBindingEvent e)
+   public void attributeRemoved(final HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
@@ -116,7 +115,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeReplaced(HttpSessionBindingEvent e)
+   public void attributeReplaced(final HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
@@ -124,7 +123,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void valueBound(HttpSessionBindingEvent e)
+   public void valueBound(final HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<ValueBound>()
       {
@@ -132,7 +131,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void valueUnbound(HttpSessionBindingEvent e)
+   public void valueUnbound(final HttpSessionBindingEvent e)
    {
       fireEvent(e, new AnnotationLiteral<ValueUnbound>()
       {
@@ -144,7 +143,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Session created / destroyed events
     */
 
-   public void sessionCreated(HttpSessionEvent e)
+   public void sessionCreated(final HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Created>()
       {
@@ -152,7 +151,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void sessionDestroyed(HttpSessionEvent e)
+   public void sessionDestroyed(final HttpSessionEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
@@ -164,7 +163,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Servlet context initialized / destroyed events
     */
 
-   public void contextDestroyed(ServletContextEvent e)
+   public void contextDestroyed(final ServletContextEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
@@ -172,7 +171,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void contextInitialized(ServletContextEvent e)
+   public void contextInitialized(final ServletContextEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Initialized>()
       {
@@ -184,7 +183,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Servlet context attribute events
     */
 
-   public void attributeAdded(ServletContextAttributeEvent e)
+   public void attributeAdded(final ServletContextAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
@@ -192,7 +191,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeRemoved(ServletContextAttributeEvent e)
+   public void attributeRemoved(final ServletContextAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
@@ -200,7 +199,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeReplaced(ServletContextAttributeEvent e)
+   public void attributeReplaced(final ServletContextAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
@@ -212,7 +211,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Request created / destroyed events
     */
 
-   public void requestDestroyed(ServletRequestEvent e)
+   public void requestDestroyed(final ServletRequestEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Destroyed>()
       {
@@ -220,7 +219,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void requestInitialized(ServletRequestEvent e)
+   public void requestInitialized(final ServletRequestEvent e)
    {
       fireEvent(e, new AnnotationLiteral<Initialized>()
       {
@@ -232,7 +231,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Servlet request attribute events
     */
 
-   public void attributeAdded(ServletRequestAttributeEvent e)
+   public void attributeAdded(final ServletRequestAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeAdded>()
       {
@@ -240,7 +239,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeRemoved(ServletRequestAttributeEvent e)
+   public void attributeRemoved(final ServletRequestAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
       {
@@ -248,7 +247,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void attributeReplaced(ServletRequestAttributeEvent e)
+   public void attributeReplaced(final ServletRequestAttributeEvent e)
    {
       fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
       {
@@ -260,15 +259,15 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
     * Asynchronous events
     */
 
-   public void onComplete(AsyncEvent e) throws IOException
+   public void onComplete(final AsyncEvent e) throws IOException
    {
-      fireEvent(e, new AnnotationLiteral<Complete>()
+      fireEvent(e, new AnnotationLiteral<Completed>()
       {
          private static final long serialVersionUID = 1L;
       });
    }
 
-   public void onError(AsyncEvent e) throws IOException
+   public void onError(final AsyncEvent e) throws IOException
    {
       fireEvent(e, new AnnotationLiteral<Error>()
       {
@@ -276,7 +275,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void onStartAsync(AsyncEvent e) throws IOException
+   public void onStartAsync(final AsyncEvent e) throws IOException
    {
       fireEvent(e, new AnnotationLiteral<StartAsync>()
       {
@@ -284,7 +283,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   public void onTimeout(AsyncEvent e) throws IOException
+   public void onTimeout(final AsyncEvent e) throws IOException
    {
       fireEvent(e, new AnnotationLiteral<Timeout>()
       {
@@ -292,7 +291,7 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       });
    }
 
-   private void fireEvent(Object payload, Annotation... qualifiers)
+   private void fireEvent(final Object payload, final Annotation... qualifiers)
    {
       log.trace("Firing event #0 with qualifiers #1", payload, qualifiers);
       beanManager.fireEvent(payload, qualifiers);
