@@ -44,22 +44,23 @@ import javax.servlet.http.HttpSessionBindingListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
 
-import org.jboss.seam.servlet.event.qualifier.AttributeAdded;
-import org.jboss.seam.servlet.event.qualifier.AttributeRemoved;
-import org.jboss.seam.servlet.event.qualifier.AttributeReplaced;
+import org.jboss.seam.servlet.event.qualifier.Added;
+import org.jboss.seam.servlet.event.qualifier.Attribute;
+import org.jboss.seam.servlet.event.qualifier.Bound;
 import org.jboss.seam.servlet.event.qualifier.Completed;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.DidActivate;
 import org.jboss.seam.servlet.event.qualifier.Error;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.jboss.seam.servlet.event.qualifier.Removed;
+import org.jboss.seam.servlet.event.qualifier.Replaced;
 import org.jboss.seam.servlet.event.qualifier.StartAsync;
 import org.jboss.seam.servlet.event.qualifier.Timeout;
-import org.jboss.seam.servlet.event.qualifier.ValueBound;
-import org.jboss.seam.servlet.event.qualifier.ValueUnbound;
+import org.jboss.seam.servlet.event.qualifier.Unbound;
+import org.jboss.seam.servlet.event.qualifier.Value;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * A servlet listener that propagates the events to the current CDI Bean Manager
@@ -68,12 +69,17 @@ import org.slf4j.LoggerFactory;
  * @author Nicklas Karlsson
  * 
  */
-public class ServletEventListener implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
+public class ServletEventBridge implements HttpSessionActivationListener, HttpSessionAttributeListener, HttpSessionBindingListener, HttpSessionListener, ServletContextListener, ServletContextAttributeListener, ServletRequestListener, ServletRequestAttributeListener, AsyncListener
 {
    @Inject
    private BeanManager beanManager;
 
-   private final Logger log = LoggerFactory.getLogger(ServletEventListener.class);
+   @Inject
+   private Logger log;
+
+   public ServletEventBridge()
+   {
+   }
 
    /**
     * Session activated / passivated events
@@ -81,18 +87,12 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void sessionDidActivate(final HttpSessionEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<DidActivate>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, DIDACTIVATE);
    }
 
    public void sessionWillPassivate(final HttpSessionEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<WillPassivate>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, WILLPASSIVATE);
    }
 
    /**
@@ -101,42 +101,27 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void attributeAdded(final HttpSessionBindingEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeAdded>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, ADDED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeRemoved(final HttpSessionBindingEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REMOVED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeReplaced(final HttpSessionBindingEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REPLACED, new AttributeLiteral(e.getName()));
    }
 
    public void valueBound(final HttpSessionBindingEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<ValueBound>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, BOUND, new ValueLiteral(e.getName()));
    }
 
    public void valueUnbound(final HttpSessionBindingEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<ValueUnbound>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, UNBOUND, new ValueLiteral(e.getName()));
    }
 
    /**
@@ -145,18 +130,12 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void sessionCreated(final HttpSessionEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Created>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, CREATED);
    }
 
    public void sessionDestroyed(final HttpSessionEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Destroyed>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, DESTROYED);
    }
 
    /**
@@ -165,18 +144,12 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void contextDestroyed(final ServletContextEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Destroyed>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, DESTROYED);
    }
 
    public void contextInitialized(final ServletContextEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Initialized>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, INITIALIZED);
    }
 
    /**
@@ -185,26 +158,17 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void attributeAdded(final ServletContextAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeAdded>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, ADDED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeRemoved(final ServletContextAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REMOVED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeReplaced(final ServletContextAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REPLACED, new AttributeLiteral(e.getName()));
    }
 
    /**
@@ -213,18 +177,12 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void requestDestroyed(final ServletRequestEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Destroyed>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, DESTROYED);
    }
 
    public void requestInitialized(final ServletRequestEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<Initialized>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, INITIALIZED);
    }
 
    /**
@@ -233,26 +191,17 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void attributeAdded(final ServletRequestAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeAdded>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, ADDED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeRemoved(final ServletRequestAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeRemoved>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REMOVED, new AttributeLiteral(e.getName()));
    }
 
    public void attributeReplaced(final ServletRequestAttributeEvent e)
    {
-      fireEvent(e, new AnnotationLiteral<AttributeReplaced>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, REPLACED, new AttributeLiteral(e.getName()));
    }
 
    /**
@@ -261,34 +210,22 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
 
    public void onComplete(final AsyncEvent e) throws IOException
    {
-      fireEvent(e, new AnnotationLiteral<Completed>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, COMPLETED);
    }
 
    public void onError(final AsyncEvent e) throws IOException
    {
-      fireEvent(e, new AnnotationLiteral<Error>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, ERROR);
    }
 
    public void onStartAsync(final AsyncEvent e) throws IOException
    {
-      fireEvent(e, new AnnotationLiteral<StartAsync>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, STARTASYNCH);
    }
 
    public void onTimeout(final AsyncEvent e) throws IOException
    {
-      fireEvent(e, new AnnotationLiteral<Timeout>()
-      {
-         private static final long serialVersionUID = 1L;
-      });
+      fireEvent(e, TIMEOUT);
    }
 
    private void fireEvent(final Object payload, final Annotation... qualifiers)
@@ -297,4 +234,106 @@ public class ServletEventListener implements HttpSessionActivationListener, Http
       beanManager.fireEvent(payload, qualifiers);
    }
 
+   /*
+    * Annotation Literal Constants
+    */
+   private static final AnnotationLiteral<WillPassivate> WILLPASSIVATE = new AnnotationLiteral<WillPassivate>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<DidActivate> DIDACTIVATE = new AnnotationLiteral<DidActivate>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Unbound> UNBOUND = new AnnotationLiteral<Unbound>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Bound> BOUND = new AnnotationLiteral<Bound>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Created> CREATED = new AnnotationLiteral<Created>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Destroyed> DESTROYED = new AnnotationLiteral<Destroyed>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Initialized> INITIALIZED = new AnnotationLiteral<Initialized>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Added> ADDED = new AnnotationLiteral<Added>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Removed> REMOVED = new AnnotationLiteral<Removed>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Replaced> REPLACED = new AnnotationLiteral<Replaced>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Completed> COMPLETED = new AnnotationLiteral<Completed>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Error> ERROR = new AnnotationLiteral<Error>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<StartAsync> STARTASYNCH = new AnnotationLiteral<StartAsync>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private static final AnnotationLiteral<Timeout> TIMEOUT = new AnnotationLiteral<Timeout>()
+   {
+      private static final long serialVersionUID = -1610281796509557441L;
+   };
+
+   private class AttributeLiteral extends AnnotationLiteral<Attribute> implements Attribute
+   {
+      private final String value;
+
+      public String value()
+      {
+         return value;
+      }
+
+      public AttributeLiteral(String value)
+      {
+         this.value = value;
+      }
+   }
+
+   private class ValueLiteral extends AnnotationLiteral<Value> implements Value
+   {
+      private final String value;
+
+      public String value()
+      {
+         return value;
+      }
+
+      public ValueLiteral(String value)
+      {
+         this.value = value;
+      }
+   }
 }

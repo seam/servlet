@@ -29,23 +29,16 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 import javax.inject.Qualifier;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletRequestAttributeEvent;
-import javax.servlet.http.HttpSessionBindingEvent;
 
 /**
- * Qualifies observer method parameters to select events that fire when
- * attributes being added.
- * 
- * The event parameter can be a {@link HttpSessionBindingEvent},
- * {@link ServletContextAttributeEvent} or a
- * {@link ServletRequestAttributeEvent}.
+ * Qualifies observer method parameters to select events for a particular value
  * 
  * @author Nicklas Karlsson
  */
 @Qualifier
 @Target( { FIELD, PARAMETER })
 @Retention(RUNTIME)
-public @interface AttributeAdded
+public @interface Value
 {
+   String value() default "";
 }
