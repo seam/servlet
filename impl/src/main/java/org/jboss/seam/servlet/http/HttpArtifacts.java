@@ -23,22 +23,23 @@ package org.jboss.seam.servlet.http;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 
+import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.slf4j.Logger;
 
 /**
  * 
  * @author Nicklas Karlsson
  * 
  *         A source for HTTP artifacts. It observes for and stores the
- *         ServletContext, HttpServletRequest and HttpSession objects. It also
- *         produces the request values for @HttpParam
+ *         ServletContext and provides the HttpSession and ServletRequest
+ *         objects
  */
 @ApplicationScoped
 public class HttpArtifacts
@@ -46,61 +47,28 @@ public class HttpArtifacts
    private ServletContext servletContext;
 
    @Inject
-   HttpUserArtifacts httpUserArtifacts;
-
-   @Inject
    BeanManager beanManager;
+   
+   @Inject Logger log;
 
-   protected void pickup(@Observes @Initialized ServletContextEvent e)
+   protected void contextInitialized(@Observes @Initialized ServletContextEvent e)
    {
+      log.debug("Servlet context initialized with event #0", e);
       servletContext = e.getServletContext();
       servletContext.setAttribute(BeanManager.class.getName(), beanManager);
    }
 
-   /**
-    * Gets the current servlet context
-    * 
-    * @throws IllegalStateException if the servlet context has not been set
-    * @return The servlet context
-    */
+   protected void contextDestroyed(@Observes @Destroyed ServletContextEvent e)
+   {
+      log.debug("Servlet context destroyed with event #0", e);
+      servletContext = null;
+   }
+   
+   @Produces
+   @ApplicationScoped
    public ServletContext getServletContext()
    {
-      if (servletContext == null)
-      {
-         throw new IllegalStateException("Servlet Context is not set");
-      }
       return servletContext;
    }
 
-   /**
-    * Gets the current HTTP servlet request
-    * 
-    * @throws IllegalStateException if the request has not been set
-    * @return the request
-    */
-   public HttpServletRequest getRequest()
-   {
-      HttpServletRequest request = httpUserArtifacts.getRequest();
-      if (request == null)
-      {
-         throw new IllegalStateException("HTTP servlet request is not set");
-      }
-      return request;
-   }
-
-   /**
-    * Gets the current HTTP session
-    * 
-    * @throws IllegalStateException if the session has not been set
-    * @return the session
-    */
-   public HttpSession getSession()
-   {
-      HttpSession session = httpUserArtifacts.getSession();
-      if (session == null)
-      {
-         throw new IllegalStateException("HTTP session is not set");
-      }
-      return session;
-   }
 }

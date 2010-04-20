@@ -36,7 +36,6 @@ import javax.servlet.http.HttpSessionEvent;
 import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
-import org.jboss.seam.servlet.http.RequestParameter;
 import org.slf4j.Logger;
 
 /**
@@ -48,7 +47,7 @@ import org.slf4j.Logger;
 @RequestScoped
 public class HttpUserArtifacts implements Serializable
 {
-   private static final long serialVersionUID = 5191073522575178427L;
+   private static final long serialVersionUID = 1L;
 
    private HttpSession session;
    private HttpServletRequest request;
@@ -60,7 +59,6 @@ public class HttpUserArtifacts implements Serializable
    {
       log.trace("Servlet request initialized with event #0", e);
       request = (HttpServletRequest) e.getServletRequest();
-      session = request.getSession();
    }
 
    protected void requestDestroyed(@Observes @Destroyed ServletRequestEvent e)
@@ -81,11 +79,15 @@ public class HttpUserArtifacts implements Serializable
       session = null;
    }
 
+   @Produces
+   @RequestScoped
    protected HttpSession getSession()
    {
       return session;
    }
 
+   @Produces
+   @RequestScoped
    protected HttpServletRequest getRequest()
    {
       return request;
