@@ -42,20 +42,22 @@ import org.slf4j.Logger;
  *         objects
  */
 @ApplicationScoped
-public class HttpArtifacts
+public class ServletContextProducer
 {
    private ServletContext servletContext;
 
    @Inject
-   BeanManager beanManager;
-   
-   @Inject Logger log;
+   private BeanManager beanManager;
+
+   @Inject
+   private Logger log;
 
    protected void contextInitialized(@Observes @Initialized ServletContextEvent e)
    {
       log.debug("Servlet context initialized with event #0", e);
       servletContext = e.getServletContext();
       servletContext.setAttribute(BeanManager.class.getName(), beanManager);
+      ServletContextHelper.setCurrentInstance(servletContext);
    }
 
    protected void contextDestroyed(@Observes @Destroyed ServletContextEvent e)
@@ -63,7 +65,7 @@ public class HttpArtifacts
       log.debug("Servlet context destroyed with event #0", e);
       servletContext = null;
    }
-   
+
    @Produces
    @ApplicationScoped
    public ServletContext getServletContext()

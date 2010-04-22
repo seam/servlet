@@ -19,30 +19,30 @@
  * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
  * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
  */
-package org.jboss.seam.servlet.http;
+package org.jboss.seam.servlet.beanManager;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.inject.spi.BeanManager;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.enterprise.util.Nonbinding;
-import javax.inject.Qualifier;
+import org.jboss.seam.servlet.http.ServletContextHelper;
+import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
 
 /**
- * Qualifies injection points that should have their values fetched from a HTTP request attribute
+ * A BeanManager provider for the Servlet Context attribute
+ * "javax.enterprise.inject.spi.BeanManager"
  * 
  * @author Nicklas Karlsson
- *
+ * 
  */
-@Qualifier
-@Retention(RUNTIME)
-@Target( { FIELD, PARAMETER, METHOD })
-public @interface RequestParameter
+public class ServletContextBeanManagerProvider implements BeanManagerProvider
 {
-   @Nonbinding
-   public String value();
+   public BeanManager getBeanManager()
+   {
+      return (BeanManager) ServletContextHelper.getCurrentInstance().getAttribute(BeanManager.class.getName());
+   }
+
+   public int getPrecedence()
+   {
+      return 0;
+   }
+
 }

@@ -26,7 +26,6 @@ import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
-import javax.enterprise.inject.spi.InjectionPoint;
 import javax.inject.Inject;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
@@ -45,7 +44,7 @@ import org.slf4j.Logger;
  * 
  */
 @RequestScoped
-public class HttpUserArtifacts implements Serializable
+public class HttpServletEnvironmentProducer implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
@@ -59,24 +58,13 @@ public class HttpUserArtifacts implements Serializable
    {
       log.trace("Servlet request initialized with event #0", e);
       request = (HttpServletRequest) e.getServletRequest();
+      session = request.getSession();
    }
 
    protected void requestDestroyed(@Observes @Destroyed ServletRequestEvent e)
    {
       log.trace("Servlet request destroyed with event #0", e);
       request = null;
-   }
-
-   protected void sessionInitialized(@Observes @Created HttpSessionEvent e)
-   {
-      log.trace("HTTP session initalized with event #0", e);
-      session = e.getSession();
-   }
-
-   protected void sessionDestroyed(@Observes @Destroyed HttpSessionEvent e)
-   {
-      log.trace("HTTP session destroyed with event #0", e);
-      session = null;
    }
 
    @Produces
@@ -91,13 +79,6 @@ public class HttpUserArtifacts implements Serializable
    protected HttpServletRequest getRequest()
    {
       return request;
-   }
-
-   @Produces
-   @RequestParameter("")
-   protected String getParamValue(InjectionPoint ip)
-   {
-      return getRequest().getParameter(ip.getAnnotated().getAnnotation(RequestParameter.class).value());
    }
 
 }
