@@ -42,7 +42,7 @@ public class ServletContextBeanManagerProvider implements BeanManagerProvider
 
    public int getPrecedence()
    {
-      return 0;
+      return 20;
    }
 
 }
