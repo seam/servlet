@@ -22,8 +22,8 @@
 package org.jboss.seam.servlet.beanManager;
 
 import javax.enterprise.inject.spi.BeanManager;
+import javax.servlet.ServletContext;
 
-import org.jboss.seam.servlet.http.ServletContextHelper;
 import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
 
 /**
@@ -35,9 +35,22 @@ import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
  */
 public class ServletContextBeanManagerProvider implements BeanManagerProvider
 {
+   private static ThreadLocal<ServletContext> servletContext = new ThreadLocal<ServletContext>()
+   {
+      protected ServletContext initialValue()
+      {
+         return null;
+      }
+   };
+
+   public static void setServletContext(ServletContext sc)
+   {
+      servletContext.set(sc);
+   }
+
    public BeanManager getBeanManager()
    {
-      return (BeanManager) ServletContextHelper.getCurrentInstance().getAttribute(BeanManager.class.getName());
+      return (BeanManager) servletContext.get().getAttribute(BeanManager.class.getName());
    }
 
    public int getPrecedence()
