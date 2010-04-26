@@ -28,7 +28,8 @@
 	<properties>
 		<arquillian.version>1.0.0.Alpha1</arquillian.version>
 		<weld.version>1.0.1-Final</weld.version>
-	</properties>
+		<weldx.version>1.0.0-SNAPSHOT</weldx.version>
+		</properties>
 
 	<repositories>
 		<repository>
@@ -66,7 +67,7 @@
 		<dependency>
 			<groupId>org.jboss.weld</groupId>
 			<artifactId>weld-extensions</artifactId>
-			<version>1.0.0.Alpha1</version>
+			<version>${weldx.version}</version>			
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
