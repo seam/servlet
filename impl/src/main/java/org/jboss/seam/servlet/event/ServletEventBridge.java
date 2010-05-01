@@ -316,7 +316,7 @@ public class ServletEventBridge implements HttpSessionActivationListener, HttpSe
          return value;
       }
 
-      public AttributeLiteral(String value)
+      public AttributeLiteral(final String value)
       {
          this.value = value;
       }
@@ -331,7 +331,7 @@ public class ServletEventBridge implements HttpSessionActivationListener, HttpSe
          return value;
       }
 
-      public ValueLiteral(String value)
+      public ValueLiteral(final String value)
       {
          this.value = value;
       }

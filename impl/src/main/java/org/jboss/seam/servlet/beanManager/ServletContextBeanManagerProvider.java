@@ -37,20 +37,25 @@ public class ServletContextBeanManagerProvider implements BeanManagerProvider
 {
    private static ThreadLocal<ServletContext> servletContext = new ThreadLocal<ServletContext>()
    {
+      @Override
       protected ServletContext initialValue()
       {
          return null;
       }
    };
 
-   public static void setServletContext(ServletContext sc)
+   public static void setServletContext(final ServletContext sc)
    {
       servletContext.set(sc);
    }
 
    public BeanManager getBeanManager()
    {
-      return (BeanManager) servletContext.get().getAttribute(BeanManager.class.getName());
+      if (servletContext.get() != null)
+      {
+         return (BeanManager) servletContext.get().getAttribute(BeanManager.class.getName());
+      }
+      return null;
    }
 
    public int getPrecedence()
