@@ -44,5 +44,5 @@ import javax.inject.Qualifier;
 public @interface HttpParam
 {
    @Nonbinding
-   public String value();
+   public String value() default "";
 }
