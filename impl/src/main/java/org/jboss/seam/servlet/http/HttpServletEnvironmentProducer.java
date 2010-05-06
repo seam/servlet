@@ -23,6 +23,7 @@ package org.jboss.seam.servlet.http;
 
 import java.io.Serializable;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
@@ -30,9 +31,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import javax.servlet.http.HttpSessionEvent;
 
-import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
 import org.slf4j.Logger;
@@ -43,42 +42,41 @@ import org.slf4j.Logger;
  * @author Nicklas Karlsson
  * 
  */
-@RequestScoped
+@ApplicationScoped
 public class HttpServletEnvironmentProducer implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
-   private HttpSession session;
-   private HttpServletRequest request;
+   private final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>();
+   private final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
 
    @Inject
    private Logger log;
 
-   protected void requestInitialized(@Observes @Initialized ServletRequestEvent e)
+   protected void requestInitialized(@Observes @Initialized final ServletRequestEvent e)
    {
       log.trace("Servlet request initialized with event #0", e);
-      request = (HttpServletRequest) e.getServletRequest();
-      session = request.getSession();
+      request.set((HttpServletRequest) e.getServletRequest());
+      session.set(request.get().getSession());
    }
 
-   protected void requestDestroyed(@Observes @Destroyed ServletRequestEvent e)
+   protected void requestDestroyed(@Observes @Destroyed final ServletRequestEvent e)
    {
       log.trace("Servlet request destroyed with event #0", e);
-      request = null;
    }
 
    @Produces
    @RequestScoped
    protected HttpSession getSession()
    {
-      return session;
+      return session.get();
    }
 
    @Produces
    @RequestScoped
    protected HttpServletRequest getRequest()
    {
-      return request;
+      return request.get();
    }
 
 }
