@@ -25,12 +25,6 @@
 		<!--module>examples/??</module-->
 	</modules>
 
-	<properties>
-		<arquillian.version>1.0.0.Alpha1</arquillian.version>
-		<weld.api.version>1.0-SP1</weld.api.version>
-		<weldx.version>1.0.0-SNAPSHOT</weldx.version>
-	</properties>
-
 	<repositories>
 		<repository>
 			<id>Java.NET</id>
@@ -56,7 +50,32 @@
 		</dependencies>
 	</dependencyManagement>
 
+	<properties>
+		<arquillian.version>1.0.0.Alpha1</arquillian.version>
+		<weld.api.version>1.0-SP1</weld.api.version>
+		<weldx.version>1.0.0-SNAPSHOT</weldx.version>
+		<slf4j.version>1.5.9.RC1</slf4j.version>
+	</properties>
+
 	<dependencies>
+		<!--
+			The reason slf4j-jdk14 is included at runtime scope is because
+			slf4j-api is compile scope and, without the JDK 1.4 bridge, JBoss AS
+			will barf. This should be included by weld-extensions to make it easy
+			to exclude if necessary.
+		-->
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>${slf4j.version}</version>
+			<scope>runtime</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 
 		<!-- Environment Dependencies -->
 		<dependency>
