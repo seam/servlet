@@ -77,6 +77,14 @@
 			<version>${slf4j.version}</version>
 		</dependency>
 
+		<dependency>
+			<!-- Implementation Specific, until Spec'd -->
+			<groupId>org.jboss.weld</groupId>
+			<artifactId>weld-core</artifactId>
+			<version>1.0.1-Final</version>
+			<scope>provided</scope>
+		</dependency>
+
 		<!-- Environment Dependencies -->
 		<dependency>
 			<!-- Required until the Servlet 3.0 API can be resolved in Central -->
