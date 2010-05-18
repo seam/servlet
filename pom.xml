@@ -51,7 +51,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<arquillian.version>1.0.0.Alpha1</arquillian.version>
+		<arquillian.version>1.0.0-SNAPSHOT</arquillian.version>
 		<weld.api.version>1.0-SP1</weld.api.version>
 		<weldx.version>1.0.0-SNAPSHOT</weldx.version>
 		<slf4j.version>1.5.9.RC1</slf4j.version>
