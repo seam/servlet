@@ -309,7 +309,9 @@ public class ServletEventBridge implements HttpSessionActivationListener, HttpSe
 
    private class AttributeLiteral extends AnnotationLiteral<Attribute> implements Attribute
    {
-      private final String value;
+      private static final long serialVersionUID = -7137081215123043985L;
+
+      private String value = "";
 
       public String value()
       {
@@ -318,13 +320,18 @@ public class ServletEventBridge implements HttpSessionActivationListener, HttpSe
 
       public AttributeLiteral(final String value)
       {
-         this.value = value;
+         if (value != null)
+         {
+            this.value = value;
+         }
       }
    }
 
    private class ValueLiteral extends AnnotationLiteral<Value> implements Value
    {
-      private final String value;
+      private static final long serialVersionUID = 167018557217189041L;
+
+      private String value = "";
 
       public String value()
       {
@@ -333,7 +340,10 @@ public class ServletEventBridge implements HttpSessionActivationListener, HttpSe
 
       public ValueLiteral(final String value)
       {
-         this.value = value;
+         if (value != null)
+         {
+            this.value = value;
+         }
       }
    }
 }
