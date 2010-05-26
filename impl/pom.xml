@@ -13,23 +13,6 @@
 
 	<packaging>jar</packaging>
 	<name>Seam Servlet Module Core Implementation</name>
-
-	<!-- Snapshots repo to get parent -->
-	<repositories>
-		<repository>
-			<id>oss.sonatype.org/jboss-snapshots</id>
-			<name>JBoss (Nexus) Snapshots Repository</name>
-			<url>http://oss.sonatype.org/content/repositories/jboss-snapshots
-			</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>never</updatePolicy>
-			</snapshots>
-		</repository>
-	</repositories>
 	
 	<dependencies>
 		<dependency>
