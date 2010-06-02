@@ -1,137 +1,141 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>org.jboss.weld</groupId>
-		<artifactId>weld-parent</artifactId>
-		<version>10</version>
-	</parent>
+   <parent>
+      <groupId>org.jboss.seam</groupId>
+      <artifactId>seam-parent</artifactId>
+      <version>1</version>
+   </parent>
 
-	<artifactId>seam-servlet-parent</artifactId>
-	<groupId>org.jboss.seam.servlet</groupId>
-	<version>3.0.0-SNAPSHOT</version>
+   <artifactId>seam-servlet-parent</artifactId>
+   <groupId>org.jboss.seam.servlet</groupId>
+   <version>3.0.0-SNAPSHOT</version>
 
-	<packaging>pom</packaging>
-	<name>Seam Servlet Module</name>
+   <packaging>pom</packaging>
+   <name>Seam Servlet Module</name>
 
-	<description>The Parent for Seam Servlet Module</description>
-	<url>http://www.seamframework.org</url>
+   <description>The Parent for Seam Servlet Module</description>
+   <url>http://www.seamframework.org</url>
 
-	<modules>
-		<module>api</module>
-		<module>impl</module>
-		<!--module>docs</module-->
-		<!--module>examples/??</module-->
-	</modules>
+   <modules>
+      <module>api</module>
+      <module>impl</module>
+   </modules>
 
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>org.jboss.weld</groupId>
-				<artifactId>weld-api-bom</artifactId>
-				<version>${weld.api.version}</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
+   <properties>
+      <weld.api.version>1.0-SP1</weld.api.version>
+      <seam.version>3.0.0.b01</seam.version>
+   </properties>
 
-	<properties>
-		<arquillian.version>1.0.0-SNAPSHOT</arquillian.version>
-		<weld.api.version>1.0-SP1</weld.api.version>
-		<weldx.version>1.0.0-SNAPSHOT</weldx.version>
-		<slf4j.version>1.5.10</slf4j.version>
-	</properties>
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>org.jboss.seam</groupId>
+            <artifactId>seam</artifactId>
+            <version>${seam.version}</version>
+            <scope>import</scope>
+            <type>pom</type>
+         </dependency>
+         
+         <!-- Override submodule versions from org.jboss.seam:seam -->
+         <dependency>
+            <groupId>org.jboss.seam.servlet</groupId>
+            <artifactId>seam-servlet</artifactId>
+            <version>${project.version}</version>
+         </dependency>
 
-	<dependencies>
+         <dependency>
+            <groupId>org.jboss.seam.servlet</groupId>
+            <artifactId>seam-servlet-api</artifactId>
+            <version>${project.version}</version>
+         </dependency>
 
-		<dependency>
-			<!-- Implementation Specific, until Spec'd -->
-			<groupId>org.jboss.weld</groupId>
-			<artifactId>weld-core</artifactId>
-			<version>1.0.1-Final</version>
-			<scope>provided</scope>
-			<optional>true</optional>
-		</dependency>
+      </dependencies>
+   </dependencyManagement>
 
-		<!-- Environment Dependencies -->
-		<dependency>
-			<!-- Required until the Servlet 3.0 API can be resolved in Central -->
-			<groupId>org.glassfish</groupId>
-			<artifactId>javax.servlet</artifactId>
-			<version>3.0</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.enterprise</groupId>
-			<artifactId>cdi-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.annotation</groupId>
-			<artifactId>jsr250-api</artifactId>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.weld</groupId>
-			<artifactId>weld-extensions</artifactId>
-			<version>${weldx.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<version>${slf4j.version}</version>
-			<scope>provided</scope>
-		</dependency>
+   <!-- TODO Move to actual submodule POMs -->
+   <dependencies>
 
-		<!-- Test Dependencies -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian</groupId>
-			<artifactId>arquillian-junit</artifactId>
-			<version>${arquillian.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.container</groupId>
-			<artifactId>arquillian-weld-embedded</artifactId>
-			<version>${arquillian.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+      <dependency>
+         <!-- Implementation Specific, until Spec'd -->
+         <groupId>org.jboss.weld</groupId>
+         <artifactId>weld-core</artifactId>
+         <scope>provided</scope>
+         <optional>true</optional>
+      </dependency>
 
-	<developers>
-		<developer>
-			<name>Nicklas Karlsson</name>
-			<email>nickarls@gmail.com</email>
-			<roles>
-				<role>Project Lead</role>
-			</roles>
-		</developer>
-		<developer>
-			<name>Lincoln Baxter, III</name>
-			<email>lincolnbaxter@gmail.com</email>
-			<url>http://ocpsoft.com</url>
-			<organization>JBoss, by Red Hat</organization>
-			<organizationUrl>http://jboss.org</organizationUrl>
-			<timezone>EST</timezone>
-			<roles>
-				<role>Project Lead</role>
-			</roles>
-		</developer>
-	</developers>
+      <!-- Environment Dependencies -->
+      <dependency>
+         <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+         <groupId>org.jboss.spec.javax.servlet</groupId>
+         <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>javax.enterprise</groupId>
+         <artifactId>cdi-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>javax.annotation</groupId>
+         <artifactId>jsr250-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.weld</groupId>
+         <artifactId>weld-extensions</artifactId>
+         <scope>provided</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.slf4j</groupId>
+         <artifactId>slf4j-api</artifactId>
+         <scope>provided</scope>
+      </dependency>
 
-	<scm>
-		<connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/servlet/trunk</connection>
-		<developerConnection>scm:svn:https://svn.jboss.org/repos/seam/modules/servlet/trunk</developerConnection>
-		<url>http://fisheye.jboss.org/browse/Seam/modules/servlet/trunk</url>
-	</scm>
+      <!-- Test Dependencies -->
+      <dependency>
+         <groupId>junit</groupId>
+         <artifactId>junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian</groupId>
+         <artifactId>arquillian-junit</artifactId>
+         <scope>test</scope>
+      </dependency>
+      <dependency>
+         <groupId>org.jboss.arquillian.container</groupId>
+         <artifactId>arquillian-weld-embedded</artifactId>
+         <scope>test</scope>
+      </dependency>
+   </dependencies>
+
+   <developers>
+      <developer>
+         <name>Nicklas Karlsson</name>
+         <email>nickarls@gmail.com</email>
+         <roles>
+            <role>Project Lead</role>
+         </roles>
+      </developer>
+      <developer>
+         <name>Lincoln Baxter, III</name>
+         <email>lincolnbaxter@gmail.com</email>
+         <url>http://ocpsoft.com</url>
+         <organization>JBoss, by Red Hat</organization>
+         <organizationUrl>http://jboss.org</organizationUrl>
+         <timezone>EST</timezone>
+         <roles>
+            <role>Project Lead</role>
+         </roles>
+      </developer>
+   </developers>
+
+   <scm>
+      <connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/servlet/trunk</connection>
+      <developerConnection>scm:svn:https://svn.jboss.org/repos/seam/modules/servlet/trunk</developerConnection>
+      <url>http://fisheye.jboss.org/browse/Seam/modules/servlet/trunk</url>
+   </scm>
 
 </project>
