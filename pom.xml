@@ -22,9 +22,12 @@
       <module>api</module>
       <module>impl</module>
    </modules>
+   
+   <prerequisites>
+      <maven>3.0</maven>
+   </prerequisites>
 
    <properties>
-      <weld.api.version>1.0-SP1</weld.api.version>
       <seam.version>3.0.0.b01</seam.version>
    </properties>
 
