@@ -37,7 +37,7 @@
             <scope>import</scope>
             <type>pom</type>
          </dependency>
-         
+
          <!-- Override submodule versions from org.jboss.seam:seam -->
          <dependency>
             <groupId>org.jboss.seam.servlet</groupId>
@@ -131,6 +131,20 @@
          </roles>
       </developer>
    </developers>
+
+   <profiles>
+      <profile>
+         <id>distribution</id>
+         <activation>
+            <property>
+               <name>dist</name>
+            </property>
+         </activation>
+         <modules>
+            <module>dist</module>
+         </modules>
+      </profile>
+   </profiles>
 
    <scm>
       <connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/servlet/trunk</connection>
