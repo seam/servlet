@@ -7,5 +7,9 @@
 	<listener>
 		<listener-class>org.jboss.seam.servlet.event.ServletEventBridge</listener-class>
 	</listener>
+   
+    <listener>
+        <listener-class>org.jboss.seam.servlet.event.Servlet3EventBridge</listener-class>
+    </listener>
 
 </web-fragment>
