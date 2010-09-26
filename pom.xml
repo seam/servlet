@@ -59,6 +59,8 @@
             <artifactId>weld-extensions</artifactId>
             <version>1.0.0.Alpha2</version>
          </dependency>
+         
+         
 
       </dependencies>
    </dependencyManagement>
@@ -101,6 +103,12 @@
          <artifactId>slf4j-api</artifactId>
          <scope>provided</scope>
       </dependency>
+      <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging</artifactId>
+            <version>3.0.0.Beta4</version>
+            <scope>provided</scope>
+         </dependency>
 
       <!-- Test Dependencies -->
       <dependency>
@@ -118,6 +126,7 @@
          <artifactId>arquillian-weld-embedded</artifactId>
          <scope>test</scope>
       </dependency>
+      
    </dependencies>
 
    <developers>

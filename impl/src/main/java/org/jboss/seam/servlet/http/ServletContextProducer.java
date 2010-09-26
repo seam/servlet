@@ -29,10 +29,10 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
+import org.jboss.logging.Logger;
 import org.jboss.seam.servlet.beanManager.ServletContextBeanManagerProvider;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
-import org.slf4j.Logger;
 
 /**
  * 
@@ -55,7 +55,7 @@ public class ServletContextProducer
 
    protected void contextInitialized(@Observes @Initialized ServletContextEvent e)
    {
-      log.debug("Servlet context initialized with event #0", e);
+      log.debugv("Servlet context initialized with event #0", e);
       servletContext = e.getServletContext();
       servletContext.setAttribute(BeanManager.class.getName(), beanManager);
       ServletContextBeanManagerProvider.setServletContext(servletContext);
@@ -63,7 +63,7 @@ public class ServletContextProducer
 
    protected void contextDestroyed(@Observes @Destroyed ServletContextEvent e)
    {
-      log.debug("Servlet context destroyed with event #0", e);
+      log.debugv("Servlet context destroyed with event #0", e);
       servletContext = null;
    }
 
