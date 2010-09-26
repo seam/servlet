@@ -27,14 +27,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
-import javax.inject.Inject;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.jboss.logging.Logger;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A manager for acquiring HTTP artifacts
@@ -50,19 +50,18 @@ public class HttpServletEnvironmentProducer implements Serializable
    private final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>();
    private final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
 
-   @Inject
-   private Logger log;
+   private Logger log = LoggerFactory.getLogger(HttpServletEnvironmentProducer.class);
 
    protected void requestInitialized(@Observes @Initialized final ServletRequestEvent e)
    {
-      log.tracev("Servlet request initialized with event #0", e);
+      log.trace("Servlet request initialized with event #0", e);
       request.set((HttpServletRequest) e.getServletRequest());
       session.set(request.get().getSession());
    }
 
    protected void requestDestroyed(@Observes @Destroyed final ServletRequestEvent e)
    {
-      log.tracev("Servlet request destroyed with event #0", e);
+      log.trace("Servlet request destroyed with event #0", e);
    }
 
    @Produces
