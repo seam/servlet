@@ -204,9 +204,9 @@
    </profiles>
 
    <scm>
-      <connection>scm:svn:http://anonsvn.jboss.org/repos/seam/modules/servlet/trunk</connection>
-      <developerConnection>scm:svn:https://svn.jboss.org/repos/seam/modules/servlet/trunk</developerConnection>
-      <url>http://fisheye.jboss.org/browse/Seam/modules/servlet/trunk</url>
+      <connection>scm:git:git://github.com/seam/servlet.git</connection>
+      <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
+      <url>http://github.com/seam/servlet</url>
    </scm>
 
 </project>
