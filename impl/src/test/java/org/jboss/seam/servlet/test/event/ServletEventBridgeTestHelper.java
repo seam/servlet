@@ -1,40 +1,45 @@
-package org.jboss.seam.servlet.event;
+/*
+ * JBoss, Home of Professional Open Source
+ * Copyright 2010, Red Hat Middleware LLC, and individual contributors
+ * by the @authors tag. See the copyright.txt in the distribution for a
+ * full listing of individual contributors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.jboss.seam.servlet.test.event;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
-import javax.servlet.AsyncEvent;
-import javax.servlet.ServletContextAttributeEvent;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletRequestAttributeEvent;
-import javax.servlet.ServletRequestEvent;
-import javax.servlet.http.HttpSessionBindingEvent;
-import javax.servlet.http.HttpSessionEvent;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
-import org.jboss.seam.servlet.event.qualifier.Added;
-import org.jboss.seam.servlet.event.qualifier.Attribute;
-import org.jboss.seam.servlet.event.qualifier.Bound;
-import org.jboss.seam.servlet.event.qualifier.Completed;
-import org.jboss.seam.servlet.event.qualifier.Created;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.DidActivate;
-import org.jboss.seam.servlet.event.qualifier.Error;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
-import org.jboss.seam.servlet.event.qualifier.Removed;
-import org.jboss.seam.servlet.event.qualifier.Replaced;
-import org.jboss.seam.servlet.event.qualifier.StartAsync;
-import org.jboss.seam.servlet.event.qualifier.Timeout;
-import org.jboss.seam.servlet.event.qualifier.Unbound;
-import org.jboss.seam.servlet.event.qualifier.Value;
 import org.jboss.seam.servlet.event.qualifier.WillPassivate;
+import org.junit.Assert;
 
+/**
+ * @author Nicklas Karlsson
+ * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ */
 @ApplicationScoped
-public class ServletEventObserver
+public class ServletEventBridgeTestHelper
 {
    private Map<String, List<Object>> observations = new HashMap<String, List<Object>>();
 
@@ -49,6 +54,11 @@ public class ServletEventObserver
       observed.add(observation);
    }
 
+   public Map<String, List<Object>> getObservations()
+   {
+      return observations;
+   }
+   
    public void reset()
    {
       observations.clear();
@@ -57,35 +67,101 @@ public class ServletEventObserver
    public void assertObservations(String id, Object... observations)
    {
       List<Object> observed = this.observations.get(id);
-      assert observed != null && observed.size() == observations.length;
-      assert observed.containsAll(Arrays.asList(observations));
+      if (observations.length > 0)
+      {
+         Assert.assertNotNull("Observer [@Observes " + id + "] was never notified", observed);
+      }
+      else
+      {
+         return;
+      }
+      
+      //Assert.assertEquals(observations.length, observed.size());
+      for (Object o : observations)
+      {
+         if (!observed.remove(o))
+         {
+            Assert.fail("Observer [@Observes " + id + "] notified too few times; expected payload: " + o);
+         }
+      }
+      
+      if (observed.size() > 0)
+      {
+         Assert.fail("Observer [@Observes " + id + "] notified too many times; extra payload: " + observed);
+      }
    }
 
-   public void observe1(@Observes HttpSessionEvent e)
+   public void observeServletRequest(@Observes ServletRequest req)
    {
-      recordObservation("1", e);
+      recordObservation("ServletRequest", req);
    }
 
-   public void observe2(@Observes @DidActivate HttpSessionEvent e)
+   public void observeServletRequestInitialized(@Observes @Initialized ServletRequest req)
    {
-      recordObservation("2", e);
+      recordObservation("@Initialized ServletRequest", req);
    }
 
-   public void observe3(@Observes @WillPassivate HttpSessionEvent e)
+   public void observeServletRequestDestroyed(@Observes @Destroyed ServletRequest req)
    {
-      recordObservation("3", e);
+      recordObservation("@Destroyed ServletRequest", req);
    }
-
-   public void observe4(@Observes @Created HttpSessionEvent e)
+   
+   public void observeHttpServletRequest(@Observes HttpServletRequest req)
    {
-      recordObservation("4", e);
+      recordObservation("HttpServletRequest", req);
    }
 
-   public void observe5(@Observes @Destroyed HttpSessionEvent e)
+   public void observeHttpServletRequestInitialized(@Observes @Initialized HttpServletRequest req)
    {
-      recordObservation("5", e);
+      recordObservation("@Initialized HttpServletRequest", req);
    }
 
+   public void observeHttpServletRequestDestroyed(@Observes @Destroyed HttpServletRequest req)
+   {
+      recordObservation("@Destroyed HttpServletRequest", req);
+   }
+   
+   public void observeHttpSession(@Observes HttpSession sess)
+   {
+      recordObservation("HttpSession", sess);
+   }
+
+   public void observeHttpSessionDidActivate(@Observes @DidActivate HttpSession sess)
+   {
+      recordObservation("@DidActivate HttpSession", sess);
+   }
+
+   public void observeSessionWillPassivate(@Observes @WillPassivate HttpSession sess)
+   {
+      recordObservation("@WillPassivate HttpSession", sess);
+   }
+
+   public void observeSessionInitialized(@Observes @Initialized HttpSession sess)
+   {
+      recordObservation("@Initialized HttpSession", sess);
+   }
+
+   public void observeSessionDestroyed(@Observes @Destroyed HttpSession sess)
+   {
+      recordObservation("@Destroyed HttpSession", sess);
+   }
+
+   public void observeServletContext(@Observes ServletContext ctx)
+   {
+      recordObservation("ServletContext", ctx);
+   }
+
+   public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx)
+   {
+      recordObservation("@Initialized ServletContext", ctx);
+   }
+
+   public void observeServletContextDestroyed(@Observes @Destroyed ServletContext ctx)
+   {
+      recordObservation("@Destroyed ServletContext", ctx);
+   }
+
+   /*
    public void observe6(@Observes HttpSessionBindingEvent e)
    {
       recordObservation("6", e);
@@ -151,21 +227,6 @@ public class ServletEventObserver
       recordObservation("16a", e);
    }
 
-   public void observe17(@Observes ServletContextEvent e)
-   {
-      recordObservation("17", e);
-   }
-
-   public void observe18(@Observes @Initialized ServletContextEvent e)
-   {
-      recordObservation("18", e);
-   }
-
-   public void observe19(@Observes @Destroyed ServletContextEvent e)
-   {
-      recordObservation("19", e);
-   }
-
    public void observe20(@Observes ServletContextAttributeEvent e)
    {
       recordObservation("20", e);
@@ -201,20 +262,6 @@ public class ServletEventObserver
       recordObservation("26", e);
    }
 
-   public void observe27(@Observes ServletRequestEvent e)
-   {
-      recordObservation("27", e);
-   }
-
-   public void observe28(@Observes @Initialized ServletRequestEvent e)
-   {
-      recordObservation("28", e);
-   }
-
-   public void observe29(@Observes @Destroyed ServletRequestEvent e)
-   {
-      recordObservation("29", e);
-   }
 
    public void observe30(@Observes @Added ServletRequestAttributeEvent e)
    {
@@ -270,6 +317,5 @@ public class ServletEventObserver
    {
       recordObservation("40", e);
    }
-
-
+   */
 }

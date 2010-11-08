@@ -10,8 +10,11 @@
       <firstname>Nicklas</firstname>
       <surname>Karlsson</surname>
    </author>
-
-   <!--
+   <author>
+      <firstname>Dan</firstname>
+      <surname>Allen</surname>
+   </author>
+<!--
 vim:et:ts=3:sw=3:tw=120
 -->
 </authorgroup>

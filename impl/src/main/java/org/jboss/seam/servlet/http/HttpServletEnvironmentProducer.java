@@ -1,34 +1,32 @@
 /*
  * JBoss, Home of Professional Open Source
- * Copyright 2010, Red Hat, Inc., and individual contributors
+ * Copyright 2010, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
  *
- * This is free software; you can redistribute it and/or modify it
- * under the terms of the GNU Lesser General Public License as
- * published by the Free Software Foundation; either version 2.1 of
- * the License, or (at your option) any later version.
- *
- * This software is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this software; if not, write to the Free
- * Software Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA
- * 02110-1301 USA, or see the FSF site: http://www.fsf.org.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package org.jboss.seam.servlet.http;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.List;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
-import javax.servlet.ServletRequestEvent;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
@@ -40,28 +38,53 @@ import org.slf4j.LoggerFactory;
  * A manager for acquiring HTTP artifacts
  * 
  * @author Nicklas Karlsson
- * 
+ * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
  */
 @ApplicationScoped
 public class HttpServletEnvironmentProducer implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
-   private final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>();
-   private final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>();
-
    private Logger log = LoggerFactory.getLogger(HttpServletEnvironmentProducer.class);
 
-   protected void requestInitialized(@Observes @Initialized final ServletRequestEvent e)
+   private final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>()
    {
-      log.trace("Servlet request initialized with event #0", e);
-      request.set((HttpServletRequest) e.getServletRequest());
-      session.set(request.get().getSession());
+      @Override
+      protected HttpSession initialValue()
+      {
+         return null;
+      }
+   };
+   
+   private final ThreadLocal<HttpServletRequest> request = new ThreadLocal<HttpServletRequest>()
+   {
+      @Override
+      protected HttpServletRequest initialValue()
+      {
+         return null;
+      }
+   };
+   
+   private final ThreadLocal<HttpServletResponse> response = new ThreadLocal<HttpServletResponse>()
+   {
+      @Override
+      protected HttpServletResponse initialValue()
+      {
+         return null;
+      }
+   };
+
+   protected void requestInitialized(@Observes @Initialized final HttpServletRequest req)
+   {
+      log.trace("Servlet request initialized #0", req);
+      request.set(req);
+      // QUESTION should we be forcing the session to be created here?
+      session.set(req.getSession());
    }
 
-   protected void requestDestroyed(@Observes @Destroyed final ServletRequestEvent e)
+   protected void requestDestroyed(@Observes @Destroyed final HttpServletRequest req)
    {
-      log.trace("Servlet request destroyed with event #0", e);
+      log.trace("Servlet request destroyed #0", req);
    }
 
    @Produces
@@ -77,5 +100,11 @@ public class HttpServletEnvironmentProducer implements Serializable
    {
       return request.get();
    }
-
+   
+   @Produces
+   @RequestScoped
+   protected List<Cookie> getCookies()
+   {
+      return Arrays.asList(request.get().getCookies());
+   }
 }

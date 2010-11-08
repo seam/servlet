@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
+   "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" []>
+<chapter id="beanmanagerprovider">
+   <title>Servlet context BeanManager provider</title>
+   <para>
+      Although discouraged as a general practice, there are circumstances when you need to access the
+      <literal>BeanManager</literal> outside of the CDI environment. Seam Servlet includes a provider that retrieves the
+      <literal>BeanManager</literal> from the Servlet context as an alternative to performing a JNDI lookup to resolve
+      it, the standard lookup mechanism in JSR-299. The Servlet module uses it's own Servlet-to-CDI event bridge to
+      bind the <literal>BeanManager</literal> to the Servlet context when the application is initialized.
+   </para>
+   <para>
+      Refer to the <ulink
+      href="http://docs.jboss.org/weld/extensions/reference/latest/en-US/html/beanmanagerprovider.html">BeanManager
+      provider</ulink> chapter of the Weld Extensions reference guide for information on how to leverage the Servlet
+      context provider to access the <literal>BeanManager</literal> from outside the CDI environment.
+   </para>
+<!--
+vim:et:ts=3:sw=3:tw=120
+-->
+</chapter>

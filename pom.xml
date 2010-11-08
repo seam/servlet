@@ -5,7 +5,7 @@
    <parent>
       <groupId>org.jboss.seam</groupId>
       <artifactId>seam-parent</artifactId>
-      <version>3</version>
+      <version>4</version>
    </parent>
 
    <artifactId>seam-servlet-parent</artifactId>
@@ -15,7 +15,10 @@
    <packaging>pom</packaging>
    <name>Seam Servlet Module</name>
 
-   <description>The Parent for Seam Servlet Module</description>
+   <description>
+      The Parent for Seam Servlet Module
+   </description>
+
    <url>http://www.seamframework.org</url>
 
    <modules>
@@ -28,14 +31,15 @@
    </prerequisites>
 
    <properties>
-      <seam.version>3.0.0.b01</seam.version>
+      <seam.version>3.0.0.b03</seam.version>
+      <jboss.javaee.version>1.0.0.Beta4</jboss.javaee.version>
    </properties>
 
    <dependencyManagement>
       <dependencies>
          <dependency>
             <groupId>org.jboss.seam</groupId>
-            <artifactId>seam</artifactId>
+            <artifactId>seam-bom</artifactId>
             <version>${seam.version}</version>
             <scope>import</scope>
             <type>pom</type>
@@ -53,80 +57,15 @@
             <artifactId>seam-servlet-api</artifactId>
             <version>${project.version}</version>
          </dependency>
-         
-         <dependency>
-            <groupId>org.jboss.weld</groupId>
-            <artifactId>weld-extensions</artifactId>
-            <version>1.0.0.Alpha2</version>
-         </dependency>
-         
-         
-
       </dependencies>
    </dependencyManagement>
 
-   <!-- TODO Move to actual submodule POMs -->
    <dependencies>
-
-      <dependency>
-         <!-- Implementation Specific, until Spec'd -->
-         <groupId>org.jboss.weld</groupId>
-         <artifactId>weld-core</artifactId>
-         <scope>provided</scope>
-         <optional>true</optional>
-      </dependency>
-
-      <!-- Environment Dependencies -->
-      <dependency>
-         <!-- Required until the Servlet 3.0 API can be resolved in Central -->
-         <groupId>org.jboss.spec.javax.servlet</groupId>
-         <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>javax.enterprise</groupId>
-         <artifactId>cdi-api</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>javax.annotation</groupId>
-         <artifactId>jsr250-api</artifactId>
-         <scope>provided</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.weld</groupId>
-         <artifactId>weld-extensions</artifactId>
-         <scope>provided</scope>
-      </dependency>
       <dependency>
          <groupId>org.slf4j</groupId>
          <artifactId>slf4j-api</artifactId>
          <scope>provided</scope>
       </dependency>
-      <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging</artifactId>
-            <version>3.0.0.Beta4</version>
-            <scope>provided</scope>
-         </dependency>
-
-      <!-- Test Dependencies -->
-      <dependency>
-         <groupId>junit</groupId>
-         <artifactId>junit</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian</groupId>
-         <artifactId>arquillian-junit</artifactId>
-         <scope>test</scope>
-      </dependency>
-      <dependency>
-         <groupId>org.jboss.arquillian.container</groupId>
-         <artifactId>arquillian-weld-embedded</artifactId>
-         <scope>test</scope>
-      </dependency>
-      
    </dependencies>
 
    <developers>
@@ -148,18 +87,74 @@
             <role>Project Lead</role>
          </roles>
       </developer>
+      <developer>
+         <name>Dan Allen</name>
+         <email>dan.j.allen@gmail.com</email>
+         <url>http://mojavelinux.com</url>
+         <organization>JBoss, by Red Hat</organization>
+         <organizationUrl>http://jboss.org</organizationUrl>
+         <timezone>EST</timezone>
+         <roles>
+            <role>Contributor</role>
+         </roles>
+      </developer>
    </developers>
 
    <profiles>
       <profile>
+         <id>default</id>
+         <activation>
+            <property>
+               <name>!arquillian</name>
+            </property>
+         </activation>
+         <dependencies>
+            <dependency>
+               <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+               <groupId>org.jboss.spec.javax.servlet</groupId>
+               <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+               <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>javax.enterprise</groupId>
+               <artifactId>cdi-api</artifactId>
+               <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>javax.annotation</groupId>
+               <artifactId>jsr250-api</artifactId>
+               <scope>provided</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+      <profile>
+         <id>arq-glassfish-embedded</id>
+         <activation>
+            <property>
+               <name>arquillian</name>
+               <value>glassfish-embedded</value>
+            </property>
+         </activation>
+         <dependencies>
+            <!-- This imports the Java EE 6 runtime libraries provided by GlassFish Embedded -->
+            <dependency>
+               <groupId>org.glassfish.extras</groupId>
+               <artifactId>glassfish-embedded-all</artifactId>
+               <version>3.0.1</version>
+               <scope>provided</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+      <profile>
          <id>distribution</id>
          <activation>
             <property>
-               <name>dist</name>
+               <name>release</name>
             </property>
          </activation>
          <modules>
             <module>dist</module>
+            <module>docs</module>
          </modules>
       </profile>
       <profile>

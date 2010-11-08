@@ -10,11 +10,22 @@
 	</parent>
 	
 	<artifactId>seam-servlet-api</artifactId>
-	<groupId>org.jboss.seam.servlet</groupId>
 	<version>3.0.0-SNAPSHOT</version>
 	
 	<packaging>jar</packaging>
 	<name>Seam Servlet Module API</name>
+
+   <build>
+      <plugins>
+         <!-- No tests in the api, skip phase -->
+         <plugin>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+               <skipTests>true</skipTests>
+            </configuration>
+         </plugin>
+      </plugins>
+   </build>
 	
 	<scm>
 		<connection>scm:git:git://github.com/seam/servlet.git</connection>

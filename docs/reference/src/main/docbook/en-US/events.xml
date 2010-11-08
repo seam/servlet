@@ -2,584 +2,585 @@
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" []>
 <chapter id="events">
-	<title>Servlet event propagation</title>
-	<para>
-		By including the seam-servlet module in your web application you will also have the
-		servlet lifecycle events propagated to the CDI event bridge so you can observe them in your beans.
-		The event bridge works by installing a servlet listener and firing events on the BeanManager with 
-		associated qualifiers, passing along the event object.
-	</para>
-	
-	<section id="events.installation">
-		<title>Installation</title>
-		<para>
-			The event bridge is installed automatically by including the seam-servlet.jar and seam-servlet-api.jar
-			in the web application library folder. If you are using Maven as your build tool, you can add the
-			following dependency:
-		</para>
-		<programlisting role="XML"><![CDATA[
-			<dependency>
-				<groupId>org.jboss.seam</groupId>
-				<artifactId>seam-servlet</artifactId>
-				<version>3.0.0-SNAPSHOT</version>
-			</dependency>]]></programlisting>		
-	</section>
-	<section id="events.session_lifecycle_listener">
-		<title>The session lifecycle listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.HttpSessionListener</literal>
-			The event object fired is a <literal>javax.servlet.http.HttpSessionEvent</literal> and there are
-			two qualifiers available that can be used for selecting the initialization or destruction of
-			the session.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Created</entry>
-							<entry>Qualifies the creation event</entry>
-						</row>
-						<row>
-							<entry>@Destroyed</entry>
-							<entry>Qualifies the destruction event</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to both lifecycle events, leave out the qualifiers. Note that omitting all qualifiers will
-			observe all events with a <literal>HttpSessionEvent</literal> as event object and these include the activation
-			and passivation events.
-			<programlisting role="Java">
-				public void observeSession(@Observes HttpSessionEvent e)
-				{
-					// Do something with the "session lifecycle" event object
-				}
-			</programlisting>
-			If you are interested in only a particular one, use a qualifer
-			<programlisting role="Java">
-				public void observeSessionCreated(@Observes @Created HttpSessionEvent e)
-				{
-					// Do something with the "session created" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.session_activation_listener">
-		<title>The session activation listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.HttpSessionActivationListener</literal>
-			The event object fired is a <literal>javax.servlet.http.HttpSessionEvent</literal> and there are
-			two qualifiers available that can be used for selecting the activation or passivation of
-			the session.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@DidActivate</entry>
-							<entry>Qualifies the activation event</entry>
-						</row>
-						<row>
-							<entry>@WillPassivate</entry>
-							<entry>Qualifies the passivation event</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to both lifecycle events, leave out the qualifiers. Note that omitting all qualifiers will
-			observe all events with a <literal>HttpSessionEvent</literal> as event object and these include the session
-			lifecycle events.
-			<programlisting role="Java">
-				public void observeSession(@Observes HttpSessionEvent e)
-				{
-					// Do something with the "session activation" event object
-				}
-			</programlisting>
-			If you are interested in only a particular one, use a qualifer
-			<programlisting role="Java">
-				public void observeSessionCreated(@Observes @WillPassivate HttpSessionEvent e)
-				{
-					// Do something with the "session will passivate" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>	
-	<section id="events.session_attribute_listener">
-		<title>The servlet context attribute listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.http.HttpSessionAttributeListener</literal>
-			The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
-			three qualifiers available that can be used for selecting the adding, removing or replacing of an
-			attribute in the servlet context. The <literal>@Attribute</literal> qualifier can further narrow down
-			the events to attributes with a particular name.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Added</entry>
-							<entry>Qualifies the adding of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Removed</entry>
-							<entry>Qualifies the removal of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Replaced</entry>
-							<entry>Qualifies the replacing of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Attribute</entry>
-							<entry>Qualifies the name of an attribute</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to all attribute events, leave out the qualifiers. Note that omitting all qualifiers will
-			observe all events with a <literal>HttpSessionBindingEvent</literal> as event object and these include the session
-			binding events.
-			<programlisting role="Java">
-				public void observeSessionAttribute(@Observes HttpSessionBindingEvent e)
-				{
-					// Do something with the "session attribute" event object
-				}
-			</programlisting>
-			If you are interested in only a particular type, use a type qualifer
-			<programlisting role="Java">
-				public void observeSessionAttributeAdded(@Observes @Added HttpSessionBindingEvent e)
-				{
-					// Do something with the "session attribute added" event object
-				}
-			</programlisting>
-			If you are interested in all events for a partical attribute, use
-			<programlisting role="Java">
-				public void observeFooAttribute(@Observes @Attribute("foo") HttpSessionBindingEvent e)
-				{
-					// Do something with the "'foo' attribute changed" event object
-				}
-			</programlisting>
-			By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
-			filtering can be achieved
-			<programlisting role="Java">
-				public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed HttpSessionBindingEvent e)
-				{
-					// Do something with the "'foo' attribute removed" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.session_binding_listener">
-		<title>The session binding listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.http.HttpSessionBindingListener</literal>
-			The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
-			two qualifiers available that can be used for selecting the binding or unbinding of an
-			value in the session. The <literal>@Value</literal> qualifier can further narrow down
-			the events to values with a particular name.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Bound</entry>
-							<entry>Qualifies the binding of a value</entry>
-						</row>
-						<row>
-							<entry>@Unbound</entry>
-							<entry>Qualifies the unbinding of a value</entry>
-						</row>
-						<row>
-							<entry>@Value</entry>
-							<entry>Qualifies the name of a value</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to all binding events, leave out the qualifiers. Note that omitting all qualifiers will
-			observe all events with a <literal>HttpSessionBindingEvent</literal> as event object and these include the session
-			attribute modifying events.
-			<programlisting role="Java">
-				public void observeSessionBinding(@Observes HttpSessionBindingEvent e)
-				{
-					// Do something with the "session binding" event object
-				}
-			</programlisting>
-			If you are interested in only a particular type, use a type qualifer
-			<programlisting role="Java">
-				public void observeSessionValueBound(@Observes @Bound HttpSessionBindingEvent e)
-				{
-					// Do something with the "session value bound" event object
-				}
-			</programlisting>
-			If you are interested in all events for a partical attribute, use
-			<programlisting role="Java">
-				public void observeFooAttribute(@Observes @Value("foo") HttpSessionBindingEvent e)
-				{
-					// Do something with the "'foo' value changed" event object
-				}
-			</programlisting>
-			By combining a type qualifier with the <literal>@Value</literal> qualifier, the tightest
-			filtering can be achieved
-			<programlisting role="Java">
-				public void observeFooValueBound(@Observes @Value("foo") @Bound HttpSessionBindingEvent e)
-				{
-					// Do something with the "'foo' value bound" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.servlet_context_lifecycle_listener">
-		<title>The servlet context lifecycle listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.ServletContextListener</literal>
-			The event object fired is a <literal>javax.servlet.ServletContextEvent</literal> and there are
-			two qualifiers available that can be used for selecting the initialization or destruction of
-			the servlet context.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Initialized</entry>
-							<entry>Qualifies the creation event</entry>
-						</row>
-						<row>
-							<entry>@Destroyed</entry>
-							<entry>Qualifies the destruction event</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to both lifecycle events, leave out the qualifiers
-			<programlisting role="Java">
-				public void observeServletContext(@Observes ServletContextEvent e)
-				{
-					// Do something with the "servlet context lifecycle" event object
-				}
-			</programlisting>
-			If you are interested in only a particular one, use a qualifer
-			<programlisting role="Java">
-				public void observeServletContextCreated(@Observes @Initialized ServletContextEvent e)
-				{
-					// Do something with the "servlet context initialized" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.servlet_context_attribute_listener">
-		<title>The servlet context attribute listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.ServletContextAttributeListener</literal>
-			The event object fired is a <literal>javax.servlet.ServletContextAttributeEvent</literal> and there are
-			three qualifiers available that can be used for selecting the adding, removing or replacing of an
-			attribute in the servlet context. The <literal>@Attribute</literal> qualifier can further narrow down
-			the events to attributes with a particular name.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Added</entry>
-							<entry>Qualifies the adding of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Removed</entry>
-							<entry>Qualifies the removal of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Replaced</entry>
-							<entry>Qualifies the replacing of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Attribute</entry>
-							<entry>Qualifies the name of an attribute</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to all attribute events, leave out the qualifiers
-			<programlisting role="Java">
-				public void observeServletContextAttribute(@Observes ServletContextAttributeEvent e)
-				{
-					// Do something with the "servlet context attribute" event object
-				}
-			</programlisting>
-			If you are interested in only a particular type, use a type qualifer
-			<programlisting role="Java">
-				public void observeServletContextAttributeAdded(@Observes @Added ServletContextAttributeEvent e)
-				{
-					// Do something with the "servlet context attribute added" event object
-				}
-			</programlisting>
-			If you are interested in all events for a partical attribute, use
-			<programlisting role="Java">
-				public void observeFooAttribute(@Observes @Attribute("foo") ServletContextAttributeEvent e)
-				{
-					// Do something with the "'foo' attribute changed" event object
-				}
-			</programlisting>
-			By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
-			filtering can be achieved
-			<programlisting role="Java">
-				public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed ServletContextAttributeEvent e)
-				{
-					// Do something with the "'foo' attribute removed" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.servlet_request_listener">
-		<title>The servlet request lifecycle listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.ServletRequestListener</literal>
-			The event object fired is a <literal>javax.servlet.ServletRequestEvent</literal> and there are
-			two qualifiers available that can be used for selecting the initialization or destruction of
-			the request.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Initialized</entry>
-							<entry>Qualifies the initialization event</entry>
-						</row>
-						<row>
-							<entry>@Destroyed</entry>
-							<entry>Qualifies the destruction event</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to both lifecycle events, leave out the qualifiers. 
-			<programlisting role="Java">
-				public void observeRequest(@Observes ServletRequestEvent e)
-				{
-					// Do something with the "servlet request lifecycle" event object
-				}
-			</programlisting>
-			If you are interested in only a particular one, use a qualifer
-			<programlisting role="Java">
-				public void observeRequestInitialized(@Observes @Initialized ServletRequestEvent e)
-				{
-					// Do something with the "request initialized" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.servlet_request_attribute_listener">
-		<title>The servlet context attribute listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.ServletRequestAttributeListener</literal>
-			The event object fired is a <literal>javax.servlet.ServletRequestAttributeEvent</literal> and there are
-			three qualifiers available that can be used for selecting the adding, removing or replacing of an
-			attribute in the servlet request. The <literal>@Attribute</literal> qualifier can further narrow down
-			the events to attributes with a particular name.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Added</entry>
-							<entry>Qualifies the adding of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Removed</entry>
-							<entry>Qualifies the removal of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Replaced</entry>
-							<entry>Qualifies the replacing of an attribute</entry>
-						</row>
-						<row>
-							<entry>@Attribute</entry>
-							<entry>Qualifies the name of an attribute</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to all attribute events, leave out the qualifiers
-			<programlisting role="Java">
-				public void observeServletRequestAttribute(@Observes ServletRequestAttributeEvent e)
-				{
-					// Do something with the "servlet request attribute" event object
-				}
-			</programlisting>
-			If you are interested in only a particular type, use a type qualifer
-			<programlisting role="Java">
-				public void observeServletRequestAttributeAdded(@Observes @Added ServletRequestAttributeEvent e)
-				{
-					// Do something with the "servlet request attribute added" event object
-				}
-			</programlisting>
-			If you are interested in all events for a partical attribute, use
-			<programlisting role="Java">
-				public void observeFooAttribute(@Observes @Attribute("foo") ServletRequestAttributeEvent e)
-				{
-					// Do something with the "'foo' attribute changed" event object
-				}
-			</programlisting>
-			By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
-			filtering can be achieved
-			<programlisting role="Java">
-				public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed ServletRequestAttributeEvent e)
-				{
-					// Do something with the "'foo' attribute removed" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	<section id="events.asynchronous_listener">
-		<title>The servlet context attribute listener</title> 
-		<para>
-			These events correspond to the interface <literal>javax.servlet.AsyncListene</literal>
-			The event object fired is a <literal>javax.servlet.AsynchEvent</literal> and there are
-			four qualifiers available that can be used for selecting the lifecycles of an asynchronous event.
-		</para>
-		<para>
-			<informaltable>
-				<tgroup cols="2">
-					<colspec colnum="1" colwidth="1*" />
-					<colspec colnum="2" colwidth="3*" />
-					<thead>
-						<row>
-							<entry>Qualifier</entry>
-							<entry>Description</entry>
-						</row>
-					</thead>
-					<tbody>
-						<row>
-							<entry>@Completed</entry>
-							<entry>Qualifies the completion of a request</entry>
-						</row>
-						<row>
-							<entry>@Error</entry>
-							<entry>Qualifies the error in a request</entry>
-						</row>
-						<row>
-							<entry>@StartAsynch</entry>
-							<entry>Qualifies the starting of a request</entry>
-						</row>
-						<row>
-							<entry>@Timeout</entry>
-							<entry>Qualifies the timeout of a request</entry>
-						</row>
-					</tbody>
-				</tgroup>
-			</informaltable>
-		</para>
-		<para>
-			If you want to listen to all asynchronous events, leave out the qualifiers
-			<programlisting role="Java">
-				public void observeAsynchronousRequest(@Observes AsynchEvent e)
-				{
-					// Do something with the "asynchronous" event object
-				}
-			</programlisting>
-			If you are interested in only a particular type, use a type qualifer
-			<programlisting role="Java">
-				public void observeAsynchronousRequestTimedOut(@Observes @Timeout AsynchEvent e)
-				{
-					// Do something with the "request timed out" event object
-				}
-			</programlisting>
-			The name of the observer method is insignificant.
-		</para>
-	</section>
-	
+   <title>Servlet event propagation</title>
+   <para>
+      By including the Seam 3 Servlet module in your web application (and performing the necessary listener
+      configuration for pre-Servlet 3.0 environments) you will also have the servlet lifecycle events propagated to the
+      CDI event bridge so you can observe them in your beans. The event bridge works by installing a servlet listener
+      and firing events on the BeanManager with associated qualifiers, passing along the event object.
+   </para>
+   
+   <section id="events.session_lifecycle_listener">
+      <title>The session lifecycle listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.HttpSessionListener</literal> interface. The event
+         object fired is a <literal>javax.servlet.http.HttpSession</literal> (since it's the only relevant information
+         in the <literal>javax.servlet.http.HttpSessionEvent</literal> object). There are two qualifiers available that
+         can be used for selecting the initialization or destruction of the session.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the creation event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers. Note that omitting all qualifiers
+         will observe all events with a <literal>HttpSession</literal> as event object.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSession(@Observes HttpSession session)
+{
+   // Do something with the "session" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSessionInitialized(@Observes @Initialized HttpSession session)
+{
+   // Do something with the "session" object upon being initialized
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.session_activation_listener">
+      <title>The session activation listener</title> 
+      <para>
+         These events correspond to the
+         <literal>javax.servlet.HttpSessionActivationListener</literal> interface. The event object
+         fired is a <literal>javax.servlet.http.HttpSession</literal> (since it's the only relevant
+         information in the <literal>javax.servlet.http.HttpSessionEvent</literal> object). There
+         are two qualifiers available that can be used for selecting the activation or passivation
+         of the session.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@DidActivate</entry>
+                     <entry>Qualifies the activation event</entry>
+                  </row>
+                  <row>
+                     <entry>@WillPassivate</entry>
+                     <entry>Qualifies the passivation event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers. Note that omitting all qualifiers will
+         observe all events with a <literal>HttpSession</literal> as event object.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSession(@Observes HttpSession session)
+{
+   // Do something with the "session" object
+}]]></programlisting>
+
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+
+      <programlisting role="JAVA"><![CDATA[public void observeSessionCreated(@Observes @WillPassivate HttpSession session)
+{
+   // Do something with the "session" object when it's being passivated
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>   
+   <section id="events.session_attribute_listener">
+      <title>The servlet context attribute listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.http.HttpSessionAttributeListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
+         three qualifiers available that can be used for selecting the adding, removing or replacing of an
+         attribute in the servlet context. The <literal>@Attribute</literal> qualifier can further narrow down
+         the events to attributes with a particular name.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Added</entry>
+                     <entry>Qualifies the adding of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Removed</entry>
+                     <entry>Qualifies the removal of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Replaced</entry>
+                     <entry>Qualifies the replacing of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Attribute</entry>
+                     <entry>Qualifies the name of an attribute</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to all attribute events, leave out the qualifiers. Note that omitting all qualifiers will
+         observe all events with a <literal>HttpSessionBindingEvent</literal> as event object and these include the session
+         binding events.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSessionAttribute(@Observes HttpSessionBindingEvent e)
+{
+   // Do something with the "session attribute" event object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular type, use a type qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSessionAttributeAdded(@Observes @Added HttpSessionBindingEvent e)
+{
+   // Do something with the "session attribute added" event object
+}]]></programlisting>
+      <para>
+         If you are interested in all events for a partical attribute, use
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttribute(@Observes @Attribute("foo") HttpSessionBindingEvent e)
+{
+   // Do something with the "'foo' attribute changed" event object
+}]]></programlisting>
+      <para>
+         By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
+         filtering can be achieved
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed HttpSessionBindingEvent e)
+{
+   // Do something with the "'foo' attribute removed" event object
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.session_binding_listener">
+      <title>The session binding listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.http.HttpSessionBindingListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
+         two qualifiers available that can be used for selecting the binding or unbinding of an
+         value in the session. The <literal>@Value</literal> qualifier can further narrow down
+         the events to values with a particular name.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Bound</entry>
+                     <entry>Qualifies the binding of a value</entry>
+                  </row>
+                  <row>
+                     <entry>@Unbound</entry>
+                     <entry>Qualifies the unbinding of a value</entry>
+                  </row>
+                  <row>
+                     <entry>@Value</entry>
+                     <entry>Qualifies the name of a value</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to all binding events, leave out the qualifiers. Note that omitting all qualifiers will
+         observe all events with a <literal>HttpSessionBindingEvent</literal> as event object and these include the session
+         attribute modifying events.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSessionBinding(@Observes HttpSessionBindingEvent e)
+{
+   // Do something with the "session binding" event object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular type, use a type qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeSessionValueBound(@Observes @Bound HttpSessionBindingEvent e)
+{
+   // Do something with the "session value bound" event object
+}]]></programlisting>
+      <para>
+         If you are interested in all events for a partical attribute, use
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttribute(@Observes @Value("foo") HttpSessionBindingEvent e)
+{
+   // Do something with the "'foo' value changed" event object
+}]]></programlisting>
+      <para>
+         By combining a type qualifier with the <literal>@Value</literal> qualifier, the tightest
+         filtering can be achieved
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooValueBound(@Observes @Value("foo") @Bound HttpSessionBindingEvent e)
+{
+   // Do something with the "'foo' value bound" event object
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.servlet_context_lifecycle_listener">
+      <title>The servlet context lifecycle listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.ServletContextListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.ServletContext</literal> (since it's the
+         only relevant information in the <literal>javax.servlet.ServletContextEvent</literal> object). There are
+         two qualifiers available that can be used for selecting the initialization or destruction of
+         the servlet context.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the creation event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContext(@Observes ServletContext ctx)
+{
+   // Do something with the "servlet context" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx)
+{
+   // Do something with the "servlet context" object upon initialization
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.servlet_context_attribute_listener">
+      <title>The servlet context attribute listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.ServletContextAttributeListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.ServletContextAttributeEvent</literal> and there are
+         three qualifiers available that can be used for selecting the adding, removing or replacing of an
+         attribute in the servlet context. The <literal>@Attribute</literal> qualifier can further narrow down
+         the events to attributes with a particular name.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Added</entry>
+                     <entry>Qualifies the adding of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Removed</entry>
+                     <entry>Qualifies the removal of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Replaced</entry>
+                     <entry>Qualifies the replacing of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Attribute</entry>
+                     <entry>Qualifies the name of an attribute</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to all attribute events, leave out the qualifiers
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContextAttribute(@Observes ServletContextAttributeEvent e)
+{
+   // Do something with the "servlet context attribute" event object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular type, use a type qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContextAttributeAdded(@Observes @Added ServletContextAttributeEvent e)
+{
+   // Do something with the "servlet context attribute added" event object
+}]]></programlisting>
+      <para>
+         If you are interested in all events for a partical attribute, use
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttribute(@Observes @Attribute("foo") ServletContextAttributeEvent e)
+{
+   // Do something with the "'foo' attribute changed" event object
+}]]></programlisting>
+      <para>
+         By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
+         filtering can be achieved
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed ServletContextAttributeEvent e)
+{
+   // Do something with the "'foo' attribute removed" event object
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.servlet_request_listener">
+      <title>The servlet request lifecycle listener</title> 
+      <para>
+         These events correspond to the 
+         <literal>javax.servlet.ServletRequestListener</literal> inteface. The event object fired is a
+         <literal>javax.servlet.ServletRequest</literal> (since it's the only relevant information in
+         the <literal>javax.servlet.ServletRequestEvent</literal> object.  There are two qualifiers
+         available that can be used for selecting the initialization or destruction of the request.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the initialization event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers. 
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequest(@Observes ServletRequest request)
+{
+   // Do something with the servlet "request" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized ServletRequest request)
+{
+   // Do something with the servlet "request" object upon initialization
+}]]></programlisting>
+      <para>
+         You can also listen specifically for a <literal>javax.servlet.http.HttpServletRequest</literal>
+         simply by changing the expected event type.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized HttpServletRequest request)
+{
+   // Do something with the HTTP servlet "request" object upon initialization
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.servlet_request_attribute_listener">
+      <title>The servlet context attribute listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.ServletRequestAttributeListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.ServletRequestAttributeEvent</literal> and there are
+         three qualifiers available that can be used for selecting the adding, removing or replacing of an
+         attribute in the servlet request. The <literal>@Attribute</literal> qualifier can further narrow down
+         the events to attributes with a particular name.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Added</entry>
+                     <entry>Qualifies the adding of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Removed</entry>
+                     <entry>Qualifies the removal of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Replaced</entry>
+                     <entry>Qualifies the replacing of an attribute</entry>
+                  </row>
+                  <row>
+                     <entry>@Attribute</entry>
+                     <entry>Qualifies the name of an attribute</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to all attribute events, leave out the qualifiers
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletRequestAttribute(@Observes ServletRequestAttributeEvent e)
+{
+   // Do something with the "servlet request attribute" event object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular type, use a type qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletRequestAttributeAdded(@Observes @Added ServletRequestAttributeEvent e)
+{
+   // Do something with the "servlet request attribute added" event object
+}]]></programlisting>
+      <para>
+         If you are interested in all events for a partical attribute, use
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttribute(@Observes @Attribute("foo") ServletRequestAttributeEvent e)
+{
+   // Do something with the "'foo' attribute changed" event object
+}]]></programlisting>
+      <para>
+         By combining a type qualifier with the <literal>@Attribute</literal> qualifier, the tightest
+         filtering can be achieved
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeFooAttributeRemoved(@Observes @Attribute("foo") @Removed ServletRequestAttributeEvent e)
+{
+   // Do something with the "'foo' attribute removed" event object
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+   <section id="events.asynchronous_listener">
+      <title>The servlet context attribute listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.AsyncListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.AsyncEvent</literal>. There are four
+         qualifiers available that can be used for selecting the lifecycles of an asynchronous
+         event.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Completed</entry>
+                     <entry>Qualifies the completion of a request</entry>
+                  </row>
+                  <row>
+                     <entry>@Error</entry>
+                     <entry>Qualifies the error in a request</entry>
+                  </row>
+                  <row>
+                     <entry>@StartAsync</entry>
+                     <entry>Qualifies the starting of a request</entry>
+                  </row>
+                  <row>
+                     <entry>@Timeout</entry>
+                     <entry>Qualifies the timeout of a request</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to all asynchronous events, leave out the qualifiers
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeAsyncronousRequest(@Observes AsyncEvent e)
+{
+   // Do something with the "asynchronous" event object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular type, use a type qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeAsyncronousRequestTimedOut(@Observes @Timeout AsyncEvent e)
+{
+   // Do something with the "request timed out" event object
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+<!--
+vim:et:ts=3:sw=3:tw=120
+-->
 </chapter>

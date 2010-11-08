@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
+   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+<chapter id="servlet.installation">
+	<title>Installation</title>
+	<para>
+		Most features of Seam Servlet are installed automatically by including the seam-servlet.jar and seam-servlet-api.jar
+		in the web application library folder. If you are using <ulink url="http://maven.apache.org/">Maven</ulink> as your build tool, you can add the
+		following single dependency to your pom.xml file:
+	</para>
+	<programlisting role="XML"><![CDATA[<dependency>
+	<groupId>org.jboss.seam.servlet</groupId>
+	<artifactId>seam-servlet</artifactId>
+	<version>${seam.servlet.version}</version>
+</dependency>]]></programlisting>	
+	<tip>
+		<para>
+         Substitute the expression ${seam.servlet.version} with the most recent or appropriate version of Seam Servlet.
+         Alternatively, you can assign the version number to the property of the same name inside the
+         <literal>properties</literal> element of your pom.xml.
+      </para>
+	</tip>
+	<para>
+      In a Servlet 3.0 or Java EE 6 environment, your configuration is now complete.
+   </para>
+   
+   <para>
+      If you are using Servlet 2.5 or Java EE 5, then you need to add the following stanza to your application's web.xml
+      file to activate many of the features provided by this module:
+	</para>
+	<programlisting role="XML"><![CDATA[<listener>
+   <listener-class>org.jboss.seam.servlet.event.Servlet2EventBridge</listener-class>
+</listener>]]></programlisting>
+   <para>
+      You are now ready to dive into the Servlet enhancements provided for you by the Seam Servlet module!
+   </para>
+<!--
+vim:et:ts=3:sw=3:tw=120
+-->
+</chapter>

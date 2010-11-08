@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-fragment version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
-	<name>seamservlet</name>
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+   <name>seamservlet</name>
 
-	<listener>
-		<listener-class>org.jboss.seam.servlet.event.ServletEventBridge</listener-class>
-	</listener>
-   
-    <listener>
-        <listener-class>org.jboss.seam.servlet.event.Servlet3EventBridge</listener-class>
-    </listener>
+   <listener>
+      <listener-class>org.jboss.seam.servlet.event.Servlet2EventBridge</listener-class>
+   </listener>
+
+<!-- Broken on GlassFish (perhaps because what is trying to do is illegal
+   <listener>
+      <listener-class>org.jboss.seam.servlet.event.Servlet3EventBridge</listener-class>
+   </listener>
+-->
 
 </web-fragment>
