@@ -9,7 +9,7 @@
       <relativePath>../pom.xml</relativePath>
 	</parent>
 
-	<artifactId>seam-servlet-impl</artifactId>
+	<artifactId>seam-servlet</artifactId>
 	<version>3.0.0-SNAPSHOT</version>
 
 	<packaging>jar</packaging>
@@ -28,7 +28,7 @@
          <artifactId>weld-extensions</artifactId>
          <scope>compile</scope>
          <!-- temporary -->
-         <version>1.0.0-SNAPSHOT</version>
+         <!--version>1.0.0-SNAPSHOT</version-->
       </dependency>
 
       <dependency>

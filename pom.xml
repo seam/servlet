@@ -154,7 +154,7 @@
          </activation>
          <modules>
             <module>dist</module>
-            <module>docs</module>
+            <module>docs/reference</module>
          </modules>
       </profile>
       <profile>
