@@ -101,8 +101,8 @@ private HttpServletRequest request;]]></programlisting>
          <literal>@Initialized ServletContext</literal> event raised by this module's Servlet-to-CDI event bridge.
       </para> 
    </section>
-   <section id="injectablerefs.http_servlet_request">
-      <title>@Inject List<Cookie></title>
+   <section id="injectablerefs.cookie">
+      <title>@Inject List&lt;Cookie&gt;</title>
       <para>
          The list of <literal>Cookie</literal> objects is made available as a request-scoped bean. It can be injected
          safetly into any CDI bean as follows:
