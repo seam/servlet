@@ -200,7 +200,7 @@
 
    <scm>
       <connection>scm:git:git://github.com/seam/servlet.git</connection>
-      <developerConnection>scm:git:git@github.com/seam/servlet.git</developerConnection>
+      <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
       <url>http://github.com/seam/servlet</url>
    </scm>
 
