@@ -119,17 +119,17 @@ public class Servlet2EventBridge extends AbstractServletEventBridge implements
    /**
     * Servlet context initialized / destroyed events
     */
+   
+   public void contextInitialized(final ServletContextEvent e)
+   {
+      //fireEvent(e, InitializedLiteral.INSTANCE);
+      fireEvent(e.getServletContext(), InitializedLiteral.INSTANCE);
+   }
 
    public void contextDestroyed(final ServletContextEvent e)
    {
       //fireEvent(e, DestroyedLiteral.INSTANCE);
       fireEvent(e.getServletContext(), DestroyedLiteral.INSTANCE);
-   }
-
-   public void contextInitialized(final ServletContextEvent e)
-   {
-      //fireEvent(e, InitializedLiteral.INSTANCE);
-      fireEvent(e.getServletContext(), InitializedLiteral.INSTANCE);
    }
 
    /**

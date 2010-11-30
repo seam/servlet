@@ -39,6 +39,7 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.enterprise.util.AnnotationLiteral;
 
+import org.jboss.logging.Messages;
 import org.jboss.seam.servlet.http.CookieParam;
 import org.jboss.seam.servlet.http.CookieParamProducer;
 import org.jboss.seam.servlet.http.HeaderParam;
@@ -46,6 +47,7 @@ import org.jboss.seam.servlet.http.HeaderParamProducer;
 import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.RequestParamProducer;
 import org.jboss.seam.servlet.http.TypedParamValue;
+import org.jboss.seam.servlet.messages.ServletMessages;
 import org.jboss.seam.servlet.util.Primitives;
 import org.jboss.weld.extensions.literal.AnyLiteral;
 import org.jboss.weld.extensions.literal.DefaultLiteral;
@@ -55,6 +57,8 @@ import org.jboss.weld.extensions.literal.DefaultLiteral;
  */
 public class ServletExtension implements Extension
 {
+   private transient ServletMessages messages = Messages.getBundle(ServletMessages.class);
+   
    private final Map<Class<? extends Annotation>, TypedParamProducerBlueprint> producerBlueprints;
    private final Map<Class<?>, Member> converterMembersByType;
    
@@ -111,7 +115,7 @@ public class ServletExtension implements Extension
                {
                   if (!allowed.contains(q))
                   {
-                     event.addDefinitionError(new IllegalArgumentException("Additional qualifiers not permitted on @" + paramAnnotationType.getSimpleName() + " injection point: " + ip));
+                     event.addDefinitionError(new IllegalArgumentException(messages.additionalQualifiersNotPermitted(paramAnnotationType.getSimpleName(), ip)));
                      error = true;
                      break;
                   }
@@ -123,7 +127,7 @@ public class ServletExtension implements Extension
                Type targetType = getActualBeanType(ip.getType());
                if (!(targetType instanceof Class))
                {
-                  event.addDefinitionError(new IllegalArgumentException("@" + paramAnnotationType.getSimpleName() + " injection point must be a raw type: " + ip));
+                  event.addDefinitionError(new IllegalArgumentException(messages.rawTypeRequired(paramAnnotationType.getSimpleName(), ip)));
                   break;
                }
                try
@@ -148,7 +152,7 @@ public class ServletExtension implements Extension
                }
                catch (NoSuchMethodException nme)
                {
-                  event.addDefinitionError(new IllegalArgumentException("No converter available for type at @" + paramAnnotationType.getName() + " injection point: " + ip));
+                  event.addDefinitionError(new IllegalArgumentException(messages.noConverterForType(paramAnnotationType.getSimpleName(), ip)));
                }
             }
          }

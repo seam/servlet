@@ -26,8 +26,8 @@ import javax.servlet.ServletContext;
 import org.jboss.seam.servlet.beanManager.ServletContextBeanManagerProvider;
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.weld.extensions.log.Category;
 
 /**
  * A source for HTTP artifacts. It observes for and stores the ServletContext
@@ -40,14 +40,12 @@ public class ServletContextProducer
 {
    private ServletContext servletContext;
 
-   @Inject
-   private BeanManager beanManager;
+   @Inject @Category("seam-servlet")
+   private ServletLog log;
 
-   private Logger log = LoggerFactory.getLogger(ServletContextProducer.class);
-
-   protected void contextInitialized(@Observes @Initialized final ServletContext ctx)
+   protected void contextInitialized(@Observes @Initialized final ServletContext ctx, BeanManager beanManager)
    {
-      log.debug("Servlet context initialized: " + ctx);
+      log.servletContextInitialized(ctx);
       ctx.setAttribute(BeanManager.class.getName(), beanManager);
       ServletContextBeanManagerProvider.setServletContext(ctx);
       servletContext = ctx;
@@ -55,12 +53,12 @@ public class ServletContextProducer
 
    protected void contextDestroyed(@Observes @Destroyed final ServletContext ctx)
    {
-      log.debug("Servlet context destroyed");
+      log.servletContextDestroyed(ctx);
       servletContext = null;
    }
 
    @Produces
-   @ApplicationScoped
+   //@ApplicationScoped
    public ServletContext getServletContext()
    {
       return servletContext;

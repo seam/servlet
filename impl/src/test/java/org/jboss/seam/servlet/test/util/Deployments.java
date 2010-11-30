@@ -16,6 +16,8 @@
  */
 package org.jboss.seam.servlet.test.util;
 
+import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.seam.servlet.messages.ServletMessages;
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -39,7 +41,8 @@ public class Deployments
    public static WebArchive createBeanWebArchive()
    {
       return ShrinkWrap.create(WebArchive.class, "test.war")
-         .addLibrary(MavenArtifactResolver.resolve("org.jboss.weld:weld-extensions:1.0.0-SNAPSHOT"))
+         .addClasses(ServletMessages.class, ServletLog.class)
+         .addLibrary(MavenArtifactResolver.resolve("org.jboss.weld:weld-extensions:1.0.0.Beta1"))
          .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
    }
    

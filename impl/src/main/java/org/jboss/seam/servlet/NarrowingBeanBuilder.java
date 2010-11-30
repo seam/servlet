@@ -52,7 +52,6 @@ import org.jboss.weld.extensions.literal.DefaultLiteral;
  */
 public class NarrowingBeanBuilder<T>
 {
-
    private final Bean<Object> delegate;
    private final BeanManager beanManager;
    private Set<Type> types;

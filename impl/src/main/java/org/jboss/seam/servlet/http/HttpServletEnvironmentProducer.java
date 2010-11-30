@@ -24,15 +24,15 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.context.RequestScoped;
 import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Produces;
+import javax.inject.Inject;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.jboss.seam.servlet.event.qualifier.Destroyed;
 import org.jboss.seam.servlet.event.qualifier.Initialized;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.weld.extensions.log.Category;
 
 /**
  * A manager for acquiring HTTP artifacts
@@ -45,7 +45,8 @@ public class HttpServletEnvironmentProducer implements Serializable
 {
    private static final long serialVersionUID = 1L;
 
-   private Logger log = LoggerFactory.getLogger(HttpServletEnvironmentProducer.class);
+   @Inject @Category("seam-servlet")
+   private ServletLog log;
 
    private final ThreadLocal<HttpSession> session = new ThreadLocal<HttpSession>()
    {
@@ -64,19 +65,10 @@ public class HttpServletEnvironmentProducer implements Serializable
          return null;
       }
    };
-   
-   private final ThreadLocal<HttpServletResponse> response = new ThreadLocal<HttpServletResponse>()
-   {
-      @Override
-      protected HttpServletResponse initialValue()
-      {
-         return null;
-      }
-   };
 
    protected void requestInitialized(@Observes @Initialized final HttpServletRequest req)
    {
-      log.trace("Servlet request initialized #0", req);
+      log.servletRequestInitialized(req);
       request.set(req);
       // QUESTION should we be forcing the session to be created here?
       session.set(req.getSession());
@@ -84,7 +76,7 @@ public class HttpServletEnvironmentProducer implements Serializable
 
    protected void requestDestroyed(@Observes @Destroyed final HttpServletRequest req)
    {
-      log.trace("Servlet request destroyed #0", req);
+      log.servletRequestDestroyed(req);
    }
 
    @Produces
