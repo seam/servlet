@@ -47,20 +47,6 @@
       </dependency>
 
       <dependency>
-         <groupId>org.jboss.seam.catch</groupId>
-         <artifactId>seam-catch-api</artifactId>
-         <version>3.0.0.Alpha1</version>
-         <scope>compile</scope>
-         <exclusions>
-            <!-- workaround for seam catch marking this compile scope -->
-            <exclusion>
-               <groupId>javax.enterprise</groupId>
-               <artifactId>cdi-api</artifactId>
-            </exclusion>
-         </exclusions>
-      </dependency>
-
-      <dependency>
          <groupId>org.jboss.logging</groupId>
          <artifactId>jboss-logging</artifactId>
          <version>3.0.0.Beta4</version>
