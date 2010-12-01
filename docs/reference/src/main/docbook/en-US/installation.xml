@@ -10,7 +10,7 @@
 	</para>
 	<programlisting role="XML"><![CDATA[<dependency>
 	<groupId>org.jboss.seam.servlet</groupId>
-	<artifactId>seam-servlet</artifactId>
+	<artifactId>seam-servlet-impl</artifactId>
 	<version>${seam.servlet.version}</version>
 </dependency>]]></programlisting>	
 	<tip>

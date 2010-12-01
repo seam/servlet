@@ -1,27 +1,27 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<artifactId>seam-servlet-parent</artifactId>
-		<groupId>org.jboss.seam.servlet</groupId>
-		<version>3.0.0-SNAPSHOT</version>
+   <parent>
+      <artifactId>seam-servlet-parent</artifactId>
+      <groupId>org.jboss.seam.servlet</groupId>
+      <version>3.0.0-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
-	</parent>
+   </parent>
 
-	<artifactId>seam-servlet</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+   <artifactId>seam-servlet-impl</artifactId>
+   <version>3.0.0-SNAPSHOT</version>
 
-	<packaging>jar</packaging>
-	<name>Seam Servlet Module Core Implementation</name>
-	
-	<dependencies>
-		<dependency>
-			<artifactId>seam-servlet-api</artifactId>
-			<groupId>org.jboss.seam.servlet</groupId>
-			<version>${project.version}</version>
-			<scope>compile</scope>
-		</dependency>
+   <packaging>jar</packaging>
+   <name>Seam Servlet Module Core Implementation</name>
+   
+   <dependencies>
+      <dependency>
+         <artifactId>seam-servlet-api</artifactId>
+         <groupId>org.jboss.seam.servlet</groupId>
+         <version>${project.version}</version>
+         <scope>compile</scope>
+      </dependency>
 
       <dependency>
          <groupId>org.jboss.weld</groupId>
@@ -34,6 +34,13 @@
          <artifactId>seam-catch-api</artifactId>
          <version>3.0.0.Alpha1</version>
          <scope>compile</scope>
+         <exclusions>
+            <!-- workaround for seam catch marking this compile scope -->
+            <exclusion>
+               <groupId>javax.enterprise</groupId>
+               <artifactId>cdi-api</artifactId>
+            </exclusion>
+         </exclusions>
       </dependency>
 
       <dependency>
@@ -60,7 +67,7 @@
          <version>1.8.4</version>
          <scope>test</scope>
       </dependency>
-	</dependencies>
+   </dependencies>
 
    <profiles>
       <profile>
@@ -163,10 +170,10 @@
       </profile>
    </profiles>
 
-	<scm>
-		<connection>scm:git:git://github.com/seam/servlet.git</connection>
-		<developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
-		<url>http://github.com/seam/servlet</url>
-	</scm>
+   <scm>
+      <connection>scm:git:git://github.com/seam/servlet.git</connection>
+      <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
+      <url>http://github.com/seam/servlet</url>
+   </scm>
 
 </project>
