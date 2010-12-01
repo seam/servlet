@@ -9,6 +9,11 @@ import org.jboss.logging.Logger.Level;
 import org.jboss.logging.Message;
 import org.jboss.logging.MessageLogger;
 
+/**
+ * Type-safe log messages for the Seam Servlet module
+ *
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
+ */
 @MessageLogger
 public interface ServletLog
 {

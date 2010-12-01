@@ -34,16 +34,17 @@ import org.jboss.seam.servlet.event.literal.InitializedLiteral;
 import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
 
 /**
- * Propagates Servlet lifecycle events to the CDI event bus. This listener
- * is auto-registered in Servlet 3.0 environments. If CDI injection is available
- * into listeners, the BeanManager will be accessible to this instance as
- * an injected resource. Otherwise, the BeanManager will be looked up using
- * the BeanManager provider service.
+ * Propagates Servlet lifecycle events to the CDI event bus.
+ *
+ * <p>This listener is auto-registered in Servlet 3.0 environments. If CDI
+ * injection is available into listeners, the BeanManager will be accessible to
+ * this instance as an injected resource. Otherwise, the BeanManager will be
+ * looked up using the BeanManager provider service.</p>
  * 
- * The internal events are fired to ensure that the setup and tear down routines
- * happen around the main events. The event strategy is used to jump from
- * a Servlet component which may not be managed by CDI to an observe we know
- * to be a managed bean.
+ * <p>The internal events are fired to ensure that the setup and tear down
+ * routines happen around the main events. The event strategy is used to jump
+ * from a Servlet component which may not be managed by CDI to an observe we
+ * know to be a managed bean.</p>
  * 
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>

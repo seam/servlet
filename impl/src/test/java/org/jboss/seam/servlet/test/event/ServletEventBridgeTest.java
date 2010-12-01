@@ -19,6 +19,8 @@ package org.jboss.seam.servlet.test.event;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.lang.reflect.Field;
+
 import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
@@ -83,10 +85,14 @@ public class ServletEventBridgeTest
     }
     
     @Test
-    public void should_observe_servlet_context_destroyed()
+    public void should_observe_servlet_context_destroyed() throws Exception
     {
        reset();
        ServletContext ctx = mock(ServletContext.class);
+       // webApplication field is normally set by context initialized event
+       Field webAppField = ServletEventBridgeListener.class.getDeclaredField("webApplication");
+       webAppField.setAccessible(true);
+       webAppField.set(listener, new WebApplication(ctx));
        listener.contextDestroyed(new ServletContextEvent(ctx));
        observer.assertObservations("@Destroyed ServletContext", ctx);
     }

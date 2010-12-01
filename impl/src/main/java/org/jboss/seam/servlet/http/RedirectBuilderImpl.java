@@ -13,6 +13,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
+ */
 // todo support switching to https/http
 public class RedirectBuilderImpl implements RedirectBuilder
 {

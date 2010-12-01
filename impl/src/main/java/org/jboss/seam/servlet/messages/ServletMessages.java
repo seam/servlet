@@ -5,6 +5,11 @@ import javax.enterprise.inject.spi.InjectionPoint;
 import org.jboss.logging.Message;
 import org.jboss.weld.extensions.log.MessageBundle;
 
+/**
+ * Type-safe exception messages for the Seam Servlet module
+ *
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
+ */
 @MessageBundle
 public interface ServletMessages
 {
