@@ -11,8 +11,8 @@
    </parent>
 
    <artifactId>seam-servlet-distribution</artifactId>
-   <name>Seam Servlet Distribution</name>
-   <description>Builds a Seam Servlet release distribution</description>
+   <name>Seam Servlet Module Distribution</name>
+   <description>Builds a Seam Servlet module release distribution</description>
    <packaging>pom</packaging>
 
    <properties>
@@ -23,13 +23,15 @@
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
          <artifactId>seam-servlet-api</artifactId>
-         <optional>true</optional>
+         <version>${project.version}</version>
+         <optional>false</optional>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
-         <artifactId>seam-servlet</artifactId>
-         <optional>true</optional>
+         <artifactId>seam-servlet-impl</artifactId>
+         <version>${project.version}</version>
+         <optional>false</optional>
       </dependency>
 
       <dependency>
@@ -48,19 +50,28 @@
          <optional>true</optional>
       </dependency>
 
-
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
-         <artifactId>seam-servlet</artifactId>
+         <artifactId>seam-servlet-impl</artifactId>
          <version>${project.version}</version>
          <classifier>sources</classifier>
       </dependency>
 
+      <!--
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
-         <artifactId>seam-servlet</artifactId>
+         <artifactId>seam-servlet-impl</artifactId>
          <version>${project.version}</version>
          <classifier>javadoc</classifier>
+         <optional>true</optional>
+      </dependency>
+      -->
+
+      <dependency>
+         <groupId>org.jboss.seam.servlet</groupId>
+         <artifactId>seam-servlet-reference-guide</artifactId>
+         <version>${project.version}</version>
+         <type>war</type>
          <optional>true</optional>
       </dependency>
 

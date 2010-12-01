@@ -4,7 +4,7 @@ Provides portable and convenient enhancements to the Servlet API. Features inclu
 
 + producers for implicit Servlet objects and HTTP request state
 + propogation of Servlet events to the CDI event bus (Servlet event bridge)
-+ passing uncaught exceptions to the Seam exception handling infrastructure (Seam Catch bridge)
++ forwarding uncaught exceptions to the Seam exception handling infrastructure (Seam Catch bridge)
 + binding the BeanManager to a Servlet context attribute
 + and more...
 

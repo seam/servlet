@@ -33,7 +33,8 @@
          <outputDirectory>.</outputDirectory>
          <includes>
             <include>readme.txt</include>
-            <include>apl.txt</include>
+            <include>license.txt</include>
+            <include>notice.txt</include>
          </includes>
       </fileSet>
    </fileSets>
@@ -45,8 +46,11 @@
          <useProjectArtifact>false</useProjectArtifact>
          <includes>
             <include>org.jboss.seam.servlet:seam-servlet-api</include>
-            <include>org.jboss.seam.servlet:seam-servlet</include>
+            <include>org.jboss.seam.servlet:seam-servlet-impl</include>
          </includes>
+         <excludes>
+            <exclude>org.jboss.seam.servlet:seam-servlet-*:jar:javadoc</exclude>
+         </excludes>
          <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       </dependencySet>
       <!-- Add necessary dependencies -->
@@ -59,14 +63,32 @@
          </excludes>
          <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       </dependencySet>
-      <!-- Pull in javadoc for api -->
+      <!-- Pull in JavaDoc for api -->
       <dependencySet>
-         <outputDirectory>doc/apidocs</outputDirectory>
+         <outputDirectory>doc/api</outputDirectory>
          <unpack>true</unpack>
          <useProjectArtifact>false</useProjectArtifact>
          <includes>
             <include>org.jboss.seam.servlet:seam-servlet-api:jar:javadoc</include>
          </includes>
+         <unpackOptions>
+            <excludes>
+               <exclude>META-INF/</exclude>
+            </excludes>
+         </unpackOptions>
+      </dependencySet>
+      <dependencySet>
+         <outputDirectory>doc/reference</outputDirectory>
+         <unpack>true</unpack>
+         <useProjectArtifact>false</useProjectArtifact>
+         <includes>
+            <include>org.jboss.seam.servlet:seam-servlet-reference-guide</include>
+         </includes>
+         <unpackOptions>
+            <excludes>
+               <exclude>META-INF/</exclude>
+            </excludes>
+         </unpackOptions>
       </dependencySet>
    </dependencySets>
 </assembly>

@@ -11,7 +11,7 @@
    </para>
 
    <section id="injectablerefs.request_param">
-      <title>@RequestParam</title>
+      <title>@Inject @RequestParam</title>
       <para>
          The <literal>@RequestParam</literal> qualifier allows you to inject an HTTP request parameter (i.e., URI query
          string or URL form encoded parameter).
@@ -102,7 +102,7 @@ private HttpServletRequest request;]]></programlisting>
       </para> 
    </section>
    <section id="injectablerefs.request_context_path">
-      <title>@Inject @ContextPath String</title>
+      <title>@Inject @ContextPath</title>
       <para>
          The context path is made available as a dependent-scoped bean. It can be injected safetly
          into any request-scoped CDI bean as follows:

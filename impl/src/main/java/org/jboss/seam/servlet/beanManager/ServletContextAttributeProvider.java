@@ -27,7 +27,7 @@ import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
  * 
  * @author Nicklas Karlsson
  * 
- * @see ImplicitServletObjectsProducer
+ * @see org.jboss.seam.servlet.ImplicitServletObjectsProducer
  */
 public class ServletContextAttributeProvider implements BeanManagerProvider
 {

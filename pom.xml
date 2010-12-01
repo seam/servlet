@@ -49,7 +49,7 @@
 
    <properties>
       <seam.version>3.0.0.b03</seam.version>
-      <jboss.javaee.version>1.0.0.Beta4</jboss.javaee.version>
+      <jboss.javaee.version>1.0.0.CR1</jboss.javaee.version>
    </properties>
 
    <dependencyManagement>
@@ -94,9 +94,9 @@
          </roles>
       </developer>
       <developer>
-         <name>Lincoln Baxter, III</name>
-         <email>lincolnbaxter@gmail.com</email>
-         <url>http://ocpsoft.com</url>
+         <name>Dan Allen</name>
+         <email>dan.j.allen@gmail.com</email>
+         <url>http://mojavelinux.com</url>
          <organization>JBoss, by Red Hat</organization>
          <organizationUrl>http://jboss.org</organizationUrl>
          <timezone>EST</timezone>
@@ -105,9 +105,9 @@
          </roles>
       </developer>
       <developer>
-         <name>Dan Allen</name>
-         <email>dan.j.allen@gmail.com</email>
-         <url>http://mojavelinux.com</url>
+         <name>Lincoln Baxter, III</name>
+         <email>lincolnbaxter@gmail.com</email>
+         <url>http://ocpsoft.com</url>
          <organization>JBoss, by Red Hat</organization>
          <organizationUrl>http://jboss.org</organizationUrl>
          <timezone>EST</timezone>
@@ -209,8 +209,8 @@
             </property>
          </activation>
          <modules>
-            <module>dist</module>
             <module>docs/reference</module>
+            <module>dist</module>
          </modules>
       </profile>
       <profile>

@@ -68,7 +68,7 @@
          The <literal>ServletContext</literal> initialized event provides an excellent opportunity to perform startup
          logic as an alterative to using an EJB 3.1 startup singleton. Even better, you can configure the bean to be
          destroyed immediately following the initialization routine by leaving it as dependent scoped (dependent-scoped
-         observes only live for the duration of the observe method invocation).
+         observers only live for the duration of the observe method invocation).
       </para>
       <para>
          Here's an example of entering seed data into the database in a development environment (as indicated by a
@@ -88,8 +88,8 @@ public class SeedDataImporter
 }]]></programlisting>
       <para>
          If you'd rather not tie yourself to the Servlet API, you can observe the <literal>WebApplication</literal> type
-         instead, which is informational object containing select information from the <literal>ServletContext</literal>
-         such as the application name, context path, server info and start time.
+         instead, which is an informational object provided by Seam Servlet that holds select information about the
+         <literal>ServletContext</literal> such as the application name, context path, server info and start time.
       </para>
       <programlisting role="JAVA"><![CDATA[public void loadData(@Observes @Initialized WebApplication webapp)
 {
