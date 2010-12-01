@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier.literal;
+package org.jboss.seam.servlet.http.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.event.qualifier.Error;
+import org.jboss.seam.servlet.http.HttpRequest;
 
 /*
- * @author Nicklas Karlsson
+ * @author Dan Allen
  */
-public class ErrorLiteral extends AnnotationLiteral<Error> implements Error
+public class HttpRequestLiteral extends AnnotationLiteral<HttpRequest> implements HttpRequest
 {
-   private static final long serialVersionUID = -6594515538269370832L;
-   public static final Error INSTANCE = new ErrorLiteral();
+   private static final long serialVersionUID = -6004283843896130532L;
+   public static final HttpRequest INSTANCE = new HttpRequestLiteral();
 }

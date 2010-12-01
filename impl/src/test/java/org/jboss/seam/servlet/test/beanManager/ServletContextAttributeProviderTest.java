@@ -30,9 +30,10 @@ import javax.servlet.ServletContextEvent;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.servlet.ServletContextProducer;
-import org.jboss.seam.servlet.beanManager.ServletContextBeanManagerProvider;
-import org.jboss.seam.servlet.event.Servlet2EventBridge;
+import org.jboss.seam.servlet.ImplicitServletObjectsProducer;
+import org.jboss.seam.servlet.WebApplication;
+import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
+import org.jboss.seam.servlet.event.ServletEventBridgeListener;
 import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.weld.extensions.beanManager.BeanManagerAccessor;
@@ -44,20 +45,20 @@ import org.junit.runner.RunWith;
  * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
  */
 @RunWith(Arquillian.class)
-public class ServletContextBeanManagerProviderTest
+public class ServletContextAttributeProviderTest
 {
    @Deployment
    public static Archive<?> createDeployment()
    {
       return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletContextBeanManagerProvider.class, ServletContextProducer.class)
-         .addPackages(true, Servlet2EventBridge.class.getPackage())
-         .addServiceProvider(BeanManagerProvider.class, ServletContextBeanManagerProvider.class);
+         .addClasses(ServletContextAttributeProvider.class, ImplicitServletObjectsProducer.class, WebApplication.class)
+         .addPackages(true, ServletEventBridgeListener.class.getPackage())
+         .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
    }
    
    @Inject BeanManager manager;
    
-   @Inject Servlet2EventBridge listener;
+   @Inject ServletEventBridgeListener listener;
    
    @Inject Instance<ServletContext> servletContextProvider;
    

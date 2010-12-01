@@ -9,9 +9,216 @@
       CDI event bridge so you can observe them in your beans. The event bridge works by installing a servlet listener
       and firing events on the BeanManager with associated qualifiers, passing along the event object.
    </para>
+
+   <section id="events.servlet_context_lifecycle_listener">
+      <title>Servlet context lifecycle listener</title> 
+      <para>
+         These events correspond to the <literal>javax.servlet.ServletContextListener</literal> interface.
+         The event object fired is a <literal>javax.servlet.ServletContext</literal> (since it's the
+         only relevant information in the <literal>javax.servlet.ServletContextEvent</literal> object). There are
+         two qualifiers available that can be used for selecting the initialization or destruction of
+         the servlet context.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the creation event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers:
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContext(@Observes ServletContext ctx)
+{
+   // Do something with the "servlet context" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer:
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx)
+{
+   // Do something with the "servlet context" object upon initialization
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+
+   <section id="events.application_initialization">
+      <title>Application initialization</title>
+      <para>
+         The <literal>ServletContext</literal> initialized event provides an excellent opportunity to perform startup
+         logic as an alterative to using an EJB 3.1 startup singleton. Even better, you can configure the bean to be
+         destroyed immediately following the initialization routine by leaving it as dependent scoped (dependent-scoped
+         observes only live for the duration of the observe method invocation).
+      </para>
+      <para>
+         Here's an example of entering seed data into the database in a development environment (as indicated by a
+         stereotype annotation named <literal>@Development</literal>).
+      </para>
+      <programlisting role="JAVA"><![CDATA[@Stateless
+@Development
+public class SeedDataImporter
+{
+   @PersistenceContext
+   private EntityManager em;
+
+   public void loadData(@Observes @Initialized ServletContext ctx)
+   {
+      em.persist(new Product(1, "Black Hole", 100.0));
+   }
+}]]></programlisting>
+      <para>
+         If you'd rather not tie yourself to the Servlet API, you can observe the <literal>WebApplication</literal> type
+         instead, which is informational object containing select information from the <literal>ServletContext</literal>
+         such as the application name, context path, server info and start time.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void loadData(@Observes @Initialized WebApplication webapp)
+{
+   ...
+}]]></programlisting>
+   </section>
+
+   <section id="events.servlet_request_lifecycle_listener">
+      <title>Servlet request lifecycle listener</title> 
+      <para>
+         These events correspond to the 
+         <literal>javax.servlet.ServletRequestListener</literal> inteface. The event object fired is a
+         <literal>javax.servlet.ServletRequest</literal> (since it's the only relevant information in
+         the <literal>javax.servlet.ServletRequestEvent</literal> object. There are two qualifiers
+         available that can be used for selecting the initialization or destruction of the request.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the initialization event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers. 
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequest(@Observes ServletRequest request)
+{
+   // Do something with the servlet "request" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized ServletRequest request)
+{
+   // Do something with the servlet "request" object upon initialization
+}]]></programlisting>
+      <para>
+         You can also listen specifically for a <literal>javax.servlet.http.HttpServletRequest</literal>
+         simply by changing the expected event type.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized HttpServletRequest request)
+{
+   // Do something with the HTTP servlet "request" object upon initialization
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
+
+   <section id="events.servlet_response_lifecycle_listener">
+      <title>Servlet response lifecycle listener</title> 
+      <para>
+         The Servlet API does not provide a listener for accessing the lifecycle of a response. Therefore, Seam Servlet
+         simulates a response lifecycle listener using CDI events. These events parallel those provided by the
+         <literal>javax.servlet.ServletRequestListener</literal> inteface. The event object fired is a
+         <literal>javax.servlet.ServletResponse</literal>. There are two qualifiers available that can be used for
+         selecting the initialization or destruction of the response.
+      </para>
+      <para>
+         <informaltable>
+            <tgroup cols="2">
+               <colspec colnum="1" colwidth="1*" />
+               <colspec colnum="2" colwidth="3*" />
+               <thead>
+                  <row>
+                     <entry>Qualifier</entry>
+                     <entry>Description</entry>
+                  </row>
+               </thead>
+               <tbody>
+                  <row>
+                     <entry>@Initialized</entry>
+                     <entry>Qualifies the initialization event</entry>
+                  </row>
+                  <row>
+                     <entry>@Destroyed</entry>
+                     <entry>Qualifies the destruction event</entry>
+                  </row>
+               </tbody>
+            </tgroup>
+         </informaltable>
+      </para>
+      <para>
+         If you want to listen to both lifecycle events, leave out the qualifiers. 
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeResponse(@Observes ServletResponse response)
+{
+   // Do something with the servlet "response" object
+}]]></programlisting>
+      <para>
+         If you are interested in only a particular one, use a qualifer
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeResponseInitialized(@Observes @Initialized ServletResponse response)
+{
+   // Do something with the servlet "response" object upon initialization
+}]]></programlisting>
+      <para>
+         You can also listen specifically for a <literal>javax.servlet.http.HttpServletResponse</literal>
+         simply by changing the expected event type.
+      </para>
+      <programlisting role="JAVA"><![CDATA[public void observeResponseInitialized(@Observes @Initialized HttpServletResponse response)
+{
+   // Do something with the HTTP servlet "response" object upon initialization
+}]]></programlisting>
+      <para>
+         The name of the observer method is insignificant.
+      </para>
+   </section>
    
    <section id="events.session_lifecycle_listener">
-      <title>The session lifecycle listener</title> 
+      <title>Session lifecycle listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.HttpSessionListener</literal> interface. The event
          object fired is a <literal>javax.servlet.http.HttpSession</literal> (since it's the only relevant information
@@ -61,8 +268,9 @@
          The name of the observer method is insignificant.
       </para>
    </section>
+
    <section id="events.session_activation_listener">
-      <title>The session activation listener</title> 
+      <title>Session activation listener</title> 
       <para>
          These events correspond to the
          <literal>javax.servlet.HttpSessionActivationListener</literal> interface. The event object
@@ -116,8 +324,9 @@
          The name of the observer method is insignificant.
       </para>
    </section>   
+   <!--
    <section id="events.session_attribute_listener">
-      <title>The servlet context attribute listener</title> 
+      <title>Servlet context attribute listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.http.HttpSessionAttributeListener</literal> interface.
          The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
@@ -193,7 +402,7 @@
       </para>
    </section>
    <section id="events.session_binding_listener">
-      <title>The session binding listener</title> 
+      <title>Session binding listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.http.HttpSessionBindingListener</literal> interface.
          The event object fired is a <literal>javax.servlet.http.HttpSessionBindingEvent</literal> and there are
@@ -264,59 +473,10 @@
          The name of the observer method is insignificant.
       </para>
    </section>
-   <section id="events.servlet_context_lifecycle_listener">
-      <title>The servlet context lifecycle listener</title> 
-      <para>
-         These events correspond to the <literal>javax.servlet.ServletContextListener</literal> interface.
-         The event object fired is a <literal>javax.servlet.ServletContext</literal> (since it's the
-         only relevant information in the <literal>javax.servlet.ServletContextEvent</literal> object). There are
-         two qualifiers available that can be used for selecting the initialization or destruction of
-         the servlet context.
-      </para>
-      <para>
-         <informaltable>
-            <tgroup cols="2">
-               <colspec colnum="1" colwidth="1*" />
-               <colspec colnum="2" colwidth="3*" />
-               <thead>
-                  <row>
-                     <entry>Qualifier</entry>
-                     <entry>Description</entry>
-                  </row>
-               </thead>
-               <tbody>
-                  <row>
-                     <entry>@Initialized</entry>
-                     <entry>Qualifies the creation event</entry>
-                  </row>
-                  <row>
-                     <entry>@Destroyed</entry>
-                     <entry>Qualifies the destruction event</entry>
-                  </row>
-               </tbody>
-            </tgroup>
-         </informaltable>
-      </para>
-      <para>
-         If you want to listen to both lifecycle events, leave out the qualifiers
-      </para>
-      <programlisting role="JAVA"><![CDATA[public void observeServletContext(@Observes ServletContext ctx)
-{
-   // Do something with the "servlet context" object
-}]]></programlisting>
-      <para>
-         If you are interested in only a particular one, use a qualifer
-      </para>
-      <programlisting role="JAVA"><![CDATA[public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx)
-{
-   // Do something with the "servlet context" object upon initialization
-}]]></programlisting>
-      <para>
-         The name of the observer method is insignificant.
-      </para>
-   </section>
+   -->
+   <!--
    <section id="events.servlet_context_attribute_listener">
-      <title>The servlet context attribute listener</title> 
+      <title>Servlet context attribute listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.ServletContextAttributeListener</literal> interface.
          The event object fired is a <literal>javax.servlet.ServletContextAttributeEvent</literal> and there are
@@ -389,67 +549,10 @@
          The name of the observer method is insignificant.
       </para>
    </section>
-   <section id="events.servlet_request_listener">
-      <title>The servlet request lifecycle listener</title> 
-      <para>
-         These events correspond to the 
-         <literal>javax.servlet.ServletRequestListener</literal> inteface. The event object fired is a
-         <literal>javax.servlet.ServletRequest</literal> (since it's the only relevant information in
-         the <literal>javax.servlet.ServletRequestEvent</literal> object.  There are two qualifiers
-         available that can be used for selecting the initialization or destruction of the request.
-      </para>
-      <para>
-         <informaltable>
-            <tgroup cols="2">
-               <colspec colnum="1" colwidth="1*" />
-               <colspec colnum="2" colwidth="3*" />
-               <thead>
-                  <row>
-                     <entry>Qualifier</entry>
-                     <entry>Description</entry>
-                  </row>
-               </thead>
-               <tbody>
-                  <row>
-                     <entry>@Initialized</entry>
-                     <entry>Qualifies the initialization event</entry>
-                  </row>
-                  <row>
-                     <entry>@Destroyed</entry>
-                     <entry>Qualifies the destruction event</entry>
-                  </row>
-               </tbody>
-            </tgroup>
-         </informaltable>
-      </para>
-      <para>
-         If you want to listen to both lifecycle events, leave out the qualifiers. 
-      </para>
-      <programlisting role="JAVA"><![CDATA[public void observeRequest(@Observes ServletRequest request)
-{
-   // Do something with the servlet "request" object
-}]]></programlisting>
-      <para>
-         If you are interested in only a particular one, use a qualifer
-      </para>
-      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized ServletRequest request)
-{
-   // Do something with the servlet "request" object upon initialization
-}]]></programlisting>
-      <para>
-         You can also listen specifically for a <literal>javax.servlet.http.HttpServletRequest</literal>
-         simply by changing the expected event type.
-      </para>
-      <programlisting role="JAVA"><![CDATA[public void observeRequestInitialized(@Observes @Initialized HttpServletRequest request)
-{
-   // Do something with the HTTP servlet "request" object upon initialization
-}]]></programlisting>
-      <para>
-         The name of the observer method is insignificant.
-      </para>
-   </section>
+   -->
+   <!--
    <section id="events.servlet_request_attribute_listener">
-      <title>The servlet context attribute listener</title> 
+      <title>Servlet context attribute listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.ServletRequestAttributeListener</literal> interface.
          The event object fired is a <literal>javax.servlet.ServletRequestAttributeEvent</literal> and there are
@@ -523,7 +626,7 @@
       </para>
    </section>
    <section id="events.asynchronous_listener">
-      <title>The servlet context attribute listener</title> 
+      <title>Servlet context attribute listener</title> 
       <para>
          These events correspond to the <literal>javax.servlet.AsyncListener</literal> interface.
          The event object fired is a <literal>javax.servlet.AsyncEvent</literal>. There are four
@@ -580,6 +683,7 @@
          The name of the observer method is insignificant.
       </para>
    </section>
+   -->
 <!--
 vim:et:ts=3:sw=3:tw=120
 -->

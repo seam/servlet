@@ -14,31 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier;
+package org.jboss.seam.servlet.event;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
 
 import javax.inject.Qualifier;
-import javax.servlet.ServletContextEvent;
-import javax.servlet.ServletRequestEvent;
 
 /**
  * Qualifies observer method parameters to select events that fire when HTTP
- * artifacts are being initialized.
+ * sessions are activated.
  * 
- * The event parameter can be a {@link ServletContextEvent} or a
- * {@link ServletRequestEvent}.
+ * The event parameter is an {@link javax.servlet.http.HttpSession}
  * 
  * @author Nicklas Karlsson
  */
 @Qualifier
-@Target( { FIELD, PARAMETER })
+@Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
-public @interface Initialized
+@Documented
+public @interface DidActivate
 {
 }

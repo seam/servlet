@@ -3,8 +3,10 @@
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
    <!-- Uncomment to have test archives exported to the file system for inspection -->
+   <!--
    <engine>
       <deploymentExportPath>target/</deploymentExportPath>
    </engine>
+   -->
 
 </arquillian>

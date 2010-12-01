@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN"
    "http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" []>
-<preface>
+<preface id="intro">
    <title>Introduction</title>
    <para>
       The goal of Seam Servlet is to provide portable enhancements to the Servlet API. Features include producers for
-      implicit Servlet objects and request state, briding Servlet events to the CDI event bus and making the BeanManager
-      available through the Servlet context.
+      implicit Servlet objects and HTTP request state, propogating Servlet events to the CDI event bus, passing uncaught
+      exceptions to the Seam Catch handler chain and binding the BeanManager to a Servlet context attribute for
+      convenient access.
    </para>
 
 <!--

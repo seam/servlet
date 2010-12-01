@@ -14,21 +14,31 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier;
+package org.jboss.seam.servlet.event;
 
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
+
 import javax.inject.Qualifier;
 
 /**
+ * Qualifies observer method parameters to select events that fire when HTTP
+ * artifacts are being destroyed.
+ * 
+ * The event parameter can be a {@link javax.servlet.ServletContext},
+ * {@link javax.servlet.ServletRequest} or a {@link javax.servlet.http.HttpSession}.
+ * 
  * @author Nicklas Karlsson
  */
 @Qualifier
-@Target( { FIELD, PARAMETER })
+@Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
-public @interface Replaced
+@Documented
+public @interface Destroyed
 {
 }

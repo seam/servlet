@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
-<chapter id="servlet.installation">
+<chapter id="installation">
 	<title>Installation</title>
 	<para>
 		Most features of Seam Servlet are installed automatically by including the seam-servlet.jar and seam-servlet-api.jar
@@ -25,14 +25,34 @@
    </para>
    
    <para>
-      If you are using Servlet 2.5 or Java EE 5, then you need to add the following stanza to your application's web.xml
-      file to activate many of the features provided by this module:
+      If you are using Servlet 2.5 or Java EE 5, then you need to manually register several Servlet components in your
+      application's web.xml to activate the features provided by this module:
 	</para>
 	<programlisting role="XML"><![CDATA[<listener>
-   <listener-class>org.jboss.seam.servlet.event.Servlet2EventBridge</listener-class>
-</listener>]]></programlisting>
+   <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
+</listener>
+
+<filter>
+   <filter-name>Servlet Event Bridge Filter</filter-name>
+   <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
+</filter>
+
+<filter-mapping>
+   <filter-name>Servlet Event Bridge Filter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>
+
+<filter>
+   <filter-name>Catch Exception Filter</filter-name>
+   <filter-class>org.jboss.seam.servlet.filter.CatchExceptionFilter</filter-class>
+</filter>
+
+<filter-mapping>
+   <filter-name>Catch Exception Filter</filter-name>
+   <url-pattern>/*</url-pattern>
+</filter-mapping>]]></programlisting>
    <para>
-      You are now ready to dive into the Servlet enhancements provided for you by the Seam Servlet module!
+      You're now ready to dive into the Servlet enhancements provided for you by the Seam Servlet module!
    </para>
 <!--
 vim:et:ts=3:sw=3:tw=120

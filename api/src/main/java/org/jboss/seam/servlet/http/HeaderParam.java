@@ -16,11 +16,13 @@
  */
 package org.jboss.seam.servlet.http;
 
+import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.ElementType.METHOD;
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
@@ -61,8 +63,9 @@ import javax.inject.Qualifier;
  * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
  */
 @Qualifier
+@Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
-@Target( { FIELD, PARAMETER, METHOD })
+@Documented
 public @interface HeaderParam
 {
    @Nonbinding

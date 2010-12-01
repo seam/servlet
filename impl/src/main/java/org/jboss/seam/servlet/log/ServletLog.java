@@ -1,7 +1,8 @@
 package org.jboss.seam.servlet.log;
 
 import javax.servlet.ServletContext;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 
 import org.jboss.logging.LogMessage;
 import org.jboss.logging.Logger.Level;
@@ -18,8 +19,14 @@ public interface ServletLog
    void servletContextDestroyed(ServletContext ctx);
    
    @LogMessage(level = Level.TRACE) @Message("Servlet request initialized: %s")
-   void servletRequestInitialized(HttpServletRequest request);
+   void servletRequestInitialized(ServletRequest request);
    
    @LogMessage(level = Level.TRACE) @Message("Servlet request destroyed: %s")
-   void servletRequestDestroyed(HttpServletRequest request);
+   void servletRequestDestroyed(ServletRequest request);
+   
+   @LogMessage(level = Level.TRACE) @Message("Servlet response initialized: %s")
+   void servletResponseInitialized(ServletResponse response);
+   
+   @LogMessage(level = Level.TRACE) @Message("Servlet response destroyed: %s")
+   void servletResponseDestroyed(ServletResponse response);
 }

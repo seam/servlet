@@ -24,6 +24,8 @@ import org.jboss.weld.conversation.ConversationManager;
 import org.jboss.weld.servlet.ServletLifecycle;
 
 /**
+ * FIXME not yet complete
+ * 
  * @author Nicklas Karlsson
  */
 public abstract class ContextualHttpRequest

@@ -39,7 +39,9 @@ import org.jboss.seam.servlet.ServletExtension;
 import org.jboss.seam.servlet.http.CookieParam;
 import org.jboss.seam.servlet.http.DefaultValue;
 import org.jboss.seam.servlet.http.HeaderParam;
-import org.jboss.seam.servlet.http.HttpServletEnvironmentProducer;
+import org.jboss.seam.servlet.http.ImplicitHttpServletObjectsProducer;
+import org.jboss.seam.servlet.http.RedirectBuilder;
+import org.jboss.seam.servlet.http.RedirectBuilderImpl;
 import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.TypedParamValue;
 import org.jboss.seam.servlet.test.util.Deployments;
@@ -67,7 +69,9 @@ public class RequestParamProducerTest
    {
       return Deployments.createMockableBeanWebArchive()
          .addClasses(ServletExtension.class, Primitives.class, NarrowingBeanBuilder.class)
-         .addPackages(false, Deployments.exclude(HttpServletEnvironmentProducer.class), TypedParamValue.class.getPackage())
+         .addPackages(false, Deployments.exclude(
+               ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class, RedirectBuilderImpl.class),
+            TypedParamValue.class.getPackage())
          .addServiceProvider(Extension.class, ServletExtension.class);
    }
    

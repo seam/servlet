@@ -14,21 +14,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier;
+package org.jboss.seam.servlet.http;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
+
 import javax.inject.Qualifier;
 
 /**
- * @author Nicklas Karlsson
+ * Qualifies the context path.
+ * 
+ * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
  */
 @Qualifier
-@Target( { FIELD, PARAMETER })
+@Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
-public @interface Added
+@Documented
+public @interface ContextPath
 {
 }

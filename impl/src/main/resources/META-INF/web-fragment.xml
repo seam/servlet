@@ -2,16 +2,42 @@
 <web-fragment version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
-   <name>seamservlet</name>
 
+   <name>SeamServlet</name>
+
+   <!--
+      If there are multiple documents stating "before others", they will all be
+      at the beginning of the list of sorted documents, but the ordering within
+      the group of such documents is unspecified.
+   -->
+   <ordering>
+      <before>
+         <others/>
+      </before>
+   </ordering>
+   
    <listener>
-      <listener-class>org.jboss.seam.servlet.event.Servlet2EventBridge</listener-class>
+      <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
    </listener>
-
-<!-- Broken on GlassFish (perhaps because what is trying to do is illegal
-   <listener>
-      <listener-class>org.jboss.seam.servlet.event.Servlet3EventBridge</listener-class>
-   </listener>
--->
-
+   
+   <filter>
+      <filter-name>Servlet Event Bridge Filter</filter-name>
+      <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
+   </filter>
+   
+   <filter-mapping>
+      <filter-name>Servlet Event Bridge Filter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+   
+   <filter>
+      <filter-name>Catch Exception Filter</filter-name>
+      <filter-class>org.jboss.seam.servlet.filter.CatchExceptionFilter</filter-class>
+   </filter>
+   
+   <filter-mapping>
+      <filter-name>Catch Exception Filter</filter-name>
+      <url-pattern>/*</url-pattern>
+   </filter-mapping>
+   
 </web-fragment>

@@ -14,11 +14,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier.literal;
+package org.jboss.seam.servlet.event.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.event.qualifier.Initialized;
+import org.jboss.seam.servlet.event.Initialized;
 
 /*
  * @author Nicklas Karlsson

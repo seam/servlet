@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier.literal;
+package org.jboss.seam.servlet.event.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.event.qualifier.Added;
+import org.jboss.seam.servlet.event.DidActivate;
 
 /*
  * @author Nicklas Karlsson
  */
-public class AddedLiteral extends AnnotationLiteral<Added> implements Added
+public class DidActivateLiteral extends AnnotationLiteral<DidActivate> implements DidActivate
 {
-   private static final long serialVersionUID = -3903727499201387655L;
-   public static final Added INSTANCE = new AddedLiteral();
+   private static final long serialVersionUID = -7542956885080035383L;
+   public static final DidActivate INSTANCE = new DidActivateLiteral();
 }

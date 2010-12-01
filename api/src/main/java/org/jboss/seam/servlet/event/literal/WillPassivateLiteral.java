@@ -14,35 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier.literal;
+package org.jboss.seam.servlet.event.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.event.qualifier.Attribute;
+import org.jboss.seam.servlet.event.WillPassivate;
 
 /*
  * @author Nicklas Karlsson
  */
-public class AttributeLiteral extends AnnotationLiteral<Attribute> implements Attribute
+public class WillPassivateLiteral extends AnnotationLiteral<WillPassivate> implements WillPassivate
 {
-   private static final long serialVersionUID = 4238099273536726316L;
-
-   public static final Attribute INSTANCE = new AttributeLiteral();
-
-   private final String value;
-
-   public AttributeLiteral()
-   {
-      this.value = "";
-   }
-
-   public AttributeLiteral(final String value)
-   {
-      this.value = value;
-   }
-
-   public String value()
-   {
-      return value;
-   }
+   private static final long serialVersionUID = 1008760745325853191L;
+   public static final WillPassivate INSTANCE = new WillPassivateLiteral();
 }

@@ -97,8 +97,27 @@ private HttpSession session;]]></programlisting>
       <programlisting role="JAVA"><![CDATA[@Inject
 private HttpServletRequest request;]]></programlisting>
       <para>
-         The producer obtains a reference to the <literal>ServletContext</literal> by observing the
-         <literal>@Initialized ServletContext</literal> event raised by this module's Servlet-to-CDI event bridge.
+         The producer obtains a reference to the <literal>HttpServletRequest</literal> by observing the
+         <literal>@Initialized HttpServletRequest</literal> event raised by this module's Servlet-to-CDI event bridge.
+      </para> 
+   </section>
+   <section id="injectablerefs.request_context_path">
+      <title>@Inject @ContextPath String</title>
+      <para>
+         The context path is made available as a dependent-scoped bean. It can be injected safetly
+         into any request-scoped CDI bean as follows:
+      </para>
+      <programlisting role="JAVA"><![CDATA[@Inject @ContextPath
+private String contextPath;]]></programlisting>
+      <para>
+         You can safetly inject the context path into a bean with a wider scope using an instance provider:
+      </para>
+      <programlisting role="JAVA"><![CDATA[@Inject @ContextPath
+private Instance<String> contextPathProvider;
+...
+String contextPath = contextPathProvider.get();]]></programlisting>
+      <para>
+         The context path is retrieved from the <literal>HttpServletRequest</literal>.
       </para> 
    </section>
    <section id="injectablerefs.cookies">

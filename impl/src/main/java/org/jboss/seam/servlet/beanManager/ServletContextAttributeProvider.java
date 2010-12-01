@@ -26,8 +26,10 @@ import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
  * "javax.enterprise.inject.spi.BeanManager"
  * 
  * @author Nicklas Karlsson
+ * 
+ * @see ImplicitServletObjectsProducer
  */
-public class ServletContextBeanManagerProvider implements BeanManagerProvider
+public class ServletContextAttributeProvider implements BeanManagerProvider
 {
    private static ThreadLocal<ServletContext> servletContext = new ThreadLocal<ServletContext>()
    {
@@ -56,5 +58,4 @@ public class ServletContextBeanManagerProvider implements BeanManagerProvider
    {
       return 20;
    }
-
 }

@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.event.qualifier.literal;
+package org.jboss.seam.servlet.event.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.event.qualifier.StartAsync;
+import org.jboss.seam.servlet.event.Destroyed;
 
 /*
  * @author Nicklas Karlsson
  */
-public class StartAsyncLiteral extends AnnotationLiteral<StartAsync> implements StartAsync
+public class DestroyedLiteral extends AnnotationLiteral<Destroyed> implements Destroyed
 {
-   private static final long serialVersionUID = -2567328090194504420L;
-   public static final StartAsync INSTANCE = new StartAsyncLiteral();
+   private static final long serialVersionUID = -6004283843896030539L;
+   public static final Destroyed INSTANCE = new DestroyedLiteral();
 }
