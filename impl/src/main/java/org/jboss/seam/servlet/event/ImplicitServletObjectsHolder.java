@@ -19,7 +19,7 @@ import org.jboss.weld.extensions.log.Category;
  * A manager for tracking the contextual Servlet objects, specifically the
  * {@link ServletContext}, {@link HttpServletRequest} and {@link HttpServletResponse}.
  *  
- * @author Dan Allen
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @ApplicationScoped
 public class ImplicitServletObjectsHolder

@@ -54,7 +54,7 @@ import java.io.File;
  * <p>Another approach to pull in a library is to add packages recursively from the
  * root library package.</p>
  *
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class MavenArtifactResolver
 {

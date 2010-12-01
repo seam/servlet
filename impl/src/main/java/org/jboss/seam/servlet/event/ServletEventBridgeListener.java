@@ -46,7 +46,7 @@ import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
  * to be a managed bean.
  * 
  * @author Nicklas Karlsson
- * @author Dan Allen
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ServletEventBridgeListener extends AbstractServletEventBridge
       implements HttpSessionActivationListener, HttpSessionListener, ServletContextListener, ServletRequestListener

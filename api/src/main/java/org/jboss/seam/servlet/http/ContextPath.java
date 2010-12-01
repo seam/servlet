@@ -31,7 +31,7 @@ import javax.inject.Qualifier;
 /**
  * Qualifies the context path.
  * 
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Qualifier
 @Target({ TYPE, METHOD, PARAMETER, FIELD })

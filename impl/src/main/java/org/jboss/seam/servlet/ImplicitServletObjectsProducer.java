@@ -14,7 +14,7 @@ import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder;
  * Produces an application-scoped {@link ServletContext} bean.
  * A references is obtained from the {@link ImplicitServletObjectsHolder}.
  *
- * @author Dan Allen
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ImplicitServletObjectsProducer
 {

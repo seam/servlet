@@ -53,7 +53,7 @@ import org.jboss.weld.extensions.literal.AnyLiteral;
 import org.jboss.weld.extensions.literal.DefaultLiteral;
 
 /**
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ServletExtension implements Extension
 {

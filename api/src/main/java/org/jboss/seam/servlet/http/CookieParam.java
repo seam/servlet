@@ -60,7 +60,7 @@ import javax.inject.Qualifier;
  * 
  * String lang = langProvider.get();</pre>
  * 
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Qualifier
 @Target({ TYPE, METHOD, PARAMETER, FIELD })

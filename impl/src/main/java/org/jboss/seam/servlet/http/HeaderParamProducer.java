@@ -49,7 +49,7 @@ import org.jboss.seam.servlet.util.Primitives;
  * returned.
  * </p>
  * 
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  * 
  * @see HeaderParam
  * @see DefaultValue

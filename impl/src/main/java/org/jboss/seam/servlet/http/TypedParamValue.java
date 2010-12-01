@@ -25,7 +25,7 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Qualifier

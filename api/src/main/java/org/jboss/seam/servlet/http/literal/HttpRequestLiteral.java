@@ -21,7 +21,7 @@ import javax.enterprise.util.AnnotationLiteral;
 import org.jboss.seam.servlet.http.HttpRequest;
 
 /*
- * @author Dan Allen
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class HttpRequestLiteral extends AnnotationLiteral<HttpRequest> implements HttpRequest
 {

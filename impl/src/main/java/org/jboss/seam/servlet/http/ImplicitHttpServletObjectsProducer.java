@@ -39,7 +39,7 @@ import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder;
  * TODO should probably throw IllegalStateException if accessed outside request
  * 
  * @author Nicklas Karlsson
- * @author <a href="mailto:dan.j.allen@gmail.com">Dan Allen</a>
+ * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ImplicitHttpServletObjectsProducer implements Serializable
 {
