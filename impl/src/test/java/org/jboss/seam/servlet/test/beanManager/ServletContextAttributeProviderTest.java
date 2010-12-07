@@ -34,6 +34,7 @@ import org.jboss.seam.servlet.ImplicitServletObjectsProducer;
 import org.jboss.seam.servlet.ServerInfo;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
 import org.jboss.seam.servlet.event.ServletEventBridgeListener;
+import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.weld.extensions.beanManager.BeanManagerAccessor;
@@ -51,7 +52,7 @@ public class ServletContextAttributeProviderTest
    public static Archive<?> createDeployment()
    {
       return Deployments.createMockableBeanWebArchive()
-         .addClass(ServletContextAttributeProvider.class)
+         .addClasses(ServletContextAttributeProvider.class, HttpServletRequestContext.class)
          .addPackage(ImplicitServletObjectsProducer.class.getPackage())
          .addPackages(true, ServletEventBridgeListener.class.getPackage())
          .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
