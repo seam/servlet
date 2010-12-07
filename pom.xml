@@ -209,7 +209,7 @@
          </activation>
          <modules>
             <module>combined</module>
-            <module>docs/reference</module>
+            <module>docs</module>
             <module>dist</module>
          </modules>
       </profile>
