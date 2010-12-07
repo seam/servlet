@@ -48,12 +48,11 @@
  Release Notes
  =============
 
- * Initial public release
- * Servlet to CDI event bridge
- * Catch Servlet integration
- * Producers for implicit Servlet objects (including producer for [Http]ServletResponse)
- * Narrowing type producers for HTTP request state (parameters, headers & cookies)
- * Binding BeanManager to a Servlet context attribute
- * Proposed RedirectBuilder API
- * @HttpRequest qualifier
-
+ * Lifecycle events and producers for (Http)ServletRequestContext
+ * @Path qualifier for request-oriented lifecycle events
+ * Character encoding configuration/filter
+ * Add support for Cookie type at @CookieParam injection point
+ * Initial Catch integration
+ * remove ContextualHttpRequest (requires more research)
+ * Add missing documentation and documentation for new features
+ * Additional tests
