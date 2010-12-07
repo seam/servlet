@@ -61,10 +61,10 @@
             <type>pom</type>
          </dependency>
 
-         <!-- Override submodule versions from org.jboss.seam:seam -->
+         <!-- Override submodule versions from org.jboss.seam:seam-bom -->
          <dependency>
             <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet</artifactId>
+            <artifactId>seam-servlet-impl</artifactId>
             <version>${project.version}</version>
          </dependency>
 
@@ -208,6 +208,7 @@
             </property>
          </activation>
          <modules>
+            <module>combined</module>
             <module>docs/reference</module>
             <module>dist</module>
          </modules>
