@@ -27,7 +27,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
+import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.log.ServletLog;
 import org.jboss.weld.extensions.log.Category;
 
@@ -43,21 +45,12 @@ public class ImplicitServletObjectsHolder
    @Inject @Category("seam-servlet")
    private ServletLog log;
    
-   private ServletContext servletContext;
+   private ServletContext servletCtx;
    
-   private final ThreadLocal<ServletRequest> request = new ThreadLocal<ServletRequest>()
+   private final ThreadLocal<ServletRequestContext> requestCtx = new ThreadLocal<ServletRequestContext>()
    {
       @Override
-      protected ServletRequest initialValue()
-      {
-         return null;
-      }
-   };
-   
-   private final ThreadLocal<ServletResponse> response = new ThreadLocal<ServletResponse>()
-   {
-      @Override
-      protected ServletResponse initialValue()
+      protected ServletRequestContext initialValue()
       {
          return null;
       }
@@ -69,70 +62,137 @@ public class ImplicitServletObjectsHolder
       log.servletContextInitialized(ctx);
       ctx.setAttribute(BeanManager.class.getName(), beanManager);
       ServletContextAttributeProvider.setServletContext(ctx);
-      servletContext = ctx;
+      servletCtx = ctx;
    }
 
    protected void contextDestroyed(@Observes @Destroyed final InternalServletContextEvent e)
    {
       log.servletContextDestroyed(e.getServletContext());
-      servletContext = null;
+      servletCtx = null;
    }
    
    protected void requestInitialized(@Observes @Initialized final InternalServletRequestEvent e)
    {
       ServletRequest req = e.getServletRequest();
       log.servletRequestInitialized(req);
-      request.set(req);
+      if (req instanceof HttpServletRequest)
+      {
+         requestCtx.set(new HttpServletRequestContext(req));
+      }
+      else
+      {
+         requestCtx.set(new ServletRequestContext(req));
+      }
    }
 
    protected void requestDestroyed(@Observes @Destroyed final InternalServletRequestEvent e)
    {
       log.servletRequestDestroyed(e.getServletRequest());
-      this.request.set(null);
+      requestCtx.set(null);
    }
    
    protected void responseInitialized(@Observes @Initialized final InternalServletResponseEvent e)
    {
-      log.servletResponseInitialized(e.getServletResponse());
-      this.response.set(e.getServletResponse());
+      ServletResponse res = e.getServletResponse();
+      log.servletResponseInitialized(res);
+      if (res instanceof HttpServletResponse)
+      {
+         requestCtx.set(new HttpServletRequestContext(requestCtx.get().getRequest(), res));
+      }
+      else
+      {
+         requestCtx.set(new ServletRequestContext(requestCtx.get().getRequest(), res));
+      }
    }
    
    protected void responseDestroyed(@Observes @Destroyed final InternalServletResponseEvent e)
    {
       log.servletResponseDestroyed(e.getServletResponse());
-      this.response.set(null);
+      if (requestCtx.get() instanceof HttpServletRequestContext)
+      {
+         requestCtx.set(new HttpServletRequestContext(requestCtx.get().getRequest()));
+      }
+      else
+      {
+         requestCtx.set(new ServletRequestContext(requestCtx.get().getRequest()));
+      }
    }
    
    public ServletContext getServletContext()
    {
-      return servletContext;
+      return servletCtx;
+   }
+   
+   public ServletRequestContext getServletRequestContext()
+   {
+      return requestCtx.get();
+   }
+   
+   public HttpServletRequestContext getHttpServletRequestContext()
+   {
+      if (requestCtx.get() instanceof HttpServletRequestContext)
+      {
+         return HttpServletRequestContext.class.cast(requestCtx.get());
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public ServletRequest getServletRequest()
    {
-      return request.get();
+      if (requestCtx.get() != null)
+      {
+         return requestCtx.get().getRequest();
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public HttpServletRequest getHttpServletRequest()
    {
-      return (HttpServletRequest) (request.get() instanceof HttpServletRequest ? request.get() : null);
+      if (requestCtx.get() instanceof HttpServletRequestContext)
+      {
+         return HttpServletRequestContext.class.cast(requestCtx.get()).getRequest();
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public ServletResponse getServletResponse()
    {
-      return response.get();
+      if (requestCtx.get() != null)
+      {
+         return requestCtx.get().getResponse();
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public HttpServletResponse getHttpServletResponse()
    {
-      return (HttpServletResponse) (response.get() instanceof HttpServletResponse ? response.get() : null);
+      if (requestCtx.get() instanceof HttpServletRequestContext)
+      {
+         return HttpServletRequestContext.class.cast(requestCtx.get()).getResponse();
+      }
+      else
+      {
+         return null;
+      }
    }
    
    public HttpSession getHttpSession()
    {
-      if (request.get() instanceof HttpServletRequest)
+      if (requestCtx.get() instanceof HttpServletRequestContext)
       {
-         return ((HttpServletRequest) request.get()).getSession();
+         return HttpServletRequestContext.class.cast(requestCtx.get()).getRequest().getSession();
       }
       else
       {

@@ -14,29 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.http;
+package org.jboss.seam.servlet.http.literal;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.util.AnnotationLiteral;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
+import org.jboss.seam.servlet.http.ServletWebRequest;
 
-import javax.inject.Qualifier;
-
-/**
- * Qualifies the context path string.
- * 
+/*
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-@Qualifier
-@Target({ TYPE, METHOD, PARAMETER, FIELD })
-@Retention(RUNTIME)
-@Documented
-public @interface ContextPath
+public class ServletWebRequestLiteral extends AnnotationLiteral<ServletWebRequest> implements ServletWebRequest
 {
+   private static final long serialVersionUID = -6004283843896130532L;
+   public static final ServletWebRequest INSTANCE = new ServletWebRequestLiteral();
 }

@@ -37,7 +37,7 @@ import javax.enterprise.inject.spi.Extension;
 import javax.enterprise.inject.spi.InjectionPoint;
 import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
-import javax.enterprise.util.AnnotationLiteral;
+import javax.servlet.http.Cookie;
 
 import org.jboss.logging.Messages;
 import org.jboss.seam.servlet.http.CookieParam;
@@ -47,16 +47,27 @@ import org.jboss.seam.servlet.http.HeaderParamProducer;
 import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.RequestParamProducer;
 import org.jboss.seam.servlet.http.TypedParamValue;
+import org.jboss.seam.servlet.http.literal.CookieParamLiteral;
+import org.jboss.seam.servlet.http.literal.HeaderParamLiteral;
+import org.jboss.seam.servlet.http.literal.RequestParamLiteral;
 import org.jboss.seam.servlet.messages.ServletMessages;
 import org.jboss.seam.servlet.util.Primitives;
 import org.jboss.weld.extensions.literal.AnyLiteral;
 import org.jboss.weld.extensions.literal.DefaultLiteral;
 
 /**
+ * Generates producers to map to the type at an HTTP parameter injection point.
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ServletExtension implements Extension
 {
+   static
+   {
+      // temporary to fix an intermittent extension ordering problem
+      System.setProperty("jboss.i18n.generate-proxies", "true");
+   }
+   
    private transient ServletMessages messages = Messages.getBundle(ServletMessages.class);
    
    private final Map<Class<? extends Annotation>, TypedParamProducerBlueprint> producerBlueprints;
@@ -133,7 +144,11 @@ public class ServletExtension implements Extension
                try
                {
                   Class<?> targetClass = (Class<?>) targetType;
-                  if (!targetClass.equals(String.class))
+                  if (targetClass.equals(String.class) || (paramAnnotationType.equals(CookieParam.class) && targetClass.equals(Cookie.class)))
+                  {
+                     // no converter needed
+                  }
+                  else
                   {
                      targetClass = Primitives.wrap(targetClass);
                      Member converter = null;
@@ -226,73 +241,5 @@ public class ServletExtension implements Extension
       {
          return qualifier;
       }
-   }
-   
-   // TODO move me to top-level type
-   public static class RequestParamLiteral extends AnnotationLiteral<RequestParam> implements RequestParam
-   {
-      private final String value;
-      
-      public RequestParamLiteral()
-      {
-         this("");
-      }
-      
-      public RequestParamLiteral(String value)
-      {
-         this.value = value;
-      }
-      
-      public String value()
-      {
-         return value;
-      }
-      
-      public static final RequestParamLiteral INSTANCE = new RequestParamLiteral();
-   }
-   
-   // TODO move me to top-level type
-   public static class HeaderParamLiteral extends AnnotationLiteral<HeaderParam> implements HeaderParam
-   {
-      private final String value;
-      
-      public HeaderParamLiteral()
-      {
-         this("");
-      }
-      
-      public HeaderParamLiteral(String value)
-      {
-         this.value = value;
-      }
-      
-      public String value()
-      {
-         return value;
-      }
-      
-      public static final HeaderParamLiteral INSTANCE = new HeaderParamLiteral();
-   }
-   
-   public static class CookieParamLiteral extends AnnotationLiteral<CookieParam> implements CookieParam
-   {
-      private final String value;
-      
-      public CookieParamLiteral()
-      {
-         this("");
-      }
-      
-      public CookieParamLiteral(String value)
-      {
-         this.value = value;
-      }
-      
-      public String value()
-      {
-         return value;
-      }
-      
-      public static final CookieParamLiteral INSTANCE = new CookieParamLiteral();
    }
 }

@@ -3,16 +3,16 @@
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <authorgroup>
    <author>
+      <firstname>Dan</firstname>
+      <surname>Allen</surname>
+   </author>
+   <author>
       <firstname>Lincoln</firstname>
       <surname>Baxter III</surname>
    </author>
    <author>
       <firstname>Nicklas</firstname>
       <surname>Karlsson</surname>
-   </author>
-   <author>
-      <firstname>Dan</firstname>
-      <surname>Allen</surname>
    </author>
 <!--
 vim:et:ts=3:sw=3:tw=120

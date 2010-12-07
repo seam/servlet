@@ -69,7 +69,7 @@ public class RequestParamProducerTest
    {
       return Deployments.createMockableBeanWebArchive()
          .addClasses(ServletExtension.class, Primitives.class, NarrowingBeanBuilder.class)
-         .addPackages(false, Deployments.exclude(
+         .addPackages(true, Deployments.exclude(
                ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class, RedirectBuilderImpl.class),
             TypedParamValue.class.getPackage())
          .addServiceProvider(Extension.class, ServletExtension.class);
@@ -88,6 +88,8 @@ public class RequestParamProducerTest
    @Inject @HeaderParam("Cache-Control") Instance<String> cacheControl;
    
    @Inject @CookieParam Instance<String> chocolate;
+   
+   @Inject @CookieParam("chocolate") Instance<Cookie> chocolateCookie;
    
    @Test
    public void should_inject_value_for_explicit_http_param()
@@ -130,6 +132,14 @@ public class RequestParamProducerTest
    public void should_inject_value_for_cookie_param()
    {
       Assert.assertEquals("chip", chocolate.get());
+   }
+   
+   @Test
+   public void should_inject_cookie_for_cookie_param()
+   {
+      Cookie c = chocolateCookie.get();
+      Assert.assertNotNull(c);
+      Assert.assertEquals("chip", c.getValue());
    }
    
    @Produces

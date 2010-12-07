@@ -31,7 +31,7 @@ import javax.servlet.ServletContextEvent;
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.servlet.ImplicitServletObjectsProducer;
-import org.jboss.seam.servlet.WebApplication;
+import org.jboss.seam.servlet.ServerInfo;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
 import org.jboss.seam.servlet.event.ServletEventBridgeListener;
 import org.jboss.seam.servlet.test.util.Deployments;
@@ -51,7 +51,8 @@ public class ServletContextAttributeProviderTest
    public static Archive<?> createDeployment()
    {
       return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletContextAttributeProvider.class, ImplicitServletObjectsProducer.class, WebApplication.class)
+         .addClass(ServletContextAttributeProvider.class)
+         .addPackage(ImplicitServletObjectsProducer.class.getPackage())
          .addPackages(true, ServletEventBridgeListener.class.getPackage())
          .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
    }
@@ -60,7 +61,8 @@ public class ServletContextAttributeProviderTest
    
    @Inject ServletEventBridgeListener listener;
    
-   @Inject Instance<ServletContext> servletContextProvider;
+   // TODO this should be in a separate test
+   @Inject @ServerInfo Instance<String> serverInfoProvider;
    
    @Test
    public void should_register_and_locate_bean_manager()
@@ -72,7 +74,7 @@ public class ServletContextAttributeProviderTest
       listener.contextInitialized(new ServletContextEvent(ctx));
       verify(ctx).setAttribute(BeanManager.class.getName(), manager);
       
-      assertEquals(MOCK_SERVLET_CONTEXT, servletContextProvider.get().getServerInfo());
+      assertEquals(MOCK_SERVLET_CONTEXT, serverInfoProvider.get());
       
       when(ctx.getAttribute(BeanManager.class.getName())).thenReturn(manager);
       assertTrue(BeanManagerAccessor.isBeanManagerAvailable());

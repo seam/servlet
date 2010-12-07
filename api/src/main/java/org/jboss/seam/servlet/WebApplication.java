@@ -69,4 +69,67 @@ public class WebApplication
       return System.currentTimeMillis() - startTime;
    }
 
+   @Override
+   public int hashCode()
+   {
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((contextPath == null) ? 0 : contextPath.hashCode());
+      result = prime * result + ((name == null) ? 0 : name.hashCode());
+      result = prime * result + ((serverInfo == null) ? 0 : serverInfo.hashCode());
+      return result;
+   }
+
+   @Override
+   public boolean equals(Object obj)
+   {
+      if (this == obj)
+      {
+         return true;
+      }
+      
+      if (!(obj instanceof WebApplication))
+      {
+         return false;
+      }
+      
+      WebApplication other = (WebApplication) obj;
+      if (contextPath == null)
+      {
+         if (other.contextPath != null)
+         {
+            return false;
+         }
+      }
+      else if (!contextPath.equals(other.contextPath))
+      {
+         return false;
+      }
+      
+      if (name == null)
+      {
+         if (other.name != null)
+         {
+            return false;
+         }
+      }
+      else if (!name.equals(other.name))
+      {
+         return false;
+      }
+      
+      if (serverInfo == null)
+      {
+         if (other.serverInfo != null)
+         {
+            return false;
+         }
+      }
+      else if (!serverInfo.equals(other.serverInfo))
+      {
+         return false;
+      }
+      
+      return true;
+   }
 }

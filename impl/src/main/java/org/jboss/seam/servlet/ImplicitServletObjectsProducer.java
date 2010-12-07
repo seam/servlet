@@ -39,22 +39,36 @@ public class ImplicitServletObjectsProducer
    
    @Produces
    @ApplicationScoped
-   public ServletContext getServletContext()
+   protected ServletContext getServletContext()
    {
       return holder.getServletContext();
    }
    
    @Produces
    @RequestScoped
-   public ServletRequest getServletRequest()
+   protected ServletRequestContext getServletRequestContext()
+   {
+      return holder.getServletRequestContext();
+   }
+   
+   @Produces
+   @RequestScoped
+   protected ServletRequest getServletRequest()
    {
       return holder.getServletRequest();
    }
    
    @Produces
    @RequestScoped
-   public ServletResponse getServletResponse()
+   protected ServletResponse getServletResponse()
    {
       return holder.getServletResponse();
+   }
+   
+   @Produces
+   @ServerInfo
+   protected String getServerInfo()
+   {
+      return getServletContext().getServerInfo();
    }
 }

@@ -54,6 +54,14 @@ public class ImplicitHttpServletObjectsProducer implements Serializable
    }
 
    @Produces
+   @Typed(HttpServletRequestContext.class)
+   @RequestScoped
+   protected HttpServletRequestContext getHttpServletRequestContext()
+   {
+      return holder.getHttpServletRequestContext();
+   }
+   
+   @Produces
    @Typed(HttpServletRequest.class)
    @RequestScoped
    protected HttpServletRequest getHttpServletRequest()

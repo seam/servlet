@@ -24,10 +24,14 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder.InternalServletResponseEvent;
 import org.jboss.seam.servlet.event.literal.DestroyedLiteral;
 import org.jboss.seam.servlet.event.literal.InitializedLiteral;
+import org.jboss.seam.servlet.event.literal.PathLiteral;
+import org.jboss.seam.servlet.http.HttpServletRequestContext;
 
 /**
  * Propagates the {@link ServletResponse} lifecycle events to the CDI event
@@ -55,15 +59,38 @@ public class ServletEventBridgeFilter extends AbstractServletEventBridge impleme
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
       fireEvent(new InternalServletResponseEvent(response), InitializedLiteral.INSTANCE);
-      fireEvent(response, InitializedLiteral.INSTANCE);
+      Path path = null;
+      if (request instanceof HttpServletRequest)
+      {
+         path = new PathLiteral(HttpServletRequest.class.cast(request).getServletPath());
+         fireEvent(response, InitializedLiteral.INSTANCE, path);
+         fireEvent(new HttpServletRequestContext(request, response), InitializedLiteral.INSTANCE, path);
+      }
+      else
+      {
+         fireEvent(response, InitializedLiteral.INSTANCE);
+         fireEvent(new ServletRequestContext(request, response), InitializedLiteral.INSTANCE);
+      }
       
       try
       {
-         chain.doFilter(request, response);
+         if (!response.isCommitted())
+         {
+            chain.doFilter(request, response);
+         }
       }
       finally
       {
-         fireEvent(response, DestroyedLiteral.INSTANCE);
+         if (request instanceof HttpServletRequest)
+         {
+            fireEvent(response, DestroyedLiteral.INSTANCE, path);
+            fireEvent(new HttpServletRequestContext(request, response), DestroyedLiteral.INSTANCE, path);
+         }
+         else
+         {
+            fireEvent(response, DestroyedLiteral.INSTANCE);
+            fireEvent(new ServletRequestContext(request, response), DestroyedLiteral.INSTANCE);
+         }
          fireEvent(new InternalServletResponseEvent(response), DestroyedLiteral.INSTANCE);
       }
    }

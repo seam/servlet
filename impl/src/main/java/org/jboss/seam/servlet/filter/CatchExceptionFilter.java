@@ -18,7 +18,7 @@ package org.jboss.seam.servlet.filter;
 
 import java.io.IOException;
 
-import javax.enterprise.event.Event;
+import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
@@ -28,42 +28,70 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.jboss.seam.exception.control.ExceptionToCatchEvent;
-import org.jboss.seam.servlet.http.literal.HttpRequestLiteral;
+import org.jboss.seam.servlet.http.literal.ServletWebRequestLiteral;
+import org.jboss.weld.extensions.beanManager.BeanManagerAware;
+import org.jboss.weld.extensions.core.Requires;
 
 /**
  * A bridge that forwards unhandled exceptions to the Seam exception handling facility (Seam Catch).
  *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class CatchExceptionFilter implements Filter
+@Requires("org.jboss.seam.exception.control.CatchExtension")
+public class CatchExceptionFilter extends BeanManagerAware implements Filter
 {
    @Inject
-   private Event<ExceptionToCatchEvent> bridgeEvent;
+   private BeanManager beanManager;
+   
+   private boolean enabled;
    
    public void init(FilterConfig config) throws ServletException
    {
+      if (beanManager == null)
+      {
+         try
+         {
+            beanManager = getBeanManager();
+         }
+         catch (IllegalStateException e)
+         {
+            return;
+         }
+      }
+
+      if (!beanManager.getBeans(CatchExceptionFilter.class).isEmpty())
+      {
+         enabled = true;
+      }
    }
 
    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
    {
-      try
+      if (!enabled)
       {
          chain.doFilter(request, response);
       }
-      catch (Exception e)
+      else
       {
-         ExceptionToCatchEvent catchEvent = new ExceptionToCatchEvent(e, HttpRequestLiteral.INSTANCE);
-         bridgeEvent.fire(catchEvent);
-         // QUESTION shouldn't catch handle rethrowing?
-         if (!catchEvent.isHandled())
+         try
          {
-            if (e instanceof ServletException)
+            chain.doFilter(request, response);
+         }
+         catch (Exception e)
+         {
+            ExceptionToCatchEvent catchEvent = new ExceptionToCatchEvent(e, ServletWebRequestLiteral.INSTANCE);
+            beanManager.fireEvent(catchEvent);
+            // QUESTION should catch handle rethrowing?
+            if (!catchEvent.isHandled())
             {
-               throw (ServletException) e;
-            }
-            else if (e instanceof IOException)
-            {
-               throw (IOException) e;
+               if (e instanceof ServletException)
+               {
+                  throw (ServletException) e;
+               }
+               else if (e instanceof IOException)
+               {
+                  throw (IOException) e;
+               }
             }
          }
       }

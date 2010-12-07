@@ -16,6 +16,7 @@
  */
 package org.jboss.seam.servlet.test.event;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,15 +24,23 @@ import java.util.Map;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.event.Observes;
+import javax.servlet.FilterChain;
 import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.jboss.seam.servlet.ServletRequestContext;
+import org.jboss.seam.servlet.WebApplication;
 import org.jboss.seam.servlet.event.Destroyed;
 import org.jboss.seam.servlet.event.DidActivate;
 import org.jboss.seam.servlet.event.Initialized;
+import org.jboss.seam.servlet.event.Path;
 import org.jboss.seam.servlet.event.WillPassivate;
+import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.junit.Assert;
 
 /**
@@ -63,20 +72,21 @@ public class ServletEventBridgeTestHelper
    {
       observations.clear();
    }
-
+   
    public void assertObservations(String id, Object... observations)
    {
       List<Object> observed = this.observations.get(id);
+      
       if (observations.length > 0)
       {
          Assert.assertNotNull("Observer [@Observes " + id + "] was never notified", observed);
       }
       else
       {
+         Assert.assertEquals("Observer [@Observes " + id + "] should not have been called", 0, (observed != null ? observed.size() : 0));
          return;
       }
       
-      //Assert.assertEquals(observations.length, observed.size());
       for (Object o : observations)
       {
          if (!observed.remove(o))
@@ -106,6 +116,21 @@ public class ServletEventBridgeTestHelper
       recordObservation("@Destroyed ServletRequest", req);
    }
    
+   public void observeWebApplication(@Observes WebApplication webapp)
+   {
+      recordObservation("WebApplication", webapp);
+   }
+
+   public void observeWebApplicationInitialized(@Observes @Initialized WebApplication webapp)
+   {
+      recordObservation("@Initialized WebApplication", webapp);
+   }
+
+   public void observeWebApplicationDestroyed(@Observes @Destroyed WebApplication webapp)
+   {
+      recordObservation("@Destroyed WebApplication", webapp);
+   }
+   
    public void observeHttpServletRequest(@Observes HttpServletRequest req)
    {
       recordObservation("HttpServletRequest", req);
@@ -119,6 +144,66 @@ public class ServletEventBridgeTestHelper
    public void observeHttpServletRequestDestroyed(@Observes @Destroyed HttpServletRequest req)
    {
       recordObservation("@Destroyed HttpServletRequest", req);
+   }
+
+   public void observeServletResponse(@Observes ServletResponse res)
+   {
+      recordObservation("ServletResponse", res);
+   }
+
+   public void observeServletResponseInitialized(@Observes @Initialized ServletResponse res)
+   {
+      recordObservation("@Initialized ServletResponse", res);
+   }
+
+   public void observeServletResponseDestroyed(@Observes @Destroyed ServletResponse res)
+   {
+      recordObservation("@Destroyed ServletResponse", res);
+   }
+   
+   public void observeHttpServletResponse(@Observes HttpServletResponse res)
+   {
+      recordObservation("HttpServletResponse", res);
+   }
+
+   public void observeHttpServletResponseInitialized(@Observes @Initialized HttpServletResponse res)
+   {
+      recordObservation("@Initialized HttpServletResponse", res);
+   }
+
+   public void observeHttpServletResponseDestroyed(@Observes @Destroyed HttpServletResponse res)
+   {
+      recordObservation("@Destroyed HttpServletResponse", res);
+   }
+   
+   public void observeServletRequestContext(@Observes ServletRequestContext ctx)
+   {
+      recordObservation("ServletRequestContext", ctx);
+   }
+   
+   public void observeServletRequestContextInitialized(@Observes @Initialized ServletRequestContext ctx)
+   {
+      recordObservation("@Initialized ServletRequestContext", ctx);
+   }
+   
+   public void observeServletRequestContextDestroyed(@Observes @Destroyed ServletRequestContext ctx)
+   {
+      recordObservation("@Destroyed ServletRequestContext", ctx);
+   }
+   
+   public void observeHttpServletRequestContext(@Observes HttpServletRequestContext ctx)
+   {
+      recordObservation("HttpServletRequestContext", ctx);
+   }
+   
+   public void observeHttpServletRequestContextInitialized(@Observes @Initialized HttpServletRequestContext ctx)
+   {
+      recordObservation("@Initialized HttpServletRequestContext", ctx);
+   }
+   
+   public void observeHttpServletRequestContextDestroyed(@Observes @Destroyed HttpServletRequestContext ctx)
+   {
+      recordObservation("@Destroyed HttpServletRequestContext", ctx);
    }
    
    public void observeHttpSession(@Observes HttpSession sess)
@@ -159,5 +244,24 @@ public class ServletEventBridgeTestHelper
    public void observeServletContextDestroyed(@Observes @Destroyed ServletContext ctx)
    {
       recordObservation("@Destroyed ServletContext", ctx);
+   }
+   
+   public void observeHttpServletRequestInitializedForPathA(@Observes @Initialized @Path("pathA") HttpServletRequest req)
+   {
+      recordObservation("@Initialized @Path(\"pathA\") HttpServletRequest", req);
+   }
+   
+   public void observeHttpServletRequestInitializedForPathB(@Observes @Initialized @Path("pathB") HttpServletRequest req)
+   {
+      recordObservation("@Initialized @Path(\"pathB\") HttpServletRequest", req);
+   }
+   
+   public static class NoOpFilterChain implements FilterChain
+   {
+      public static final FilterChain INSTANCE = new NoOpFilterChain();
+      
+      public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
+      {
+      }
    }
 }

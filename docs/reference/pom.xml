@@ -69,5 +69,25 @@
             </plugins>
          </build>
       </profile>
+      <profile>
+         <id>preview</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.jboss.maven.plugins</groupId>
+                  <artifactId>maven-jdocbook-plugin</artifactId>
+                  <configuration>
+                     <formats>
+                        <format>
+                          <formatName>html</formatName>
+                          <stylesheetResource>classpath:/xslt/org/jboss/weld/xhtml.xsl</stylesheetResource>
+                          <finalName>index.html</finalName>
+                        </format>
+                     </formats>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
    </profiles>
 </project>

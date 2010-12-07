@@ -64,8 +64,14 @@ public class CookieParamProducer
    // FIXME find better place to cache the valueOf methods
    protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext)
    {
-      String v = getCookieValue(getCookieName(ip), ip);
+      String cookieName = getCookieName(ip);
       Class<?> t = Primitives.wrap(resolveExpectedType(ip));
+      if (t.equals(Cookie.class))
+      {
+         return getCookie(cookieName, ip);
+      }
+      
+      String v = getCookieValue(cookieName, ip);
       if (t.equals(String.class))
       {
          return v;
@@ -91,6 +97,30 @@ public class CookieParamProducer
       return headerName;
    }
 
+   private Cookie getCookie(String cookieName, InjectionPoint ip)
+   {
+      Cookie cookie = null;
+      for (Cookie c : request.getCookies())
+      {
+         if (c.getName().equals(cookieName))
+         {
+            cookie = c;
+            break;
+         }
+      }
+      
+      if (cookie == null)
+      {
+         String defaultValue = getDefaultValue(ip);
+         if (defaultValue != null)
+         {
+            cookie = new Cookie(cookieName, defaultValue);
+         }
+      }
+      
+      return cookie;
+   }
+   
    private String getCookieValue(String cookieName, InjectionPoint ip)
    {
       // do we have to do any specific filtering here?

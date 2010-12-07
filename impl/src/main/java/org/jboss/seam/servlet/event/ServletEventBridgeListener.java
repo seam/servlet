@@ -20,6 +20,7 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.ServletRequestEvent;
 import javax.servlet.ServletRequestListener;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSessionActivationListener;
 import javax.servlet.http.HttpSessionEvent;
 import javax.servlet.http.HttpSessionListener;
@@ -31,6 +32,7 @@ import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder.InternalServlet
 import org.jboss.seam.servlet.event.literal.DestroyedLiteral;
 import org.jboss.seam.servlet.event.literal.DidActivateLiteral;
 import org.jboss.seam.servlet.event.literal.InitializedLiteral;
+import org.jboss.seam.servlet.event.literal.PathLiteral;
 import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
 
 /**
@@ -72,12 +74,28 @@ public class ServletEventBridgeListener extends AbstractServletEventBridge
    public void requestInitialized(final ServletRequestEvent e)
    {
       fireEvent(new InternalServletRequestEvent(e.getServletRequest()), InitializedLiteral.INSTANCE);
-      fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE);
+      if (e.getServletRequest() instanceof HttpServletRequest)
+      {
+         fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE,
+            new PathLiteral(HttpServletRequest.class.cast(e.getServletRequest()).getServletPath()));
+      }
+      else
+      {
+         fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE);
+      }
    }
    
    public void requestDestroyed(final ServletRequestEvent e)
    {
-      fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE);
+      if (e.getServletRequest() instanceof HttpServletRequest)
+      {
+         fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE,
+            new PathLiteral(HttpServletRequest.class.cast(e.getServletRequest()).getServletPath()));
+      }
+      else
+      {
+         fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE);
+      }
       fireEvent(new InternalServletRequestEvent(e.getServletRequest()), DestroyedLiteral.INSTANCE);
    }
    
