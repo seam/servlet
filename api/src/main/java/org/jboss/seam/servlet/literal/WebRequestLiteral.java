@@ -14,17 +14,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.http.literal;
+package org.jboss.seam.servlet.literal;
 
 import javax.enterprise.util.AnnotationLiteral;
 
-import org.jboss.seam.servlet.http.ServletWebRequest;
+import org.jboss.seam.servlet.WebRequest;
 
 /*
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class ServletWebRequestLiteral extends AnnotationLiteral<ServletWebRequest> implements ServletWebRequest
+public class WebRequestLiteral extends AnnotationLiteral<WebRequest> implements WebRequest
 {
    private static final long serialVersionUID = -6004283843896130532L;
-   public static final ServletWebRequest INSTANCE = new ServletWebRequestLiteral();
+   public static final WebRequest INSTANCE = new WebRequestLiteral();
 }

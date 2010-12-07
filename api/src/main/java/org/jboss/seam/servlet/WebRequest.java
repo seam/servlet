@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.http;
+package org.jboss.seam.servlet;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
@@ -39,6 +39,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface ServletWebRequest
+public @interface WebRequest
 {
 }

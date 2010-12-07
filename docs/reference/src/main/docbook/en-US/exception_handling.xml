@@ -49,22 +49,28 @@ public class ExceptionHandlers {
    }
 }]]></programlisting>
       <para>
-         That's all there is to it! If you only want this handler to be used for exceptions
-         processed by the Servlet integration (excluding web service requests like JAX-RS),
-         then you can add the <literal>@ServletWebRequest</literal> qualifier to the handler:
+         That's all there is to it! If you only want this handler to be used for exceptions raised by a web request
+         (excluding web service requests like JAX-RS), then you can add the <literal>@WebRequest</literal> qualifier to
+         the handler:
       </para>
       <programlisting role="JAVA"><![CDATA[@HandlesExceptions
 public class ExceptionHandlers {
-   void handleAll(@Handles @ServletWebRequest
+   void handleAll(@Handles @WebRequest
          CaughtException<Throwable> caught, HttpServletResponse response) {
       response.sendError(500, "You've been caught by Catch!"); 
    }
 }]]></programlisting>
+      <note>
+         <para>
+            Currently, <literal>@WebRequest</literal> is required to catch exceptions initiated by the Servlet
+            integration because of a bug in Catch.
+         </para>
+      </note>
       <para>
          Let's consider another example. When the custom <literal>AccountNotFound</literal> exception is thrown,
          we'll send a 404 response using this handler.
       </para>
-      <programlisting role="JAVA"><![CDATA[void handleAccountNotFound(@Handles @ServletWebRequest
+      <programlisting role="JAVA"><![CDATA[void handleAccountNotFound(@Handles @WebRequest
       CaughtException<AccountNotFound> caught, HttpServletResponse response) {
    response.sendError(404, "Account not found: " + caught.getException().getAccountId()); 
 }]]></programlisting>

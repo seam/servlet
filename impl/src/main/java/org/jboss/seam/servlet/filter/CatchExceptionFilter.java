@@ -27,19 +27,23 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.jboss.seam.exception.control.ExceptionToCatchEvent;
-import org.jboss.seam.servlet.http.literal.ServletWebRequestLiteral;
+import org.jboss.seam.exception.control.ExceptionToCatch;
+import org.jboss.seam.servlet.literal.WebRequestLiteral;
 import org.jboss.weld.extensions.beanManager.BeanManagerAware;
 import org.jboss.weld.extensions.core.Requires;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A bridge that forwards unhandled exceptions to the Seam exception handling facility (Seam Catch).
  *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-@Requires("org.jboss.seam.exception.control.CatchExtension")
+@Requires("org.jboss.seam.exception.control.extension.CatchExtension")
 public class CatchExceptionFilter extends BeanManagerAware implements Filter
 {
+   private transient Logger log = LoggerFactory.getLogger(CatchExceptionFilter.class);
+   
    @Inject
    private BeanManager beanManager;
    
@@ -55,6 +59,7 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
          }
          catch (IllegalStateException e)
          {
+            log.info("Could not locate BeanManager. Catch integration for Servlet disabled (even if present on the classpath)");
             return;
          }
       }
@@ -62,6 +67,7 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
       if (!beanManager.getBeans(CatchExceptionFilter.class).isEmpty())
       {
          enabled = true;
+         log.info("Catch integration for Servlet enabled");
       }
    }
 
@@ -79,7 +85,7 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
          }
          catch (Exception e)
          {
-            ExceptionToCatchEvent catchEvent = new ExceptionToCatchEvent(e, ServletWebRequestLiteral.INSTANCE);
+            ExceptionToCatch catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
             beanManager.fireEvent(catchEvent);
             // QUESTION should catch handle rethrowing?
             if (!catchEvent.isHandled())

@@ -1,5 +1,6 @@
 package org.jboss.seam.servlet.http;
 
+import javax.enterprise.inject.Typed;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -17,8 +18,12 @@ import org.jboss.seam.servlet.ServletRequestContext;
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
+@Typed()
 public class HttpServletRequestContext extends ServletRequestContext
 {
+   // required for scoped producer
+   public HttpServletRequestContext() {}
+   
    public HttpServletRequestContext(ServletRequest request, ServletResponse response)
    {
       super(enforceType(request, HttpServletRequest.class), enforceType(response, HttpServletResponse.class));
