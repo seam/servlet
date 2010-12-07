@@ -21,12 +21,12 @@
    <parent>
       <artifactId>seam-servlet-parent</artifactId>
       <groupId>org.jboss.seam.servlet</groupId>
-      <version>3.0.0-SNAPSHOT</version>
+      <version>3.0.0.Alpha2</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
    <artifactId>seam-servlet-impl</artifactId>
-   <version>3.0.0-SNAPSHOT</version>
+   <version>3.0.0.Alpha2</version>
 
    <packaging>jar</packaging>
    <name>Seam Servlet Module Core Implementation</name>
