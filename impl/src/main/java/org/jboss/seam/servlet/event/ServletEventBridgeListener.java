@@ -34,6 +34,7 @@ import org.jboss.seam.servlet.event.literal.DidActivateLiteral;
 import org.jboss.seam.servlet.event.literal.InitializedLiteral;
 import org.jboss.seam.servlet.event.literal.PathLiteral;
 import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
+import org.jboss.seam.servlet.http.literal.HttpMethodLiteral;
 
 /**
  * Propagates Servlet lifecycle events to the CDI event bus.
@@ -54,20 +55,17 @@ import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
 public class ServletEventBridgeListener extends AbstractServletEventBridge
       implements HttpSessionActivationListener, HttpSessionListener, ServletContextListener, ServletRequestListener
 {
-   private WebApplication webApplication;
-   
    public void contextInitialized(final ServletContextEvent e)
    {
       fireEvent(new InternalServletContextEvent(e.getServletContext()), InitializedLiteral.INSTANCE);
-      webApplication = new WebApplication(e.getServletContext());
-      fireEvent(webApplication, InitializedLiteral.INSTANCE);
+      WebApplication webapp = new WebApplication(e.getServletContext());
+      e.getServletContext().setAttribute(WEB_APPLICATION_ATTRIBUTE_NAME, webapp);
+      fireEvent(webapp, InitializedLiteral.INSTANCE);
       fireEvent(e.getServletContext(), InitializedLiteral.INSTANCE);
    }
    
    public void contextDestroyed(final ServletContextEvent e)
    {
-      fireEvent(e.getServletContext(), DestroyedLiteral.INSTANCE);
-      fireEvent(webApplication, DestroyedLiteral.INSTANCE);
       fireEvent(new InternalServletContextEvent(e.getServletContext()), DestroyedLiteral.INSTANCE);
    }
    
@@ -76,8 +74,10 @@ public class ServletEventBridgeListener extends AbstractServletEventBridge
       fireEvent(new InternalServletRequestEvent(e.getServletRequest()), InitializedLiteral.INSTANCE);
       if (e.getServletRequest() instanceof HttpServletRequest)
       {
+         HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
          fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE,
-            new PathLiteral(HttpServletRequest.class.cast(e.getServletRequest()).getServletPath()));
+            new PathLiteral(httpRequest.getServletPath()),
+            new HttpMethodLiteral(httpRequest.getMethod()));
       }
       else
       {
@@ -89,8 +89,10 @@ public class ServletEventBridgeListener extends AbstractServletEventBridge
    {
       if (e.getServletRequest() instanceof HttpServletRequest)
       {
+         HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
          fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE,
-            new PathLiteral(HttpServletRequest.class.cast(e.getServletRequest()).getServletPath()));
+            new PathLiteral(httpRequest.getServletPath()),
+            new HttpMethodLiteral(httpRequest.getMethod()));
       }
       else
       {

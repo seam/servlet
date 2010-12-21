@@ -182,7 +182,7 @@ public class ServletExtension implements Extension
          {
             for (Class<?> type : blueprint.getTargetTypes())
             {
-               event.addBean(createdTypedParamProducer(blueprint.getProducer(), type, blueprint.getQualifier(), beanManager));
+               event.addBean(createTypedParamProducer(blueprint.getProducer(), type, blueprint.getQualifier(), beanManager));
             }
          }
       }
@@ -190,7 +190,7 @@ public class ServletExtension implements Extension
       producerBlueprints.clear();
    }
    
-   private <T> Bean<T> createdTypedParamProducer(Bean<Object> delegate, Class<T> targetType, Annotation qualifier, BeanManager beanManager)
+   private <T> Bean<T> createTypedParamProducer(Bean<Object> delegate, Class<T> targetType, Annotation qualifier, BeanManager beanManager)
    {
       return new NarrowingBeanBuilder<T>(delegate, beanManager)
             .readFromType(beanManager.createAnnotatedType(targetType)).qualifiers(qualifier).create();

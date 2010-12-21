@@ -24,28 +24,29 @@
       <version>4</version>
    </parent>
 
-   <artifactId>seam-servlet-parent</artifactId>
    <groupId>org.jboss.seam.servlet</groupId>
+   <artifactId>seam-servlet-parent</artifactId>
+   <packaging>pom</packaging>
    <version>3.0.0-SNAPSHOT</version>
 
-   <packaging>pom</packaging>
    <name>Seam Servlet Module</name>
+   <description>Additional CDI integration and other enhancements to the Servlet API</description>
 
-   <description>
-      The Parent for Seam Servlet Module
-   </description>
+   <url>http://seamframework.org/Seam3/ServletModule</url>
 
-   <url>http://www.seamframework.org</url>
+   <licenses>
+      <license>
+         <name>Apache License, Version 2.0</name>
+         <distribution>repo</distribution>
+         <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+      </license>
+   </licenses>
 
    <modules>
       <module>api</module>
       <module>impl</module>
    </modules>
    
-   <prerequisites>
-      <maven>3.0</maven>
-   </prerequisites>
-
    <properties>
       <seam.version>3.0.0.b03</seam.version>
       <jboss.javaee.version>1.0.0.CR1</jboss.javaee.version>
@@ -84,37 +85,26 @@
       </dependency>
    </dependencies>
 
-   <developers>
-      <developer>
-         <name>Nicklas Karlsson</name>
-         <email>nickarls@gmail.com</email>
-         <roles>
-            <role>Project Lead</role>
-         </roles>
-      </developer>
-      <developer>
-         <name>Dan Allen</name>
-         <email>dan.j.allen@gmail.com</email>
-         <url>http://mojavelinux.com</url>
-         <organization>JBoss, by Red Hat</organization>
-         <organizationUrl>http://jboss.org</organizationUrl>
-         <timezone>EST</timezone>
-         <roles>
-            <role>Project Lead</role>
-         </roles>
-      </developer>
-      <developer>
-         <name>Lincoln Baxter, III</name>
-         <email>lincolnbaxter@gmail.com</email>
-         <url>http://ocpsoft.com</url>
-         <organization>JBoss, by Red Hat</organization>
-         <organizationUrl>http://jboss.org</organizationUrl>
-         <timezone>EST</timezone>
-         <roles>
-            <role>Contributor</role>
-         </roles>
-      </developer>
-   </developers>
+   <!-- remove after upgrade to seam-parent 5 -->
+   <build>
+      <pluginManagement>
+         <plugins>
+            <plugin>
+               <groupId>org.apache.maven.plugins</groupId>
+               <artifactId>maven-jar-plugin</artifactId>
+               <configuration>
+                  <archive>
+                     <manifestEntries>
+                        <Implementation-Version>${project.version}</Implementation-Version>
+                        <Implementation-Vendor-Id>org.jboss.seam</Implementation-Vendor-Id>
+                        <Specification-Version>${project.version}</Specification-Version>
+                     </manifestEntries>
+                  </archive>
+               </configuration>
+            </plugin>
+         </plugins>
+      </pluginManagement>
+   </build>
 
    <profiles>
       <profile>
@@ -259,5 +249,42 @@
       <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
       <url>http://github.com/seam/servlet</url>
    </scm>
+
+   <issueManagement>
+      <system>JIRA</system>
+      <url>http://issues.jboss.org/browse/SEAMSERVLET</url>
+   </issueManagement>
+
+   <developers>
+      <developer>
+         <name>Dan Allen</name>
+         <email>dan.j.allen@gmail.com</email>
+         <url>http://mojavelinux.com</url>
+         <organization>JBoss, by Red Hat</organization>
+         <organizationUrl>http://jboss.org</organizationUrl>
+         <timezone>EST</timezone>
+         <roles>
+            <role>Project Lead</role>
+         </roles>
+      </developer>
+      <developer>
+         <name>Nicklas Karlsson</name>
+         <email>nickarls@gmail.com</email>
+         <roles>
+            <role>Committer</role>
+         </roles>
+      </developer>
+      <developer>
+         <name>Lincoln Baxter, III</name>
+         <email>lincolnbaxter@gmail.com</email>
+         <url>http://ocpsoft.com</url>
+         <organization>JBoss, by Red Hat</organization>
+         <organizationUrl>http://jboss.org</organizationUrl>
+         <timezone>EST</timezone>
+         <roles>
+            <role>Contributor</role>
+         </roles>
+      </developer>
+   </developers>
 
 </project>

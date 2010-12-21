@@ -27,16 +27,29 @@
       the group of such documents is unspecified.
    -->
    <ordering>
+      <after>
+         <name>WeldServlet</name>
+      </after>
       <before>
          <others/>
       </before>
    </ordering>
    
    <listener>
+      <display-name>Servlet Event Bridge Listener</display-name>
       <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
    </listener>
    
+   <servlet>
+      <display-name>Servlet Event Bridge Servlet</display-name>
+      <servlet-name>Servlet Event Bridge Servlet</servlet-name>
+      <servlet-class>org.jboss.seam.servlet.event.ServletEventBridgeServlet</servlet-class>
+      <!-- Make load-on-startup a large enough value to be last initialized, first destroyed -->
+      <load-on-startup>99999</load-on-startup>
+   </servlet>
+   
    <filter>
+      <display-name>Servlet Event Bridge Filter</display-name>
       <filter-name>Servlet Event Bridge Filter</filter-name>
       <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
    </filter>
@@ -48,7 +61,7 @@
    
    <filter>
       <filter-name>Catch Exception Filter</filter-name>
-      <filter-class>org.jboss.seam.servlet.filter.CatchExceptionFilter</filter-class>
+      <filter-class>org.jboss.seam.servlet.exception.filter.CatchExceptionFilter</filter-class>
    </filter>
    
    <filter-mapping>

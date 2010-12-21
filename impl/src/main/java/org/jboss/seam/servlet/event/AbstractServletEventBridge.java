@@ -22,6 +22,7 @@ import java.util.Arrays;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
 
+import org.jboss.seam.servlet.WebApplication;
 import org.jboss.weld.extensions.beanManager.BeanManagerAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,6 +36,8 @@ import org.slf4j.LoggerFactory;
 public abstract class AbstractServletEventBridge extends BeanManagerAware
 {
    private transient Logger log = LoggerFactory.getLogger(AbstractServletEventBridge.class);
+   
+   public static String WEB_APPLICATION_ATTRIBUTE_NAME = WebApplication.class.getName();
    
    @Inject
    private BeanManager beanManager;

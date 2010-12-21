@@ -21,15 +21,18 @@
    <modelVersion>4.0.0</modelVersion>
 
    <parent>
-      <artifactId>seam-servlet-parent</artifactId>
       <groupId>org.jboss.seam.servlet</groupId>
+      <artifactId>seam-servlet-parent</artifactId>
       <version>3.0.0-SNAPSHOT</version>
       <relativePath>../pom.xml</relativePath>
    </parent>
 
    <artifactId>seam-servlet</artifactId>
+
    <packaging>jar</packaging>
-   <name>Seam Servlet Module (Uber Jar)</name>
+   <name>Seam Servlet Module</name>
+   <!-- url required for JAR Manifest -->
+   <url>${project.parent.url}</url>
 
    <build>
       <plugins>
@@ -45,10 +48,9 @@
                   <configuration>
                      <createSourcesJar>true</createSourcesJar>
                      <artifactSet>
-                        <excludes>
-                           <exclude>org.jboss.weld:weld-extensions</exclude>
-                           <exclude>org.jboss.seam.solder:seam-solder</exclude>
-                        </excludes>
+                        <includes>
+                           <include>org.jboss.seam.servlet:*</include>
+                        </includes>
                      </artifactSet>
                   </configuration>
                </execution>
