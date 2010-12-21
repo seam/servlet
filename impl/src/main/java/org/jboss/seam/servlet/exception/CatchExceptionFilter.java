@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.filter;
+package org.jboss.seam.servlet.exception;
 
 import java.io.IOException;
 
@@ -26,6 +26,7 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.exception.control.ExceptionToCatch;
 import org.jboss.seam.servlet.literal.WebRequestLiteral;
@@ -85,7 +86,16 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
          }
          catch (Exception e)
          {
-            ExceptionToCatch catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
+            ExceptionToCatch catchEvent;
+            if (request instanceof HttpServletRequest)
+            {
+               catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
+//                     new PathLiteral(HttpServletRequest.class.cast(request).getServletPath()));
+            }
+            else
+            {
+               catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
+            }
             beanManager.fireEvent(catchEvent);
             // QUESTION should catch handle rethrowing?
             if (!catchEvent.isHandled())
@@ -97,6 +107,10 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
                else if (e instanceof IOException)
                {
                   throw (IOException) e;
+               }
+               else
+               {
+                  throw new ServletException(e);
                }
             }
          }
