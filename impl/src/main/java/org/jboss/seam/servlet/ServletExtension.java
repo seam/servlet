@@ -21,7 +21,9 @@ import java.lang.reflect.Member;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -47,6 +49,7 @@ import org.jboss.seam.servlet.http.HeaderParam;
 import org.jboss.seam.servlet.http.HeaderParamProducer;
 import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.RequestParamProducer;
+import org.jboss.seam.servlet.http.TemporalConverters;
 import org.jboss.seam.servlet.http.TypedParamValue;
 import org.jboss.seam.servlet.http.literal.CookieParamLiteral;
 import org.jboss.seam.servlet.http.literal.HeaderParamLiteral;
@@ -185,14 +188,31 @@ public class ServletExtension implements Extension
                   {
                      targetClass = PrimitiveTypes.box(targetClass);
                      Member converter = null;
-                     try
-                     {
-                        converter = targetClass.getConstructor(String.class);
-                     }
-                     catch (NoSuchMethodException sce)
+
+                     if (targetClass.isEnum())
                      {
                         converter = targetClass.getMethod("valueOf", String.class);
                      }
+                     else if (Date.class.isAssignableFrom(targetClass))
+                     {
+                        converter = TemporalConverters.class.getMethod("parseDate", String.class);
+                     }
+                     else if (Calendar.class.isAssignableFrom(targetClass))
+                     {
+                        converter = TemporalConverters.class.getMethod("parseCalendar", String.class);
+                     }
+                     else
+                     {
+                        try
+                        {
+                           converter = targetClass.getConstructor(String.class);
+                        }
+                        catch (NoSuchMethodException sce)
+                        {
+                           converter = targetClass.getMethod("valueOf", String.class);
+                        }
+                     }
+
                      // TODO need way to register or detect custom converters
                      converterMembersByType.put(targetClass, converter);
                   }

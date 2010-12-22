@@ -19,6 +19,8 @@ package org.jboss.seam.servlet.test.http;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
@@ -66,7 +68,7 @@ public class RequestParamProducerTest
    public static Archive<?> createDeployment()
    {
       return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletExtension.class)
+         .addClasses(ServletExtension.class, Suit.class)
          .addPackages(true, Deployments.exclude(
                ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class, RedirectBuilderImpl.class),
             TypedParamValue.class.getPackage())
@@ -82,6 +84,10 @@ public class RequestParamProducerTest
    @Inject @RequestParam(MISSING_PARAM) Instance<String> missingNoDefault;
    
    @Inject @RequestParam("pageSize") Instance<Integer> pageSize;
+   
+   @Inject @RequestParam("suit") Instance<Suit> suit;
+   
+   @Inject @RequestParam("airDate") Instance<Date> airDate;
    
    @Inject @HeaderParam("Cache-Control") Instance<String> cacheControl;
    
@@ -121,6 +127,23 @@ public class RequestParamProducerTest
    }
    
    @Test
+   public void should_inject_value_for_enum_http_param()
+   {
+      Assert.assertEquals(Suit.DIAMONDS, suit.get());
+   }
+   
+   @Test
+   public void should_inject_value_for_date_http_param()
+   {
+      Calendar cal = Calendar.getInstance();
+      cal.set(2010, 7, 1, 20, 0, 0);
+      cal.set(Calendar.MILLISECOND, 0);
+      Date value = airDate.get();
+      Assert.assertNotNull(value);
+      Assert.assertEquals(cal.getTime().getTime(), value.getTime());
+   }
+   
+   @Test
    public void should_inject_value_for_header_param()
    {
       Assert.assertEquals("no-cache", cacheControl.get());
@@ -150,11 +173,15 @@ public class RequestParamProducerTest
       parameters.put(EXPLICIT_PARAM, new String[] { EXPLICIT_VALUE });
       parameters.put("page", new String[] { "1" });
       parameters.put("pageSize", new String[] { "25" });
+      parameters.put("suit", new String[] { Suit.DIAMONDS.name() });
+      parameters.put("airDate", new String[] { "2010-08-01 20:00" });
       when(req.getParameterMap()).thenReturn(parameters);
       when(req.getParameter(IMPLICIT_PARAM)).thenReturn(IMPLICIT_VALUE);
       when(req.getParameter(EXPLICIT_PARAM)).thenReturn(EXPLICIT_VALUE);
       when(req.getParameter("page")).thenReturn("1");
       when(req.getParameter("pageSize")).thenReturn("25");
+      when(req.getParameter("suit")).thenReturn(Suit.DIAMONDS.name());
+      when(req.getParameter("airDate")).thenReturn("2010-08-01 20:00");
       
       Vector<String> headerNames = new Vector<String>();
       headerNames.add("Cache-Control");
