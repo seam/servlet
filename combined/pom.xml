@@ -30,7 +30,7 @@
    <artifactId>seam-servlet</artifactId>
 
    <packaging>jar</packaging>
-   <name>Seam Servlet Module</name>
+   <name>Seam Servlet</name>
    <!-- url required for JAR Manifest -->
    <url>${project.parent.url}</url>
 

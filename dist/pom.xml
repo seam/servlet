@@ -10,7 +10,7 @@
    </parent>
 
    <artifactId>seam-servlet-distribution</artifactId>
-   <name>Seam Servlet Module Distribution</name>
+   <name>Seam Servlet Distribution</name>
    <description>Builds a Seam Servlet module release distribution</description>
    <packaging>pom</packaging>
 

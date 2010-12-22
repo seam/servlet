@@ -28,7 +28,7 @@
    <artifactId>seam-servlet-api</artifactId>
    
    <packaging>jar</packaging>
-   <name>Seam Servlet Module API</name>
+   <name>Seam Servlet API</name>
    <!-- url required for JAR Manifest -->
    <url>${project.parent.url}</url>
 

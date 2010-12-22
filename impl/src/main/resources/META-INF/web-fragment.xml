@@ -27,9 +27,12 @@
       the group of such documents is unspecified.
    -->
    <ordering>
+      <!-- if name doesn't match, fails on JBoss AS -->
+      <!--
       <after>
          <name>WeldServlet</name>
       </after>
+      -->
       <before>
          <others/>
       </before>
@@ -61,7 +64,7 @@
    
    <filter>
       <filter-name>Catch Exception Filter</filter-name>
-      <filter-class>org.jboss.seam.servlet.exception.filter.CatchExceptionFilter</filter-class>
+      <filter-class>org.jboss.seam.servlet.exception.CatchExceptionFilter</filter-class>
    </filter>
    
    <filter-mapping>

@@ -28,7 +28,7 @@
    <artifactId>seam-servlet-impl</artifactId>
 
    <packaging>jar</packaging>
-   <name>Seam Servlet Module Implementation</name>
+   <name>Seam Servlet Implementation</name>
    <!-- url required for JAR Manifest -->
    <url>${project.parent.url}</url>
    
@@ -115,13 +115,38 @@
    <profiles>
       <profile>
          <id>default</id>
-         <!--
          <activation>
             <property>
                <name>!arquillian</name>
             </property>
          </activation>
-         -->
+         <dependencies>
+            <dependency>
+               <groupId>org.jboss.spec</groupId>
+               <artifactId>jboss-javaee-6.0</artifactId>
+               <type>pom</type>
+               <scope>provided</scope>
+            </dependency>
+         </dependencies>
+         <build>
+            <plugins>
+               <plugin>
+                  <artifactId>maven-surefire-plugin</artifactId>
+                  <configuration>
+                     <skip>true</skip>
+                  </configuration>
+               </plugin>
+            </plugins>
+         </build>
+      </profile>
+      <!--
+      <profile>
+         <id>default</id>
+         <activation>
+            <property>
+               <name>!arquillian</name>
+            </property>
+         </activation>
          <dependencies>
             <dependency>
                <groupId>org.jboss.arquillian.container</groupId>
@@ -145,6 +170,8 @@
             </dependency>
          </dependencies>
       </profile>
+      -->
+
       <profile>
          <!-- To run tests, you must add -Djboss.i18n.generate-proxies=true to JBoss AS startup script -->
          <id>arq-jbossas-remote</id>

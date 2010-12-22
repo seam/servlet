@@ -29,7 +29,7 @@
    <groupId>org.jboss.seam.servlet</groupId>
    <artifactId>seam-servlet-reference-guide</artifactId>
    <packaging>jdocbook</packaging>
-   <name>Seam Servlet Module Reference Guide</name>
+   <name>Seam Servlet Reference Guide</name>
 
    <properties>
       <pdf.name>${project.artifactId}.pdf</pdf.name>
