@@ -75,6 +75,12 @@
             <version>${project.version}</version>
          </dependency>
 
+         <dependency>
+            <groupId>org.jboss.seam.servlet</groupId>
+            <artifactId>seam-servlet</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+
          <!-- promote to parent -->
          <dependency>
             <groupId>org.jboss.logging</groupId>

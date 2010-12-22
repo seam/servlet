@@ -22,15 +22,19 @@
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
          <artifactId>seam-servlet-api</artifactId>
-         <version>${project.version}</version>
          <optional>false</optional>
       </dependency>
 
       <dependency>
          <groupId>org.jboss.seam.servlet</groupId>
          <artifactId>seam-servlet-impl</artifactId>
-         <version>${project.version}</version>
          <optional>false</optional>
+      </dependency>
+
+      <dependency>
+         <groupId>org.jboss.seam.servlet</groupId>
+         <artifactId>seam-servlet</artifactId>
+         <optional>true</optional>
       </dependency>
 
       <dependency>

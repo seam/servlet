@@ -43,16 +43,16 @@
  Downloads:             http://sfwk.org/Seam3/DistributionDownloads
  Forums:                http://sfwk.org/Community/Seam3Users
  Source Code:           http://github.com/seam/servlet
- Issue Tracking:        http://jira.jboss.org/jira/browse/SEAMSERVLET
+ Issue Tracking:        http://issues.jboss.org/browse/SEAMSERVLET
 
  Release Notes
  =============
 
- * Lifecycle events and producers for (Http)ServletRequestContext
- * @Path qualifier for request-oriented lifecycle events
- * Character encoding configuration/filter
- * Add support for Cookie type at @CookieParam injection point
- * Initial Catch integration
- * remove ContextualHttpRequest (requires more research)
- * Add missing documentation and documentation for new features
- * Additional tests
+ * Migration to Seam Solder
+ * Declarative exception handler facility
+ * Additional startup event (@Started WebApplication)
+ * Support for Enum, Date and Calendar in HTTP data injections
+ * Combined API + implement JAR (seam-servlet)
+ * @HttpMethod lifecycle event selector
+ * Documentation edits
+ * Assign name to web-fragment.xml
