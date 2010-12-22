@@ -21,7 +21,7 @@
    <parent>
       <groupId>org.jboss.seam</groupId>
       <artifactId>seam-parent</artifactId>
-      <version>4</version>
+      <version>5</version>
    </parent>
 
    <groupId>org.jboss.seam.servlet</groupId>
@@ -48,8 +48,7 @@
    </modules>
    
    <properties>
-      <seam.version>3.0.0.b03</seam.version>
-      <jboss.javaee.version>1.0.0.CR1</jboss.javaee.version>
+      <seam.version>3.0.0.b04</seam.version>
    </properties>
 
    <dependencyManagement>
@@ -74,37 +73,24 @@
             <artifactId>seam-servlet-api</artifactId>
             <version>${project.version}</version>
          </dependency>
+
+         <!-- promote to parent -->
+         <dependency>
+            <groupId>org.jboss.logging</groupId>
+            <artifactId>jboss-logging-tools</artifactId>
+            <version>1.0.0.Beta1</version>
+            <scope>provided</scope>
+         </dependency>
+
+         <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.8.4</version>
+            <scope>test</scope>
+         </dependency>
+         
       </dependencies>
    </dependencyManagement>
-
-   <dependencies>
-      <dependency>
-         <groupId>org.slf4j</groupId>
-         <artifactId>slf4j-api</artifactId>
-         <scope>provided</scope>
-      </dependency>
-   </dependencies>
-
-   <!-- remove after upgrade to seam-parent 5 -->
-   <build>
-      <pluginManagement>
-         <plugins>
-            <plugin>
-               <groupId>org.apache.maven.plugins</groupId>
-               <artifactId>maven-jar-plugin</artifactId>
-               <configuration>
-                  <archive>
-                     <manifestEntries>
-                        <Implementation-Version>${project.version}</Implementation-Version>
-                        <Implementation-Vendor-Id>org.jboss.seam</Implementation-Vendor-Id>
-                        <Specification-Version>${project.version}</Specification-Version>
-                     </manifestEntries>
-                  </archive>
-               </configuration>
-            </plugin>
-         </plugins>
-      </pluginManagement>
-   </build>
 
    <profiles>
       <profile>
@@ -127,8 +113,8 @@
                <scope>provided</scope>
             </dependency>
             <dependency>
-               <groupId>javax.annotation</groupId>
-               <artifactId>jsr250-api</artifactId>
+               <groupId>org.jboss.spec.javax.annotation</groupId>
+               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
                <scope>provided</scope>
             </dependency>
          </dependencies>
@@ -166,8 +152,8 @@
                <scope>provided</scope>
             </dependency>
             <dependency>
-               <groupId>javax.annotation</groupId>
-               <artifactId>jsr250-api</artifactId>
+               <groupId>org.jboss.spec.javax.annotation</groupId>
+               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
                <scope>provided</scope>
             </dependency>
          </dependencies>

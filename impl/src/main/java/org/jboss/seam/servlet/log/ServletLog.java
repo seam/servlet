@@ -16,6 +16,9 @@
  */
 package org.jboss.seam.servlet.log;
 
+import java.lang.annotation.Annotation;
+import java.util.List;
+
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -33,6 +36,8 @@ import org.jboss.logging.MessageLogger;
 @MessageLogger
 public interface ServletLog
 {
+   static String CATEGORY = "seam-servlet";
+   
    @LogMessage(level = Level.TRACE) @Message("Servlet context initialized: %s")
    void servletContextInitialized(ServletContext ctx);
    
@@ -50,4 +55,13 @@ public interface ServletLog
    
    @LogMessage(level = Level.TRACE) @Message("Servlet response destroyed: %s")
    void servletResponseDestroyed(ServletResponse response);
+   
+   @LogMessage(level = Level.INFO) @Message("CDI BeanManager cannot be found. Not sending event %s with qualifiers %s")
+   void skippingEventNoBeanManager(Object payload, @SuppressWarnings("rawtypes") List qualifiers);
+   
+   @LogMessage(level = Level.INFO) @Message("Catch Integration for Servlets enabled")
+   void catchIntegrationEnabled();
+   
+   @LogMessage(level = Level.INFO) @Message("Could not locate CDI BeanManager. Catch Integration for Servlets disabled")
+   void catchIntegrationDisabledNoBeanManager();
 }

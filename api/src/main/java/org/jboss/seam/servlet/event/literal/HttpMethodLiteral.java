@@ -1,41 +1,49 @@
 /*
  * JBoss, Home of Professional Open Source
+ * 
  * Copyright 2010, Red Hat Middleware LLC, and individual contributors
  * by the @authors tag. See the copyright.txt in the distribution for a
  * full listing of individual contributors.
- *
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.http;
+package org.jboss.seam.servlet.event.literal;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
+import javax.enterprise.util.AnnotationLiteral;
 
-import java.lang.annotation.Documented;
-import java.lang.annotation.Retention;
-import java.lang.annotation.Target;
-
-import javax.inject.Qualifier;
+import org.jboss.seam.servlet.event.HttpMethod;
 
 /**
- * Qualifies the HTTP method.
- * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-@Qualifier
-@Target({ PARAMETER, FIELD })
-@Retention(RUNTIME)
-@Documented
-public @interface HttpMethod
+public class HttpMethodLiteral extends AnnotationLiteral<HttpMethod> implements HttpMethod
 {
-   String value();
+   private final String value;
+   
+   public HttpMethodLiteral(String value)
+   {
+      if (value == null || value.length() == 0)
+      {
+         this.value = "GET";
+      }
+      else
+      {
+         this.value = value;
+      }
+   }
+   
+   public String value()
+   {
+      return value;
+   }
 }

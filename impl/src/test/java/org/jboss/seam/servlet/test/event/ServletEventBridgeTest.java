@@ -21,6 +21,7 @@ import static org.mockito.Mockito.when;
 
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
+import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequest;
@@ -36,8 +37,10 @@ import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.WebApplication;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
+import org.jboss.seam.servlet.event.AbstractServletEventBridge;
 import org.jboss.seam.servlet.event.ServletEventBridgeFilter;
 import org.jboss.seam.servlet.event.ServletEventBridgeListener;
+import org.jboss.seam.servlet.event.ServletEventBridgeServlet;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.test.event.ServletEventBridgeTestHelper.NoOpFilterChain;
 import org.jboss.seam.servlet.test.util.Deployments;
@@ -66,6 +69,8 @@ public class ServletEventBridgeTest
     @Inject ServletEventBridgeListener listener;
     
     @Inject ServletEventBridgeFilter filter;
+    
+    @Inject ServletEventBridgeServlet servlet;
    
     @Inject ServletEventBridgeTestHelper observer;
 
@@ -76,30 +81,40 @@ public class ServletEventBridgeTest
     }
     
     @Test
-    public void should_observe_servlet_context()
+    public void should_observe_servlet_context() throws Exception
     {
        reset();
        ServletContext ctx = mock(ServletContext.class);
        when(ctx.getServletContextName()).thenReturn("mock");
+       ServletConfig cfg = mock(ServletConfig.class);
+       when(cfg.getServletContext()).thenReturn(ctx);
        WebApplication webapp = new WebApplication(ctx);
+       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
        
        listener.contextInitialized(new ServletContextEvent(ctx));
+       servlet.init(cfg);
+       servlet.destroy();
        listener.contextDestroyed(new ServletContextEvent(ctx));
-       observer.assertObservations("WebApplication", webapp, webapp);
+       observer.assertObservations("WebApplication", webapp, webapp, webapp);
        observer.assertObservations("ServletContext", ctx, ctx);
     }
     
     @Test
-    public void should_observe_servlet_context_initialized()
+    public void should_observe_servlet_context_initialized() throws Exception
     {
        reset();
        ServletContext ctx = mock(ServletContext.class);
        when(ctx.getServletContextName()).thenReturn("mock");
+       ServletConfig cfg = mock(ServletConfig.class);
+       when(cfg.getServletContext()).thenReturn(ctx);
        WebApplication webapp = new WebApplication(ctx);
+       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
        
        listener.contextInitialized(new ServletContextEvent(ctx));
+       servlet.init(cfg);
        observer.assertObservations("@Initialized WebApplication", webapp);
        observer.assertObservations("@Initialized ServletContext", ctx);
+       observer.assertObservations("@Started WebApplication", webapp);
     }
     
     @Test
@@ -108,12 +123,18 @@ public class ServletEventBridgeTest
        reset();
        ServletContext ctx = mock(ServletContext.class);
        when(ctx.getServletContextName()).thenReturn("mock");
+       ServletConfig cfg = mock(ServletConfig.class);
+       when(cfg.getServletContext()).thenReturn(ctx);
        WebApplication webapp = new WebApplication(ctx);
+       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
+       
        // the next call is needed to setup the WebApplication instance variable
        listener.contextInitialized(new ServletContextEvent(ctx));
+       // the next call is needed to setup the ServletConfig instance variable
+       servlet.init(cfg);
        observer.reset();
        
-       listener.contextDestroyed(new ServletContextEvent(ctx));
+       servlet.destroy();
        observer.assertObservations("@Destroyed WebApplication", webapp);
        observer.assertObservations("@Destroyed ServletContext", ctx);
     }

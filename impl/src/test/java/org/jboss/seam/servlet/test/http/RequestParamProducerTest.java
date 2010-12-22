@@ -34,7 +34,6 @@ import junit.framework.Assert;
 
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.seam.servlet.NarrowingBeanBuilder;
 import org.jboss.seam.servlet.ServletExtension;
 import org.jboss.seam.servlet.http.CookieParam;
 import org.jboss.seam.servlet.http.DefaultValue;
@@ -45,7 +44,6 @@ import org.jboss.seam.servlet.http.RedirectBuilderImpl;
 import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.TypedParamValue;
 import org.jboss.seam.servlet.test.util.Deployments;
-import org.jboss.seam.servlet.util.Primitives;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -68,7 +66,7 @@ public class RequestParamProducerTest
    public static Archive<?> createDeployment()
    {
       return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletExtension.class, Primitives.class, NarrowingBeanBuilder.class)
+         .addClasses(ServletExtension.class)
          .addPackages(true, Deployments.exclude(
                ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class, RedirectBuilderImpl.class),
             TypedParamValue.class.getPackage())

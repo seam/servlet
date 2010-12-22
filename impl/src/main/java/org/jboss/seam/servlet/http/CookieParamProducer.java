@@ -29,7 +29,7 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.servlet.ServletExtension;
-import org.jboss.seam.servlet.util.Primitives;
+import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
  * A producer for a String bean qualified &#064;{@link CookieParam}.
@@ -65,7 +65,7 @@ public class CookieParamProducer
    protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext)
    {
       String cookieName = getCookieName(ip);
-      Class<?> t = Primitives.wrap(resolveExpectedType(ip));
+      Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
       if (t.equals(Cookie.class))
       {
          return getCookie(cookieName, ip);

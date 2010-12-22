@@ -28,7 +28,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
 import org.jboss.seam.servlet.ServletExtension;
-import org.jboss.seam.servlet.util.Primitives;
+import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
  * A producer for a String bean qualified &#064;{@link RequestParam}.
@@ -66,7 +66,7 @@ public class RequestParamProducer
    protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext)
    {
       String v = getParameterValue(getParameterName(ip), ip);
-      Class<?> t = Primitives.wrap(resolveExpectedType(ip));
+      Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
       if (t.equals(String.class))
       {
          return v;

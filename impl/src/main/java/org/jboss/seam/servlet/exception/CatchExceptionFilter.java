@@ -18,8 +18,6 @@ package org.jboss.seam.servlet.exception;
 
 import java.io.IOException;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.inject.Inject;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -28,12 +26,13 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
+import org.jboss.logging.Logger;
 import org.jboss.seam.exception.control.ExceptionToCatch;
 import org.jboss.seam.servlet.literal.WebRequestLiteral;
-import org.jboss.weld.extensions.beanManager.BeanManagerAware;
-import org.jboss.weld.extensions.core.Requires;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.seam.solder.beanManager.BeanManagerAware;
+import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
+import org.jboss.seam.solder.core.Requires;
 
 /**
  * A bridge that forwards unhandled exceptions to the Seam exception handling facility (Seam Catch).
@@ -43,32 +42,23 @@ import org.slf4j.LoggerFactory;
 @Requires("org.jboss.seam.exception.control.extension.CatchExtension")
 public class CatchExceptionFilter extends BeanManagerAware implements Filter
 {
-   private transient Logger log = LoggerFactory.getLogger(CatchExceptionFilter.class);
+   private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
    
-   @Inject
-   private BeanManager beanManager;
-   
-   private boolean enabled;
+   private boolean enabled = false;
    
    public void init(FilterConfig config) throws ServletException
    {
-      if (beanManager == null)
+      try
       {
-         try
+         if (!getBeanManager().getBeans(CatchExceptionFilter.class).isEmpty())
          {
-            beanManager = getBeanManager();
-         }
-         catch (IllegalStateException e)
-         {
-            log.info("Could not locate BeanManager. Catch integration for Servlet disabled (even if present on the classpath)");
-            return;
+            enabled = true;
+            log.catchIntegrationEnabled();
          }
       }
-
-      if (!beanManager.getBeans(CatchExceptionFilter.class).isEmpty())
+      catch (BeanManagerUnavailableException e)
       {
-         enabled = true;
-         log.info("Catch integration for Servlet enabled");
+         log.catchIntegrationDisabledNoBeanManager();
       }
    }
 
@@ -96,7 +86,7 @@ public class CatchExceptionFilter extends BeanManagerAware implements Filter
             {
                catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
             }
-            beanManager.fireEvent(catchEvent);
+            getBeanManager().fireEvent(catchEvent);
             // QUESTION should catch handle rethrowing?
             if (!catchEvent.isHandled())
             {

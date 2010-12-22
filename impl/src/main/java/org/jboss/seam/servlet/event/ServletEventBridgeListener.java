@@ -31,10 +31,10 @@ import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder.InternalServlet
 import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder.InternalServletRequestEvent;
 import org.jboss.seam.servlet.event.literal.DestroyedLiteral;
 import org.jboss.seam.servlet.event.literal.DidActivateLiteral;
+import org.jboss.seam.servlet.event.literal.HttpMethodLiteral;
 import org.jboss.seam.servlet.event.literal.InitializedLiteral;
 import org.jboss.seam.servlet.event.literal.PathLiteral;
 import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
-import org.jboss.seam.servlet.http.literal.HttpMethodLiteral;
 
 /**
  * Propagates Servlet lifecycle events to the CDI event bus.

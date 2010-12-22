@@ -34,11 +34,11 @@
 
    <build>
       <plugins>
-         <!-- No tests in the api, skip phase -->
+         <!-- Skip test phase in API module -->
          <plugin>
             <artifactId>maven-surefire-plugin</artifactId>
             <configuration>
-               <skipTests>true</skipTests>
+               <skip>true</skip>
             </configuration>
          </plugin>
       </plugins>

@@ -37,8 +37,8 @@ import org.jboss.seam.servlet.event.ServletEventBridgeListener;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.weld.extensions.beanManager.BeanManagerAccessor;
-import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
+import org.jboss.seam.solder.beanManager.BeanManagerLocator;
+import org.jboss.seam.solder.beanManager.BeanManagerProvider;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -78,7 +78,8 @@ public class ServletContextAttributeProviderTest
       assertEquals(MOCK_SERVLET_CONTEXT, serverInfoProvider.get());
       
       when(ctx.getAttribute(BeanManager.class.getName())).thenReturn(manager);
-      assertTrue(BeanManagerAccessor.isBeanManagerAvailable());
-      assertEquals(manager, BeanManagerAccessor.getBeanManager());
+      BeanManagerLocator locator = new BeanManagerLocator();
+      assertTrue(locator.isBeanManagerAvailable());
+      assertEquals(manager, locator.getBeanManager());
    }
 }

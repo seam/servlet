@@ -31,7 +31,7 @@ import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.log.ServletLog;
-import org.jboss.weld.extensions.log.Category;
+import org.jboss.seam.solder.log.Category;
 
 /**
  * A manager for tracking the contextual Servlet objects, specifically the
@@ -42,7 +42,7 @@ import org.jboss.weld.extensions.log.Category;
 @ApplicationScoped
 public class ImplicitServletObjectsHolder
 {
-   @Inject @Category("seam-servlet")
+   @Inject @Category(ServletLog.CATEGORY)
    private ServletLog log;
    
    private ServletContext servletCtx;

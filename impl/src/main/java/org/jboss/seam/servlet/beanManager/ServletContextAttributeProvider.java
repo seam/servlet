@@ -19,7 +19,7 @@ package org.jboss.seam.servlet.beanManager;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.servlet.ServletContext;
 
-import org.jboss.weld.extensions.beanManager.BeanManagerProvider;
+import org.jboss.seam.solder.beanManager.BeanManagerProvider;
 
 /**
  * A BeanManager provider for the Servlet Context attribute

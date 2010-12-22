@@ -39,6 +39,7 @@ import org.jboss.seam.servlet.event.Destroyed;
 import org.jboss.seam.servlet.event.DidActivate;
 import org.jboss.seam.servlet.event.Initialized;
 import org.jboss.seam.servlet.event.Path;
+import org.jboss.seam.servlet.event.Started;
 import org.jboss.seam.servlet.event.WillPassivate;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.junit.Assert;
@@ -124,6 +125,11 @@ public class ServletEventBridgeTestHelper
    public void observeWebApplicationInitialized(@Observes @Initialized WebApplication webapp)
    {
       recordObservation("@Initialized WebApplication", webapp);
+   }
+   
+   public void observeWebApplicationStarted(@Observes @Started WebApplication webapp)
+   {
+      recordObservation("@Started WebApplication", webapp);
    }
 
    public void observeWebApplicationDestroyed(@Observes @Destroyed WebApplication webapp)

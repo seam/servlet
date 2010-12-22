@@ -31,6 +31,7 @@ import javax.enterprise.event.Observes;
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.AfterBeanDiscovery;
 import javax.enterprise.inject.spi.Annotated;
+import javax.enterprise.inject.spi.AnnotatedMethod;
 import javax.enterprise.inject.spi.Bean;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.enterprise.inject.spi.Extension;
@@ -51,9 +52,10 @@ import org.jboss.seam.servlet.http.literal.CookieParamLiteral;
 import org.jboss.seam.servlet.http.literal.HeaderParamLiteral;
 import org.jboss.seam.servlet.http.literal.RequestParamLiteral;
 import org.jboss.seam.servlet.messages.ServletMessages;
-import org.jboss.seam.servlet.util.Primitives;
-import org.jboss.weld.extensions.literal.AnyLiteral;
-import org.jboss.weld.extensions.literal.DefaultLiteral;
+import org.jboss.seam.solder.bean.NarrowingBeanBuilder;
+import org.jboss.seam.solder.literal.AnyLiteral;
+import org.jboss.seam.solder.literal.DefaultLiteral;
+import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
  * Generates producers to map to the type at an HTTP parameter injection point.
@@ -62,12 +64,6 @@ import org.jboss.weld.extensions.literal.DefaultLiteral;
  */
 public class ServletExtension implements Extension
 {
-   static
-   {
-      // temporary to fix an intermittent extension ordering problem
-      System.setProperty("jboss.i18n.generate-proxies", "true");
-   }
-   
    private transient ServletMessages messages = Messages.getBundle(ServletMessages.class);
    
    private final Map<Class<? extends Annotation>, TypedParamProducerBlueprint> producerBlueprints;
@@ -87,25 +83,62 @@ public class ServletExtension implements Extension
       return converterMembersByType.get(type);
    }
    
-   void detectRequestParamProducer(@Observes ProcessProducerMethod<RequestParamProducer, Object> event)
+   // according to the Java EE 6 javadoc (the authority according to the powers that be),
+   // this is the correct order of type parameters
+   void processRequestParamProducer(@Observes ProcessProducerMethod<Object, RequestParamProducer> event)
    {
-      if (event.getAnnotatedProducerMethod().isAnnotationPresent(TypedParamValue.class))
+      if (event.getAnnotatedProducerMethod().getBaseType().equals(Object.class) &&
+         event.getAnnotatedProducerMethod().isAnnotationPresent(TypedParamValue.class))
       {
          producerBlueprints.get(RequestParam.class).setProducer(event.getBean());
       }
    }
    
-   void detectHeaderParamProducer(@Observes ProcessProducerMethod<HeaderParamProducer, Object> event)
+   // according to JSR-299 spec, this is the correct order of type parameters
+   @Deprecated
+   void processRequestParamProducerInverted(@Observes ProcessProducerMethod<RequestParamProducer, Object> event)
    {
-      if (event.getAnnotatedProducerMethod().isAnnotationPresent(TypedParamValue.class))
+      if (isTypedParamProducer(event.getAnnotatedProducerMethod()))
+      {
+         producerBlueprints.get(RequestParam.class).setProducer(event.getBean());
+      }
+   }
+   
+   // according to the Java EE 6 javadoc (the authority according to the powers that be),
+   // this is the correct order of type parameters
+   void processHeaderParamProducer(@Observes ProcessProducerMethod<Object, HeaderParamProducer> event)
+   {
+      if (isTypedParamProducer(event.getAnnotatedProducerMethod()))
       {
          producerBlueprints.get(HeaderParam.class).setProducer(event.getBean());
       }
    }
    
-   void detectCookieParamProducer(@Observes ProcessProducerMethod<CookieParamProducer, Object> event)
+   // according to JSR-299 spec, this is the correct order of type parameters
+   @Deprecated
+   void processHeaderParamProducerInverted(@Observes ProcessProducerMethod<HeaderParamProducer, Object> event)
    {
-      if (event.getAnnotatedProducerMethod().isAnnotationPresent(TypedParamValue.class))
+      if (isTypedParamProducer(event.getAnnotatedProducerMethod()))
+      {
+         producerBlueprints.get(HeaderParam.class).setProducer(event.getBean());
+      }
+   }
+   
+   // according to the Java EE 6 javadoc (the authority according to the powers that be),
+   // this is the correct order of type parameters
+   void processCookieParamProducer(@Observes ProcessProducerMethod<Object, CookieParamProducer> event)
+   {
+      if (isTypedParamProducer(event.getAnnotatedProducerMethod()))
+      {
+         producerBlueprints.get(CookieParam.class).setProducer(event.getBean());
+      }
+   }
+   
+   // according to JSR-299 spec, this is the correct order of type parameters
+   @Deprecated
+   void processCookieParamProducerInverted(@Observes ProcessProducerMethod<CookieParamProducer, Object> event)
+   {
+      if (isTypedParamProducer(event.getAnnotatedProducerMethod()))
       {
          producerBlueprints.get(CookieParam.class).setProducer(event.getBean());
       }
@@ -150,7 +183,7 @@ public class ServletExtension implements Extension
                   }
                   else
                   {
-                     targetClass = Primitives.wrap(targetClass);
+                     targetClass = PrimitiveTypes.box(targetClass);
                      Member converter = null;
                      try
                      {
@@ -190,6 +223,11 @@ public class ServletExtension implements Extension
       producerBlueprints.clear();
    }
    
+   private boolean isTypedParamProducer(AnnotatedMethod<?> method)
+   {
+      return method.getBaseType().equals(Object.class) && method.isAnnotationPresent(TypedParamValue.class);
+   }
+   
    private <T> Bean<T> createTypedParamProducer(Bean<Object> delegate, Class<T> targetType, Annotation qualifier, BeanManager beanManager)
    {
       return new NarrowingBeanBuilder<T>(delegate, beanManager)
@@ -222,7 +260,9 @@ public class ServletExtension implements Extension
          return producer;
       }
       
-      public void setProducer(Bean<Object> producer)
+      // unchecked operation to support inverted observer type params
+      @SuppressWarnings({ "rawtypes", "unchecked" })
+      public void setProducer(Bean producer)
       {
          this.producer = producer;
       }

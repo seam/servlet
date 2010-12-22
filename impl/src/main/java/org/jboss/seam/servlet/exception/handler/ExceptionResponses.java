@@ -5,7 +5,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jboss.weld.extensions.servicehandler.ServiceHandler;
+import org.jboss.seam.solder.servicehandler.ServiceHandler;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

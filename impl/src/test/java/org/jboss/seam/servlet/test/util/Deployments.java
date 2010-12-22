@@ -41,8 +41,9 @@ public class Deployments
    public static WebArchive createBeanWebArchive()
    {
       return ShrinkWrap.create(WebArchive.class, "test.war")
-         .addClasses(ServletMessages.class, ServletLog.class)
-         .addLibrary(MavenArtifactResolver.resolve("org.jboss.weld:weld-extensions:1.0.0.Beta1"))
+         // add packages to include generated classes
+         .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
+         .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.Beta1"))
          .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
    }
    
