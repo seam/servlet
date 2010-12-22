@@ -57,13 +57,13 @@ public class NonManagedClass extends BeanManagerAware {
 }]]>
    </programlisting>
    <para>
-      Alternatively, you can retrieve the <literal>BeanManager</literal> from the static method
-      <literal>getBeanManager()</literal> on the <literal>BeanManagerAccessor</literal> class, as shown here:
+      Alternatively, you can retrieve the <literal>BeanManager</literal> from the method
+      <literal>getBeanManager()</literal> on the <literal>BeanManagerLocator</literal> class, as shown here:
    </para>
    <programlisting role="JAVA"><![CDATA[
 public class NonManagedClass {
    public void fireEvent() {
-      BeanManagerAccessor.getBeanManager().fireEvent("Send me to a managed bean");
+      new BeanManagerLocator().getBeanManager().fireEvent("Send me to a managed bean");
    }
 }]]>
    </programlisting>
@@ -76,8 +76,8 @@ public class NonManagedClass {
    <para>
       Under the covers, these classes look for the <literal>BeanManager</literal> in the servlet context attribute
       covered in this section, amongst other available strategies. Refer to the <ulink
-      href="http://docs.jboss.org/weld/extensions/reference/latest/en-US/html/beanmanagerprovider.html">BeanManager
-      provider</ulink> chapter of the Weld Extensions reference guide for information on how to leverage the servlet
+      href="http://docs.jboss.org/seam/3/solder/latest/reference/en-US/html/beanmanagerprovider.html">BeanManager
+      provider</ulink> chapter of the Seam Solder reference guide for information on how to leverage the servlet
       context attribute provider to access the <literal>BeanManager</literal> from outside the CDI environment.
    </para>
 <!--
