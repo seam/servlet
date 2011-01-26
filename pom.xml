@@ -178,6 +178,7 @@
             <dependency>
                <groupId>org.glassfish.extras</groupId>
                <artifactId>glassfish-embedded-all</artifactId>
+               <!-- TODO move version to seam-parent -->
                <version>3.0.1</version>
                <scope>provided</scope>
             </dependency>
