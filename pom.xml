@@ -80,21 +80,6 @@
             <artifactId>seam-servlet</artifactId>
             <version>${project.version}</version>
          </dependency>
-
-         <!-- promote to parent -->
-         <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging-tools</artifactId>
-            <version>1.0.0.Beta1</version>
-            <scope>provided</scope>
-         </dependency>
-
-         <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-            <version>1.8.4</version>
-            <scope>test</scope>
-         </dependency>
          
       </dependencies>
    </dependencyManagement>
