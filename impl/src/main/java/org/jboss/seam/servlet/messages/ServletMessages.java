@@ -18,8 +18,8 @@ package org.jboss.seam.servlet.messages;
 
 import javax.enterprise.inject.spi.InjectionPoint;
 
-import org.jboss.logging.Message;
-import org.jboss.logging.MessageBundle;
+import org.jboss.seam.solder.logging.Message;
+import org.jboss.seam.solder.logging.MessageBundle;
 
 /**
  * Type-safe exception messages for the Seam Servlet module

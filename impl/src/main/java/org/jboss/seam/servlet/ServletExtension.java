@@ -42,7 +42,6 @@ import javax.enterprise.inject.spi.ProcessInjectionTarget;
 import javax.enterprise.inject.spi.ProcessProducerMethod;
 import javax.servlet.http.Cookie;
 
-import org.jboss.logging.Messages;
 import org.jboss.seam.servlet.http.CookieParam;
 import org.jboss.seam.servlet.http.CookieParamProducer;
 import org.jboss.seam.servlet.http.HeaderParam;
@@ -58,6 +57,7 @@ import org.jboss.seam.servlet.messages.ServletMessages;
 import org.jboss.seam.solder.bean.NarrowingBeanBuilder;
 import org.jboss.seam.solder.literal.AnyLiteral;
 import org.jboss.seam.solder.literal.DefaultLiteral;
+import org.jboss.seam.solder.logging.Messages;
 import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
