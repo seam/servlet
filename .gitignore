@@ -2,5 +2,8 @@ target
 .classpath
 .project
 .settings
+*.iml
+*.ipr
+*.iws
 *.sw?
 transaction.log

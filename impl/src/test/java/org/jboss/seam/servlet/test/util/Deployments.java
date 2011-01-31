@@ -43,7 +43,7 @@ public class Deployments
       return ShrinkWrap.create(WebArchive.class, "test.war")
          // add packages to include generated classes
          .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
-         .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.Beta1"))
+         .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.Beta2"))
          .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
    }
    

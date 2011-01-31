@@ -16,17 +16,16 @@
  */
 package org.jboss.seam.servlet.log;
 
-import java.lang.annotation.Annotation;
 import java.util.List;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.jboss.seam.solder.logging.LogMessage;
 import org.jboss.logging.Logger.Level;
-import org.jboss.logging.Message;
-import org.jboss.logging.MessageLogger;
+import org.jboss.seam.solder.logging.LogMessage;
+import org.jboss.seam.solder.logging.Message;
+import org.jboss.seam.solder.logging.MessageLogger;
 
 /**
  * Type-safe log messages for the Seam Servlet module
