@@ -17,7 +17,7 @@
 --> 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
-<chapter id="installation">
+<chapter id="servlet-installation">
 	<title>Installation</title>
 	<para>
      To use the Seam Servlet module, you need to put the API and implementation JARs on the classpath of your web
@@ -25,7 +25,7 @@
      extra configuration, covered below, is required if you are not using a Servlet 3-compliant container.
    </para>
 
-   <section id="installation.maven-dependencies">
+   <section id="servlet-installation.maven-dependencies">
       <title>Maven dependency configuration</title>
       <para>
 	   	If you are using <ulink url="http://maven.apache.org/">Maven</ulink> as your build tool, you can add the
