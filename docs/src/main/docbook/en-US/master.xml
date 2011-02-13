@@ -17,18 +17,18 @@
 --> 
 <!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
-<book lang="en">
+<book lang="en" xmlns:xi="http://www.w3.org/2001/XInclude">
 
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="book_info.xml" />
+   <xi:include href="book_info.xml" />
 
    <toc />
 
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="introduction.xml"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="installation.xml"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="events.xml"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="injectable_refs.xml"/>
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="exception_handling.xml" />
-   <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="beanmanager.xml"/>
+   <xi:include href="servlet-introduction.xml"/>
+   <xi:include href="servlet-installation.xml"/>
+   <xi:include href="servlet-events.xml"/>
+   <xi:include href="servlet-injectable_refs.xml"/>
+   <xi:include href="servlet-exception_handling.xml" />
+   <xi:include href="servlet-beanmanager.xml"/>
 
    <!--
    <xi:include xmlns:xi="http://www.w3.org/2001/XInclude" href="chapterXX.xml" />
