@@ -27,7 +27,7 @@
    <groupId>org.jboss.seam.servlet</groupId>
    <artifactId>seam-servlet-parent</artifactId>
    <packaging>pom</packaging>
-   <version>3.0.0-SNAPSHOT</version>
+   <version>3.0.0.CR1</version>
 
    <name>Seam Servlet Module</name>
    <description>Additional CDI integration and other enhancements to the Servlet API</description>
