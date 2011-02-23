@@ -49,15 +49,6 @@
          <scope>provided</scope>
       </dependency>
 
-      <!-- JBoss Logging annotation processor for generating type-safe loggers -->
-      <!--
-      <dependency>
-         <groupId>org.jboss.logging</groupId>
-         <artifactId>jboss-logging-tools</artifactId>
-         <optional>true</optional>
-      </dependency>
-      -->
-
       <!-- Test Dependencies -->
       <dependency>
          <groupId>junit</groupId>
@@ -113,12 +104,6 @@
             </property>
          </activation>
          <dependencies>
-            <dependency>
-               <groupId>org.jboss.spec</groupId>
-               <artifactId>jboss-javaee-6.0</artifactId>
-               <type>pom</type>
-               <scope>provided</scope>
-            </dependency>
          </dependencies>
          <build>
             <plugins>
