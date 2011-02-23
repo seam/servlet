@@ -25,9 +25,9 @@
 
     API Docs and reference guide.
   
- examples/
+ source/
 
-    Seam Servlet examples
+    Module source code
   
  Licensing
  =========

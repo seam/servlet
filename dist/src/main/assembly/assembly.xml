@@ -31,6 +31,7 @@
       <fileSet>
          <directory>src/main/assembly</directory>
          <outputDirectory>.</outputDirectory>
+         <filtered>true</filtered>
          <includes>
             <include>readme.txt</include>
             <include>license.txt</include>
@@ -45,15 +46,15 @@
          <outputDirectory>artifacts</outputDirectory>
          <useProjectArtifact>false</useProjectArtifact>
          <includes>
-            <include>org.jboss.seam.servlet:seam-servlet-api</include>
-            <include>org.jboss.seam.servlet:seam-servlet-impl</include>
             <include>org.jboss.seam.servlet:seam-servlet</include>
          </includes>
          <excludes>
-            <exclude>org.jboss.seam.servlet:seam-servlet*:jar:javadoc</exclude>
+            <exclude>org.jboss.seam.servlet:*:*:javadoc</exclude>
+            <exclude>org.jboss.seam.servlet:*:*:sources</exclude>
          </excludes>
          <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       </dependencySet>
+      
       <!-- Add necessary dependencies -->
       <dependencySet>
          <outputDirectory>lib</outputDirectory>
@@ -64,7 +65,8 @@
          </excludes>
          <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       </dependencySet>
-      <!-- Pull in JavaDoc for api -->
+      
+      <!--JavaDoc -->
       <dependencySet>
          <outputDirectory>doc/api</outputDirectory>
          <unpack>true</unpack>
@@ -78,6 +80,8 @@
             </excludes>
          </unpackOptions>
       </dependencySet>
+      
+      <!-- Reference documentation -->
       <dependencySet>
          <outputDirectory>doc/reference</outputDirectory>
          <unpack>true</unpack>
@@ -91,5 +95,21 @@
             </excludes>
          </unpackOptions>
       </dependencySet>
+      
+      <!-- Source code -->
+      <dependencySet>
+         <outputDirectory>source</outputDirectory>
+         <unpack>true</unpack>
+         <useProjectArtifact>false</useProjectArtifact>
+         <includes>
+            <include>org.jboss.seam.servlet:seam-servlet-api:*:sources</include>
+            <include>org.jboss.seam.servlet:seam-servlet-impl:*:sources</include>
+         </includes>
+         <unpackOptions>
+            <excludes>
+               <exclude>META-INF/</exclude>
+            </excludes>
+         </unpackOptions>
+      </dependencySet>       
    </dependencySets>
 </assembly>
