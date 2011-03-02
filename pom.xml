@@ -50,6 +50,7 @@
    
    <properties>
       <seam.version>3.0.0.CR1</seam.version>
+      <emma.version>2.0.5312</emma.version>
    </properties>
 
    <dependencyManagement>
@@ -151,6 +152,33 @@
          </dependencies>
       </profile>
       <profile>
+         <id>arq-jbossas-managed</id>
+         <activation>
+            <property>
+               <name>arquillian</name>
+               <value>jbossas-managed</value>
+            </property>
+         </activation>
+         <dependencies>
+            <dependency>
+               <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+               <groupId>org.jboss.spec.javax.servlet</groupId>
+               <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+               <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>javax.enterprise</groupId>
+               <artifactId>cdi-api</artifactId>
+               <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>org.jboss.spec.javax.annotation</groupId>
+               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+               <scope>provided</scope>
+            </dependency>
+         </dependencies>
+      </profile>
+      <profile>
          <id>arq-glassfish-embedded</id>
          <activation>
             <property>
@@ -219,6 +247,82 @@
                </snapshots>
             </pluginRepository>
          </pluginRepositories>
+      </profile>
+      <profile>
+         <id>code-coverage</id>
+         <dependencies>
+            <dependency>
+               <groupId>emma</groupId>
+               <artifactId>emma</artifactId>
+               <version>${emma.version}</version>
+            </dependency>
+         </dependencies>
+         <build>
+            <pluginManagement>
+               <plugins>
+                  <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-dependency-plugin</artifactId>
+                     <executions>
+                        <execution>
+                           <id>deploy-emma-jar</id>
+                           <phase>process-test-sources</phase>
+                           <goals>
+                              <goal>copy</goal>
+                           </goals>
+                           <configuration>
+                              <artifactItems>
+                                 <artifactItem>
+                                    <groupId>emma</groupId>
+                                    <artifactId>emma</artifactId>
+                                    <version>${emma.version}</version>
+                                    <type>jar</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>${env.JBOSS_HOME}/server/default/lib</outputDirectory>
+                                 </artifactItem>
+                              </artifactItems>
+                           </configuration>
+                        </execution>
+                     </executions>
+                  </plugin>
+                  <plugin>
+                     <groupId>org.apache.maven.plugins</groupId>
+                     <artifactId>maven-antrun-plugin</artifactId>
+                     <executions>
+                        <execution>
+                           <id>retrieve-coverage-file</id>
+                           <phase>test</phase>
+                           <goals>
+                              <goal>run</goal>
+                           </goals>
+                           <configuration>
+                              <tasks>
+                                 <move file="${env.JBOSS_HOME}/bin/coverage.ec"
+                                    todir="${basedir}" failonerror="false" />
+                              </tasks>
+                           </configuration>
+                        </execution>
+                     </executions>
+                  </plugin>
+                  <plugin>
+                     <artifactId>maven-clean-plugin</artifactId>
+                     <configuration>
+                        <filesets>
+                           <fileset>
+                              <directory>${basedir}/</directory>
+                              <includes>
+                                 <include>**/*.ec</include>
+                                 <include>**/*.em</include>
+                                 <include>**/transaction.log</include>
+                              </includes>
+                              <followSymlinks>false</followSymlinks>
+                           </fileset>
+                        </filesets>
+                     </configuration>
+                  </plugin>
+               </plugins>
+            </pluginManagement>
+         </build>
       </profile>
    </profiles>
 

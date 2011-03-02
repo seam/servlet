@@ -31,6 +31,10 @@
    <name>Seam Servlet Implementation</name>
    <!-- url required for JAR Manifest -->
    <url>${project.parent.url}</url>
+
+   <properties>
+      <jboss.javaee.spec.version>1.0.0.Final</jboss.javaee.spec.version>
+   </properties>
    
    <dependencies>
       <dependency>
@@ -166,8 +170,60 @@
             <dependency>
                <groupId>org.jboss.spec</groupId>
                <artifactId>jboss-javaee-6.0</artifactId>
+               <version>${jboss.javaee.spec.version}</version>
                <type>pom</type>
                <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>org.jboss.jbossas</groupId>
+               <artifactId>jboss-as-client</artifactId>
+               <type>pom</type>
+               <scope>test</scope>
+            </dependency>
+            <dependency>
+               <groupId>org.jboss.weld</groupId>
+               <artifactId>weld-core</artifactId>
+               <scope>test</scope>
+            </dependency>
+         </dependencies>
+         <build>
+            <testResources>
+               <testResource>
+                  <directory>src/test/resources</directory>
+               </testResource>
+               <testResource>
+                  <directory>src/test/resources-jbossas</directory>
+               </testResource>
+            </testResources>
+         </build>
+      </profile>
+      <profile>
+         <id>arq-jbossas-managed</id>
+         <activation>
+            <property>
+               <name>arquillian</name>
+               <value>jbossas-managed</value>
+            </property>
+         </activation>
+         <properties>
+            <bindAddress>localhost</bindAddress>
+            <httpPort>8080</httpPort>
+         </properties>
+         <dependencies>
+            <dependency>
+               <groupId>org.jboss.arquillian.container</groupId>
+               <artifactId>arquillian-jbossas-managed-6</artifactId>
+            </dependency>
+            <dependency>
+               <groupId>org.jboss.spec</groupId>
+               <artifactId>jboss-javaee-6.0</artifactId>
+               <version>${jboss.javaee.spec.version}</version>
+               <type>pom</type>
+               <scope>provided</scope>
+            </dependency>
+            <dependency>
+               <groupId>org.jboss.jbossas</groupId>
+               <artifactId>jboss-server-manager</artifactId>
             </dependency>
             <dependency>
                <groupId>org.jboss.jbossas</groupId>
@@ -207,6 +263,33 @@
                <scope>test</scope>
             </dependency>
          </dependencies>
+      </profile>
+      <profile>
+         <id>code-coverage</id>
+         <build>
+            <plugins>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-dependency-plugin</artifactId>
+               </plugin>
+               <plugin>
+                  <groupId>org.codehaus.mojo</groupId>
+                  <artifactId>emma-maven-plugin</artifactId>
+               </plugin>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-surefire-plugin</artifactId>
+               </plugin>
+               <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-antrun-plugin</artifactId>
+               </plugin>
+               <plugin>
+                  <groupId>org.sonatype.maven.plugin</groupId>
+                  <artifactId>emma4it-maven-plugin</artifactId>
+               </plugin>
+            </plugins>
+         </build>
       </profile>
    </profiles>
 
