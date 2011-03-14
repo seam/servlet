@@ -185,7 +185,7 @@ public class SeedDataImporter {
 }]]></programlisting>
         <para>
             The <literal>@Started</literal> event is fired in the init method of a built-in Servlet with a load-on-startup
-            value of 1000.
+            value of 99999.
         </para>
         <para>
             You can also use <literal>WebApplication</literal> with the <literal>@Destroyed</literal> qualifier to be

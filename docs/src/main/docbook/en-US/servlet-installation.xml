@@ -80,6 +80,8 @@
 <servlet>
     <servlet-name>Servlet Event Bridge Servlet</servlet-name>
     <servlet-class>org.jboss.seam.servlet.event.ServletEventBridgeServlet</servlet-class>
+    <!-- Make load-on-startup large enough to be initialized last (thus destroyed first) -->
+    <load-on-startup>99999</load-on-startup>
 </servlet>
 
 <filter>
