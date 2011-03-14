@@ -31,6 +31,5 @@ import javax.inject.Qualifier;
 @Qualifier
 @Documented
 @Target(ElementType.METHOD)
-public @interface TypedParamValue
-{
+public @interface TypedParamValue {
 }

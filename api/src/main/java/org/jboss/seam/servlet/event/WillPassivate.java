@@ -26,8 +26,7 @@ import static java.lang.annotation.ElementType.PARAMETER;
 import javax.inject.Qualifier;
 
 /**
- * Qualifies observer method parameters to select events that fire when HTTP
- * sessions are passivated.
+ * Qualifies observer method parameters to select events that fire when HTTP sessions are passivated.
  * 
  * The event parameter is an {@link javax.servlet.http.HttpSession}
  * 
@@ -37,6 +36,5 @@ import javax.inject.Qualifier;
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-public @interface WillPassivate
-{
+public @interface WillPassivate {
 }

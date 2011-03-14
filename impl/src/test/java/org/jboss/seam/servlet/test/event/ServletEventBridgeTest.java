@@ -53,285 +53,271 @@ import org.junit.runner.RunWith;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @RunWith(Arquillian.class)
-public class ServletEventBridgeTest
-{
+public class ServletEventBridgeTest {
     @Deployment
-    public static Archive<?> createDeployment()
-    {
-       return Deployments.createMockableBeanWebArchive()
-          .addPackage(WebApplication.class.getPackage())
-          .addPackages(true, ServletEventBridgeListener.class.getPackage())
-          .addClasses(ServletEventBridgeTestHelper.class, ServletContextAttributeProvider.class, HttpServletRequestContext.class);
+    public static Archive<?> createDeployment() {
+        return Deployments
+                .createMockableBeanWebArchive()
+                .addPackage(WebApplication.class.getPackage())
+                .addPackages(true, ServletEventBridgeListener.class.getPackage())
+                .addClasses(ServletEventBridgeTestHelper.class, ServletContextAttributeProvider.class,
+                        HttpServletRequestContext.class);
     }
 
     public static final FilterChain NOOP_FILTER_CHAIN = new NoOpFilterChain();
-    
-    @Inject ServletEventBridgeListener listener;
-    
-    @Inject ServletEventBridgeFilter filter;
-    
-    @Inject ServletEventBridgeServlet servlet;
-   
-    @Inject ServletEventBridgeTestHelper observer;
 
-    //@Before
-    public void reset()
-    {
-       observer.reset();
+    @Inject
+    ServletEventBridgeListener listener;
+
+    @Inject
+    ServletEventBridgeFilter filter;
+
+    @Inject
+    ServletEventBridgeServlet servlet;
+
+    @Inject
+    ServletEventBridgeTestHelper observer;
+
+    // @Before
+    public void reset() {
+        observer.reset();
     }
-    
+
     @Test
-    public void should_observe_servlet_context() throws Exception
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       when(ctx.getServletContextName()).thenReturn("mock");
-       ServletConfig cfg = mock(ServletConfig.class);
-       when(cfg.getServletContext()).thenReturn(ctx);
-       WebApplication webapp = new WebApplication(ctx);
-       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
-       
-       listener.contextInitialized(new ServletContextEvent(ctx));
-       servlet.init(cfg);
-       servlet.destroy();
-       listener.contextDestroyed(new ServletContextEvent(ctx));
-       observer.assertObservations("WebApplication", webapp, webapp, webapp);
-       observer.assertObservations("ServletContext", ctx, ctx);
+    public void should_observe_servlet_context() throws Exception {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        when(ctx.getServletContextName()).thenReturn("mock");
+        ServletConfig cfg = mock(ServletConfig.class);
+        when(cfg.getServletContext()).thenReturn(ctx);
+        WebApplication webapp = new WebApplication(ctx);
+        when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
+
+        listener.contextInitialized(new ServletContextEvent(ctx));
+        servlet.init(cfg);
+        servlet.destroy();
+        listener.contextDestroyed(new ServletContextEvent(ctx));
+        observer.assertObservations("WebApplication", webapp, webapp, webapp);
+        observer.assertObservations("ServletContext", ctx, ctx);
     }
-    
+
     @Test
-    public void should_observe_servlet_context_initialized() throws Exception
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       when(ctx.getServletContextName()).thenReturn("mock");
-       ServletConfig cfg = mock(ServletConfig.class);
-       when(cfg.getServletContext()).thenReturn(ctx);
-       WebApplication webapp = new WebApplication(ctx);
-       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
-       
-       listener.contextInitialized(new ServletContextEvent(ctx));
-       servlet.init(cfg);
-       observer.assertObservations("@Initialized WebApplication", webapp);
-       observer.assertObservations("@Initialized ServletContext", ctx);
-       observer.assertObservations("@Started WebApplication", webapp);
+    public void should_observe_servlet_context_initialized() throws Exception {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        when(ctx.getServletContextName()).thenReturn("mock");
+        ServletConfig cfg = mock(ServletConfig.class);
+        when(cfg.getServletContext()).thenReturn(ctx);
+        WebApplication webapp = new WebApplication(ctx);
+        when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
+
+        listener.contextInitialized(new ServletContextEvent(ctx));
+        servlet.init(cfg);
+        observer.assertObservations("@Initialized WebApplication", webapp);
+        observer.assertObservations("@Initialized ServletContext", ctx);
+        observer.assertObservations("@Started WebApplication", webapp);
     }
-    
+
     @Test
-    public void should_observe_servlet_context_destroyed() throws Exception
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       when(ctx.getServletContextName()).thenReturn("mock");
-       ServletConfig cfg = mock(ServletConfig.class);
-       when(cfg.getServletContext()).thenReturn(ctx);
-       WebApplication webapp = new WebApplication(ctx);
-       when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
-       
-       // the next call is needed to setup the WebApplication instance variable
-       listener.contextInitialized(new ServletContextEvent(ctx));
-       // the next call is needed to setup the ServletConfig instance variable
-       servlet.init(cfg);
-       observer.reset();
-       
-       servlet.destroy();
-       observer.assertObservations("@Destroyed WebApplication", webapp);
-       observer.assertObservations("@Destroyed ServletContext", ctx);
+    public void should_observe_servlet_context_destroyed() throws Exception {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        when(ctx.getServletContextName()).thenReturn("mock");
+        ServletConfig cfg = mock(ServletConfig.class);
+        when(cfg.getServletContext()).thenReturn(ctx);
+        WebApplication webapp = new WebApplication(ctx);
+        when(ctx.getAttribute(AbstractServletEventBridge.WEB_APPLICATION_ATTRIBUTE_NAME)).thenReturn(webapp);
+
+        // the next call is needed to setup the WebApplication instance variable
+        listener.contextInitialized(new ServletContextEvent(ctx));
+        // the next call is needed to setup the ServletConfig instance variable
+        servlet.init(cfg);
+        observer.reset();
+
+        servlet.destroy();
+        observer.assertObservations("@Destroyed WebApplication", webapp);
+        observer.assertObservations("@Destroyed ServletContext", ctx);
     }
-  
+
     @Test
-    public void should_observe_session()
-    {
-       reset();
-       HttpSession session = mock(HttpSession.class);
-       
-       listener.sessionCreated(new HttpSessionEvent(session));
-       listener.sessionWillPassivate(new HttpSessionEvent(session));
-       listener.sessionDidActivate(new HttpSessionEvent(session));
-       listener.sessionDestroyed(new HttpSessionEvent(session));
-       observer.assertObservations("HttpSession", session, session, session, session);
+    public void should_observe_session() {
+        reset();
+        HttpSession session = mock(HttpSession.class);
+
+        listener.sessionCreated(new HttpSessionEvent(session));
+        listener.sessionWillPassivate(new HttpSessionEvent(session));
+        listener.sessionDidActivate(new HttpSessionEvent(session));
+        listener.sessionDestroyed(new HttpSessionEvent(session));
+        observer.assertObservations("HttpSession", session, session, session, session);
     }
-    
+
     @Test
-    public void should_observe_session_created()
-    {
-       reset();
-       HttpSession session = mock(HttpSession.class);
-       
-       listener.sessionCreated(new HttpSessionEvent(session));
-       observer.assertObservations("@Initialized HttpSession", session);
+    public void should_observe_session_created() {
+        reset();
+        HttpSession session = mock(HttpSession.class);
+
+        listener.sessionCreated(new HttpSessionEvent(session));
+        observer.assertObservations("@Initialized HttpSession", session);
     }
-    
+
     @Test
-    public void should_observe_session_destroyed()
-    {
-       reset();
-       HttpSession session = mock(HttpSession.class);
-       
-       listener.sessionDestroyed(new HttpSessionEvent(session));
-       observer.assertObservations("@Destroyed HttpSession", session);
+    public void should_observe_session_destroyed() {
+        reset();
+        HttpSession session = mock(HttpSession.class);
+
+        listener.sessionDestroyed(new HttpSessionEvent(session));
+        observer.assertObservations("@Destroyed HttpSession", session);
     }
-    
+
     @Test
-    public void should_observe_session_will_passivate()
-    {
-       reset();
-       HttpSession session = mock(HttpSession.class);
-       
-       listener.sessionWillPassivate(new HttpSessionEvent(session));
-       observer.assertObservations("@WillPassivate HttpSession", session);
+    public void should_observe_session_will_passivate() {
+        reset();
+        HttpSession session = mock(HttpSession.class);
+
+        listener.sessionWillPassivate(new HttpSessionEvent(session));
+        observer.assertObservations("@WillPassivate HttpSession", session);
     }
-    
+
     @Test
-    public void should_observe_session_did_activate()
-    {
-       reset();
-       HttpSession session = mock(HttpSession.class);
-       
-       listener.sessionDidActivate(new HttpSessionEvent(session));
-       observer.assertObservations("@DidActivate HttpSession", session);
+    public void should_observe_session_did_activate() {
+        reset();
+        HttpSession session = mock(HttpSession.class);
+
+        listener.sessionDidActivate(new HttpSessionEvent(session));
+        observer.assertObservations("@DidActivate HttpSession", session);
     }
- 
+
     @Test
-    public void should_observe_request()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       ServletRequest req = mock(ServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       listener.requestDestroyed(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("ServletRequest", req, req);
-       observer.assertObservations("HttpServletRequest");
+    public void should_observe_request() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        ServletRequest req = mock(ServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        listener.requestDestroyed(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("ServletRequest", req, req);
+        observer.assertObservations("HttpServletRequest");
     }
-    
+
     @Test
-    public void should_observe_request_initialized()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       ServletRequest req = mock(ServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("@Initialized ServletRequest", req);
-       observer.assertObservations("@Initialized HttpServletRequest");
+    public void should_observe_request_initialized() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        ServletRequest req = mock(ServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("@Initialized ServletRequest", req);
+        observer.assertObservations("@Initialized HttpServletRequest");
     }
-    
+
     @Test
-    public void should_observe_request_destroyed()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       ServletRequest req = mock(ServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestDestroyed(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("@Destroyed ServletRequest", req);
-       observer.assertObservations("@Destroyed HttpServletRequest");
+    public void should_observe_request_destroyed() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        ServletRequest req = mock(ServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestDestroyed(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("@Destroyed ServletRequest", req);
+        observer.assertObservations("@Destroyed HttpServletRequest");
     }
-    
+
     @Test
-    public void should_observe_http_request()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       HttpServletRequest req = mock(HttpServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       listener.requestDestroyed(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("ServletRequest", req, req);
-       observer.assertObservations("HttpServletRequest", req, req);
+    public void should_observe_http_request() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        listener.requestDestroyed(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("ServletRequest", req, req);
+        observer.assertObservations("HttpServletRequest", req, req);
     }
-    
+
     @Test
-    public void should_observe_http_request_initialized()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       HttpServletRequest req = mock(HttpServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("@Initialized ServletRequest", req);
-       observer.assertObservations("@Initialized HttpServletRequest", req);
+    public void should_observe_http_request_initialized() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("@Initialized ServletRequest", req);
+        observer.assertObservations("@Initialized HttpServletRequest", req);
     }
-    
+
     @Test
-    public void should_observe_http_request_destroyed()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       HttpServletRequest req = mock(HttpServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       listener.requestDestroyed(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("@Destroyed ServletRequest", req);
-       observer.assertObservations("@Destroyed HttpServletRequest", req);
+    public void should_observe_http_request_destroyed() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        listener.requestDestroyed(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("@Destroyed ServletRequest", req);
+        observer.assertObservations("@Destroyed HttpServletRequest", req);
     }
-    
+
     @Test
-    public void should_observe_servlet_request_context() throws Exception
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       ServletRequest req = mock(ServletRequest.class);
-       ServletResponse res = mock(ServletResponse.class);
-       ServletRequestContext rctx = new ServletRequestContext(req, res);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       // the next call is needed to setup the ServletRequest instance variable
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       filter.doFilter(req, res, NoOpFilterChain.INSTANCE);
-       observer.assertObservations("ServletResponse", res, res);
-       observer.assertObservations("@Initialized ServletResponse", res);
-       observer.assertObservations("@Destroyed ServletResponse", res);
-       observer.assertObservations("ServletRequestContext", rctx, rctx);
-       observer.assertObservations("@Initialized ServletRequestContext", rctx);
-       observer.assertObservations("@Destroyed ServletRequestContext", rctx);
+    public void should_observe_servlet_request_context() throws Exception {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        ServletRequest req = mock(ServletRequest.class);
+        ServletResponse res = mock(ServletResponse.class);
+        ServletRequestContext rctx = new ServletRequestContext(req, res);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        // the next call is needed to setup the ServletRequest instance variable
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        filter.doFilter(req, res, NoOpFilterChain.INSTANCE);
+        observer.assertObservations("ServletResponse", res, res);
+        observer.assertObservations("@Initialized ServletResponse", res);
+        observer.assertObservations("@Destroyed ServletResponse", res);
+        observer.assertObservations("ServletRequestContext", rctx, rctx);
+        observer.assertObservations("@Initialized ServletRequestContext", rctx);
+        observer.assertObservations("@Destroyed ServletRequestContext", rctx);
     }
-    
+
     @Test
-    public void should_observe_http_servlet_request_context() throws Exception
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       HttpServletRequest req = mock(HttpServletRequest.class);
-       HttpServletResponse res = mock(HttpServletResponse.class);
-       HttpServletRequestContext rctx = new HttpServletRequestContext(req, res);
-       when(req.getServletContext()).thenReturn(ctx);
-       
-       // the next call is needed to setup the ServletRequest instance variable
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       filter.doFilter(req, res, NoOpFilterChain.INSTANCE);
-       observer.assertObservations("ServletRequestContext", rctx, rctx);
-       observer.assertObservations("@Initialized ServletRequestContext", rctx);
-       observer.assertObservations("@Destroyed ServletRequestContext", rctx);
-       observer.assertObservations("HttpServletRequestContext", rctx, rctx);
-       observer.assertObservations("@Initialized HttpServletRequestContext", rctx);
-       observer.assertObservations("@Destroyed HttpServletRequestContext", rctx);
-       observer.assertObservations("ServletResponse", res, res);
-       observer.assertObservations("@Initialized ServletResponse", res);
-       observer.assertObservations("@Destroyed ServletResponse", res);
-       observer.assertObservations("HttpServletResponse", res, res);
-       observer.assertObservations("@Initialized HttpServletResponse", res);
-       observer.assertObservations("@Destroyed HttpServletResponse", res);
+    public void should_observe_http_servlet_request_context() throws Exception {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        HttpServletResponse res = mock(HttpServletResponse.class);
+        HttpServletRequestContext rctx = new HttpServletRequestContext(req, res);
+        when(req.getServletContext()).thenReturn(ctx);
+
+        // the next call is needed to setup the ServletRequest instance variable
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        filter.doFilter(req, res, NoOpFilterChain.INSTANCE);
+        observer.assertObservations("ServletRequestContext", rctx, rctx);
+        observer.assertObservations("@Initialized ServletRequestContext", rctx);
+        observer.assertObservations("@Destroyed ServletRequestContext", rctx);
+        observer.assertObservations("HttpServletRequestContext", rctx, rctx);
+        observer.assertObservations("@Initialized HttpServletRequestContext", rctx);
+        observer.assertObservations("@Destroyed HttpServletRequestContext", rctx);
+        observer.assertObservations("ServletResponse", res, res);
+        observer.assertObservations("@Initialized ServletResponse", res);
+        observer.assertObservations("@Destroyed ServletResponse", res);
+        observer.assertObservations("HttpServletResponse", res, res);
+        observer.assertObservations("@Initialized HttpServletResponse", res);
+        observer.assertObservations("@Destroyed HttpServletResponse", res);
     }
-    
+
     @Test
-    public void should_observe_http_request_initialized_for_path()
-    {
-       reset();
-       ServletContext ctx = mock(ServletContext.class);
-       HttpServletRequest req = mock(HttpServletRequest.class);
-       when(req.getServletContext()).thenReturn(ctx);
-       when(req.getServletPath()).thenReturn("/pathA");
-       
-       listener.requestInitialized(new ServletRequestEvent(ctx, req));
-       observer.assertObservations("@Initialized @Path(\"pathA\") HttpServletRequest", req);
-       observer.assertObservations("@Initialized @Path(\"pathB\") HttpServletRequest");
-       observer.assertObservations("@Initialized HttpServletRequest", req);
+    public void should_observe_http_request_initialized_for_path() {
+        reset();
+        ServletContext ctx = mock(ServletContext.class);
+        HttpServletRequest req = mock(HttpServletRequest.class);
+        when(req.getServletContext()).thenReturn(ctx);
+        when(req.getServletPath()).thenReturn("/pathA");
+
+        listener.requestInitialized(new ServletRequestEvent(ctx, req));
+        observer.assertObservations("@Initialized @Path(\"pathA\") HttpServletRequest", req);
+        observer.assertObservations("@Initialized @Path(\"pathB\") HttpServletRequest");
+        observer.assertObservations("@Initialized HttpServletRequest", req);
     }
 }

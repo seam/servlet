@@ -34,7 +34,6 @@ import java.lang.annotation.Target;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface DefaultValue
-{
-   public String value();
+public @interface DefaultValue {
+    public String value();
 }

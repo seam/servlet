@@ -29,9 +29,8 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * A qualifier used to distinguish resources (such as exception handlers) that
- * are appropriate for an HTTP request not handled by a more specific Servlet
- * (such as JAX-RS or JSF).
+ * A qualifier used to distinguish resources (such as exception handlers) that are appropriate for an HTTP request not handled
+ * by a more specific Servlet (such as JAX-RS or JSF).
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
@@ -39,6 +38,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface WebRequest
-{
+public @interface WebRequest {
 }

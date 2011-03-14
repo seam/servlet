@@ -20,11 +20,10 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.jboss.seam.servlet.WebRequest;
 
-/*
+/**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class WebRequestLiteral extends AnnotationLiteral<WebRequest> implements WebRequest
-{
-   private static final long serialVersionUID = -6004283843896130532L;
-   public static final WebRequest INSTANCE = new WebRequestLiteral();
+public class WebRequestLiteral extends AnnotationLiteral<WebRequest> implements WebRequest {
+    private static final long serialVersionUID = -6004283843896130532L;
+    public static final WebRequest INSTANCE = new WebRequestLiteral();
 }

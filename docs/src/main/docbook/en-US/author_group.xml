@@ -16,21 +16,21 @@
   limitations under the License.
 --> 
 <!DOCTYPE bookinfo PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <authorgroup>
-   <author>
-      <firstname>Dan</firstname>
-      <surname>Allen</surname>
-   </author>
-   <author>
-      <firstname>Lincoln</firstname>
-      <surname>Baxter III</surname>
-   </author>
-   <author>
-      <firstname>Nicklas</firstname>
-      <surname>Karlsson</surname>
-   </author>
+    <author>
+        <firstname>Dan</firstname>
+        <surname>Allen</surname>
+    </author>
+    <author>
+        <firstname>Lincoln</firstname>
+        <surname>Baxter III</surname>
+    </author>
+    <author>
+        <firstname>Nicklas</firstname>
+        <surname>Karlsson</surname>
+    </author>
 <!--
-vim:et:ts=3:sw=3:tw=120
+vim:et:ts=4:sw=4:tw=128
 -->
 </authorgroup>

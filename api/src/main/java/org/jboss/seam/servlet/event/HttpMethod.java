@@ -27,8 +27,7 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Qualifies observer methods to select HTTP lifecycle events for a particular
- * HTTP method.
+ * Qualifies observer methods to select HTTP lifecycle events for a particular HTTP method.
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
@@ -36,7 +35,6 @@ import javax.inject.Qualifier;
 @Target({ PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface HttpMethod
-{
-   String value();
+public @interface HttpMethod {
+    String value();
 }

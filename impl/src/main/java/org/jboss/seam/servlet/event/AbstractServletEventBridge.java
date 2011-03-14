@@ -26,31 +26,26 @@ import org.jboss.seam.solder.beanManager.BeanManagerAware;
 import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
 
 /**
- * An abstract class that handles sending events to the CDI event bus with support
- * for environments where injection into the Servlet component is not available.
+ * An abstract class that handles sending events to the CDI event bus with support for environments where injection into the
+ * Servlet component is not available.
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public abstract class AbstractServletEventBridge extends BeanManagerAware
-{
-   private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
-   
-   public static String WEB_APPLICATION_ATTRIBUTE_NAME = WebApplication.class.getName();
-   
-   /**
-    * Propagates the Servlet event to the CDI event bus if the BeanManager is available.
-    * If injection is available, this will always be skipped, and thus the performance optimal
-    */
-   protected void fireEvent(final Object payload, final Annotation... qualifiers)
-   {
-      try
-      {
-         getBeanManager().fireEvent(payload, qualifiers);
-      }
-      catch (BeanManagerUnavailableException e)
-      {
-         log.skippingEventNoBeanManager(payload, Arrays.asList(qualifiers));
-         return;
-      }
-   }
+public abstract class AbstractServletEventBridge extends BeanManagerAware {
+    private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
+
+    public static String WEB_APPLICATION_ATTRIBUTE_NAME = WebApplication.class.getName();
+
+    /**
+     * Propagates the Servlet event to the CDI event bus if the BeanManager is available. If injection is available, this will
+     * always be skipped, and thus the performance optimal
+     */
+    protected void fireEvent(final Object payload, final Annotation... qualifiers) {
+        try {
+            getBeanManager().fireEvent(payload, qualifiers);
+        } catch (BeanManagerUnavailableException e) {
+            log.skippingEventNoBeanManager(payload, Arrays.asList(qualifiers));
+            return;
+        }
+    }
 }

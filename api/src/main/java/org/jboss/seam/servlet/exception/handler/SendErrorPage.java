@@ -7,8 +7,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface SendErrorPage
-{
-   String value();
-   boolean redirect() default false;
+public @interface SendErrorPage {
+    String value();
+
+    boolean redirect() default false;
 }

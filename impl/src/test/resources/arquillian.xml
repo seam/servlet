@@ -16,18 +16,18 @@
   limitations under the License.
 --> 
 <arquillian xmlns="http://jboss.com/arquillian"
-   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xmlns:jboss="urn:arq:org.jboss.arquillian.container.jbossas.managed_6">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:jboss="urn:arq:org.jboss.arquillian.container.jbossas.managed_6">
 
-   <!-- Uncomment to have test archives exported to the file system for inspection -->
-   <!--
-   <engine>
-      <deploymentExportPath>target/</deploymentExportPath>
-   </engine>
-   -->
-   
-   <jboss:container>
-      <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m -Djboss.i18n.generate-proxies=true</javaVmArguments>
-   </jboss:container>
+    <!-- Uncomment to have test archives exported to the file system for inspection -->
+    <!--
+    <engine>
+        <deploymentExportPath>target/</deploymentExportPath>
+    </engine>
+    -->
+    
+    <jboss:container>
+        <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m -Djboss.i18n.generate-proxies=true</javaVmArguments>
+    </jboss:container>
 
 </arquillian>

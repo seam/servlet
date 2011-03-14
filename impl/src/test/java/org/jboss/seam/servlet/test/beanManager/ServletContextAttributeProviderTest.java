@@ -46,40 +46,41 @@ import org.junit.runner.RunWith;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @RunWith(Arquillian.class)
-public class ServletContextAttributeProviderTest
-{
-   @Deployment
-   public static Archive<?> createDeployment()
-   {
-      return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletContextAttributeProvider.class, HttpServletRequestContext.class)
-         .addPackage(ImplicitServletObjectsProducer.class.getPackage())
-         .addPackages(true, ServletEventBridgeListener.class.getPackage())
-         .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
-   }
-   
-   @Inject BeanManager manager;
-   
-   @Inject ServletEventBridgeListener listener;
-   
-   // TODO this should be in a separate test
-   @Inject @ServerInfo Instance<String> serverInfoProvider;
-   
-   @Test
-   public void should_register_and_locate_bean_manager()
-   {
-      String MOCK_SERVLET_CONTEXT = "Mock Servlet Context";
-      
-      ServletContext ctx = mock(ServletContext.class);
-      when(ctx.getServerInfo()).thenReturn(MOCK_SERVLET_CONTEXT);
-      listener.contextInitialized(new ServletContextEvent(ctx));
-      verify(ctx).setAttribute(BeanManager.class.getName(), manager);
-      
-      assertEquals(MOCK_SERVLET_CONTEXT, serverInfoProvider.get());
-      
-      when(ctx.getAttribute(BeanManager.class.getName())).thenReturn(manager);
-      BeanManagerLocator locator = new BeanManagerLocator();
-      assertTrue(locator.isBeanManagerAvailable());
-      assertEquals(manager, locator.getBeanManager());
-   }
+public class ServletContextAttributeProviderTest {
+    @Deployment
+    public static Archive<?> createDeployment() {
+        return Deployments.createMockableBeanWebArchive()
+                .addClasses(ServletContextAttributeProvider.class, HttpServletRequestContext.class)
+                .addPackage(ImplicitServletObjectsProducer.class.getPackage())
+                .addPackages(true, ServletEventBridgeListener.class.getPackage())
+                .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
+    }
+
+    @Inject
+    BeanManager manager;
+
+    @Inject
+    ServletEventBridgeListener listener;
+
+    // TODO this should be in a separate test
+    @Inject
+    @ServerInfo
+    Instance<String> serverInfoProvider;
+
+    @Test
+    public void should_register_and_locate_bean_manager() {
+        String MOCK_SERVLET_CONTEXT = "Mock Servlet Context";
+
+        ServletContext ctx = mock(ServletContext.class);
+        when(ctx.getServerInfo()).thenReturn(MOCK_SERVLET_CONTEXT);
+        listener.contextInitialized(new ServletContextEvent(ctx));
+        verify(ctx).setAttribute(BeanManager.class.getName(), manager);
+
+        assertEquals(MOCK_SERVLET_CONTEXT, serverInfoProvider.get());
+
+        when(ctx.getAttribute(BeanManager.class.getName())).thenReturn(manager);
+        BeanManagerLocator locator = new BeanManagerLocator();
+        assertTrue(locator.isBeanManagerAvailable());
+        assertEquals(manager, locator.getBeanManager());
+    }
 }

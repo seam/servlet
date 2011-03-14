@@ -36,78 +36,56 @@ import org.jboss.seam.solder.core.Requires;
 
 /**
  * A bridge that forwards unhandled exceptions to the Seam exception handling facility (Seam Catch).
- *
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Requires("org.jboss.seam.exception.control.extension.CatchExtension")
-public class CatchExceptionFilter extends BeanManagerAware implements Filter
-{
-   private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
-   
-   private boolean enabled = false;
-   
-   public void init(FilterConfig config) throws ServletException
-   {
-      try
-      {
-         if (!getBeanManager().getBeans(CatchExceptionFilter.class).isEmpty())
-         {
-            enabled = true;
-            log.catchIntegrationEnabled();
-         }
-      }
-      catch (BeanManagerUnavailableException e)
-      {
-         log.catchIntegrationDisabledNoBeanManager();
-      }
-   }
+public class CatchExceptionFilter extends BeanManagerAware implements Filter {
+    private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
 
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      if (!enabled)
-      {
-         chain.doFilter(request, response);
-      }
-      else
-      {
-         try
-         {
+    private boolean enabled = false;
+
+    public void init(FilterConfig config) throws ServletException {
+        try {
+            if (!getBeanManager().getBeans(CatchExceptionFilter.class).isEmpty()) {
+                enabled = true;
+                log.catchIntegrationEnabled();
+            }
+        } catch (BeanManagerUnavailableException e) {
+            log.catchIntegrationDisabledNoBeanManager();
+        }
+    }
+
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+        if (!enabled) {
             chain.doFilter(request, response);
-         }
-         catch (Exception e)
-         {
-            ExceptionToCatch catchEvent;
-            if (request instanceof HttpServletRequest)
-            {
-               catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
-//                     new PathLiteral(HttpServletRequest.class.cast(request).getServletPath()));
+        } else {
+            try {
+                chain.doFilter(request, response);
+            } catch (Exception e) {
+                ExceptionToCatch catchEvent;
+                if (request instanceof HttpServletRequest) {
+                    catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
+                    // new PathLiteral(HttpServletRequest.class.cast(request).getServletPath()));
+                } else {
+                    catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
+                }
+                getBeanManager().fireEvent(catchEvent);
+                // QUESTION should catch handle rethrowing?
+                if (!catchEvent.isHandled()) {
+                    if (e instanceof ServletException) {
+                        throw (ServletException) e;
+                    } else if (e instanceof IOException) {
+                        throw (IOException) e;
+                    } else {
+                        throw new ServletException(e);
+                    }
+                }
             }
-            else
-            {
-               catchEvent = new ExceptionToCatch(e, WebRequestLiteral.INSTANCE);
-            }
-            getBeanManager().fireEvent(catchEvent);
-            // QUESTION should catch handle rethrowing?
-            if (!catchEvent.isHandled())
-            {
-               if (e instanceof ServletException)
-               {
-                  throw (ServletException) e;
-               }
-               else if (e instanceof IOException)
-               {
-                  throw (IOException) e;
-               }
-               else
-               {
-                  throw new ServletException(e);
-               }
-            }
-         }
-      }
-   }
+        }
+    }
 
-   public void destroy()
-   {
-   }
+    public void destroy() {
+    }
 }

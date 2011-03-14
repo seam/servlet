@@ -34,68 +34,55 @@ import org.jboss.seam.servlet.event.literal.PathLiteral;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 
 /**
- * Propagates the {@link ServletResponse} lifecycle events to the CDI event
- * bus, complementing the ServletEventBridgeListener, which handles the other
- * lifecycle events.
+ * Propagates the {@link ServletResponse} lifecycle events to the CDI event bus, complementing the ServletEventBridgeListener,
+ * which handles the other lifecycle events.
  * 
- * <p>This filter is auto-registered in Servlet 3.0 environments. If CDI
- * injection is available into filters, the BeanManager will be accessible to
- * this instance as an injected resource. Otherwise, the BeanManager will be
- * looked up using the BeanManager provider service.</p>
- *
- * <p>The internal events are fired to ensure that the setup and tear down routines
- * happen around the main events. The event strategy is used to jump from
- * a Servlet component which may not be managed by CDI to an observe we know
- * to be a managed bean.</p>
- *
+ * <p>
+ * This filter is auto-registered in Servlet 3.0 environments. If CDI injection is available into filters, the BeanManager will
+ * be accessible to this instance as an injected resource. Otherwise, the BeanManager will be looked up using the BeanManager
+ * provider service.
+ * </p>
+ * 
+ * <p>
+ * The internal events are fired to ensure that the setup and tear down routines happen around the main events. The event
+ * strategy is used to jump from a Servlet component which may not be managed by CDI to an observe we know to be a managed bean.
+ * </p>
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class ServletEventBridgeFilter extends AbstractServletEventBridge implements Filter
-{
-   public void init(FilterConfig config) throws ServletException
-   {
-   }
+public class ServletEventBridgeFilter extends AbstractServletEventBridge implements Filter {
+    public void init(FilterConfig config) throws ServletException {
+    }
 
-   public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException
-   {
-      fireEvent(new InternalServletResponseEvent(response), InitializedLiteral.INSTANCE);
-      Path path = null;
-      if (request instanceof HttpServletRequest)
-      {
-         path = new PathLiteral(HttpServletRequest.class.cast(request).getServletPath());
-         fireEvent(response, InitializedLiteral.INSTANCE, path);
-         fireEvent(new HttpServletRequestContext(request, response), InitializedLiteral.INSTANCE, path);
-      }
-      else
-      {
-         fireEvent(response, InitializedLiteral.INSTANCE);
-         fireEvent(new ServletRequestContext(request, response), InitializedLiteral.INSTANCE);
-      }
-      
-      try
-      {
-         if (!response.isCommitted())
-         {
-            chain.doFilter(request, response);
-         }
-      }
-      finally
-      {
-         if (request instanceof HttpServletRequest)
-         {
-            fireEvent(response, DestroyedLiteral.INSTANCE, path);
-            fireEvent(new HttpServletRequestContext(request, response), DestroyedLiteral.INSTANCE, path);
-         }
-         else
-         {
-            fireEvent(response, DestroyedLiteral.INSTANCE);
-            fireEvent(new ServletRequestContext(request, response), DestroyedLiteral.INSTANCE);
-         }
-         fireEvent(new InternalServletResponseEvent(response), DestroyedLiteral.INSTANCE);
-      }
-   }
+    public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException,
+            ServletException {
+        fireEvent(new InternalServletResponseEvent(response), InitializedLiteral.INSTANCE);
+        Path path = null;
+        if (request instanceof HttpServletRequest) {
+            path = new PathLiteral(HttpServletRequest.class.cast(request).getServletPath());
+            fireEvent(response, InitializedLiteral.INSTANCE, path);
+            fireEvent(new HttpServletRequestContext(request, response), InitializedLiteral.INSTANCE, path);
+        } else {
+            fireEvent(response, InitializedLiteral.INSTANCE);
+            fireEvent(new ServletRequestContext(request, response), InitializedLiteral.INSTANCE);
+        }
 
-   public void destroy()
-   {
-   }
+        try {
+            if (!response.isCommitted()) {
+                chain.doFilter(request, response);
+            }
+        } finally {
+            if (request instanceof HttpServletRequest) {
+                fireEvent(response, DestroyedLiteral.INSTANCE, path);
+                fireEvent(new HttpServletRequestContext(request, response), DestroyedLiteral.INSTANCE, path);
+            } else {
+                fireEvent(response, DestroyedLiteral.INSTANCE);
+                fireEvent(new ServletRequestContext(request, response), DestroyedLiteral.INSTANCE);
+            }
+            fireEvent(new InternalServletResponseEvent(response), DestroyedLiteral.INSTANCE);
+        }
+    }
+
+    public void destroy() {
+    }
 }

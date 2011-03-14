@@ -26,24 +26,18 @@ import org.jboss.seam.servlet.event.HttpMethod;
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class HttpMethodLiteral extends AnnotationLiteral<HttpMethod> implements HttpMethod
-{
-   private final String value;
-   
-   public HttpMethodLiteral(String value)
-   {
-      if (value == null || value.length() == 0)
-      {
-         this.value = "GET";
-      }
-      else
-      {
-         this.value = value;
-      }
-   }
-   
-   public String value()
-   {
-      return value;
-   }
+public class HttpMethodLiteral extends AnnotationLiteral<HttpMethod> implements HttpMethod {
+    private final String value;
+
+    public HttpMethodLiteral(String value) {
+        if (value == null || value.length() == 0) {
+            this.value = "GET";
+        } else {
+            this.value = value;
+        }
+    }
+
+    public String value() {
+        return value;
+    }
 }

@@ -26,24 +26,20 @@ import org.jboss.seam.servlet.http.HeaderParam;
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class HeaderParamLiteral extends AnnotationLiteral<HeaderParam> implements HeaderParam
-{
-   private final String value;
-   
-   public HeaderParamLiteral()
-   {
-      this("");
-   }
-   
-   public HeaderParamLiteral(String value)
-   {
-      this.value = value;
-   }
-   
-   public String value()
-   {
-      return value;
-   }
-   
-   public static final HeaderParamLiteral INSTANCE = new HeaderParamLiteral();
+public class HeaderParamLiteral extends AnnotationLiteral<HeaderParam> implements HeaderParam {
+    private final String value;
+
+    public HeaderParamLiteral() {
+        this("");
+    }
+
+    public HeaderParamLiteral(String value) {
+        this.value = value;
+    }
+
+    public String value() {
+        return value;
+    }
+
+    public static final HeaderParamLiteral INSTANCE = new HeaderParamLiteral();
 }

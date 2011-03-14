@@ -29,11 +29,9 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletRequestEvent;
 
 /**
- * Qualifies observer method parameters to select events that fire when HTTP
- * artifacts are being initialized.
+ * Qualifies observer method parameters to select events that fire when HTTP artifacts are being initialized.
  * 
- * The event parameter can be a {@link ServletContextEvent} or a
- * {@link ServletRequestEvent}.
+ * The event parameter can be a {@link ServletContextEvent} or a {@link ServletRequestEvent}.
  * 
  * @author Nicklas Karlsson
  */
@@ -41,6 +39,5 @@ import javax.servlet.ServletRequestEvent;
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-public @interface Initialized
-{
+public @interface Initialized {
 }

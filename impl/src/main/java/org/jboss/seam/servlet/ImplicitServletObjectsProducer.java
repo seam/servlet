@@ -27,48 +27,42 @@ import javax.servlet.ServletResponse;
 import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder;
 
 /**
- * Produces an application-scoped {@link ServletContext} bean.
- * A references is obtained from the {@link ImplicitServletObjectsHolder}.
- *
+ * Produces an application-scoped {@link ServletContext} bean. A references is obtained from the
+ * {@link ImplicitServletObjectsHolder}.
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class ImplicitServletObjectsProducer
-{
-   @Inject
-   private ImplicitServletObjectsHolder holder;
-   
-   @Produces
-   @ApplicationScoped
-   protected ServletContext getServletContext()
-   {
-      return holder.getServletContext();
-   }
-   
-   @Produces
-   @RequestScoped
-   protected ServletRequestContext getServletRequestContext()
-   {
-      return holder.getServletRequestContext();
-   }
-   
-   @Produces
-   @RequestScoped
-   protected ServletRequest getServletRequest()
-   {
-      return holder.getServletRequest();
-   }
-   
-   @Produces
-   @RequestScoped
-   protected ServletResponse getServletResponse()
-   {
-      return holder.getServletResponse();
-   }
-   
-   @Produces
-   @ServerInfo
-   protected String getServerInfo()
-   {
-      return getServletContext().getServerInfo();
-   }
+public class ImplicitServletObjectsProducer {
+    @Inject
+    private ImplicitServletObjectsHolder holder;
+
+    @Produces
+    @ApplicationScoped
+    protected ServletContext getServletContext() {
+        return holder.getServletContext();
+    }
+
+    @Produces
+    @RequestScoped
+    protected ServletRequestContext getServletRequestContext() {
+        return holder.getServletRequestContext();
+    }
+
+    @Produces
+    @RequestScoped
+    protected ServletRequest getServletRequest() {
+        return holder.getServletRequest();
+    }
+
+    @Produces
+    @RequestScoped
+    protected ServletResponse getServletResponse() {
+        return holder.getServletResponse();
+    }
+
+    @Produces
+    @ServerInfo
+    protected String getServerInfo() {
+        return getServletContext().getServerInfo();
+    }
 }

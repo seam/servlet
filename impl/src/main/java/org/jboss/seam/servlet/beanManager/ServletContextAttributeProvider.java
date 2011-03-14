@@ -22,40 +22,32 @@ import javax.servlet.ServletContext;
 import org.jboss.seam.solder.beanManager.BeanManagerProvider;
 
 /**
- * A BeanManager provider for the Servlet Context attribute
- * "javax.enterprise.inject.spi.BeanManager"
+ * A BeanManager provider for the Servlet Context attribute "javax.enterprise.inject.spi.BeanManager"
  * 
  * @author Nicklas Karlsson
  * 
  * @see org.jboss.seam.servlet.ImplicitServletObjectsProducer
  */
-public class ServletContextAttributeProvider implements BeanManagerProvider
-{
-   private static ThreadLocal<ServletContext> servletContext = new ThreadLocal<ServletContext>()
-   {
-      @Override
-      protected ServletContext initialValue()
-      {
-         return null;
-      }
-   };
+public class ServletContextAttributeProvider implements BeanManagerProvider {
+    private static ThreadLocal<ServletContext> servletContext = new ThreadLocal<ServletContext>() {
+        @Override
+        protected ServletContext initialValue() {
+            return null;
+        }
+    };
 
-   public static void setServletContext(final ServletContext sc)
-   {
-      servletContext.set(sc);
-   }
+    public static void setServletContext(final ServletContext sc) {
+        servletContext.set(sc);
+    }
 
-   public BeanManager getBeanManager()
-   {
-      if (servletContext.get() != null)
-      {
-         return (BeanManager) servletContext.get().getAttribute(BeanManager.class.getName());
-      }
-      return null;
-   }
+    public BeanManager getBeanManager() {
+        if (servletContext.get() != null) {
+            return (BeanManager) servletContext.get().getAttribute(BeanManager.class.getName());
+        }
+        return null;
+    }
 
-   public int getPrecedence()
-   {
-      return 20;
-   }
+    public int getPrecedence() {
+        return 20;
+    }
 }

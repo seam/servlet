@@ -29,38 +29,46 @@ import org.jboss.seam.solder.logging.MessageLogger;
 
 /**
  * Type-safe log messages for the Seam Servlet module
- *
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @MessageLogger
-public interface ServletLog
-{
-   static String CATEGORY = "seam-servlet";
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet context initialized: %s")
-   void servletContextInitialized(ServletContext ctx);
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet context destroyed: %s")
-   void servletContextDestroyed(ServletContext ctx);
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet request initialized: %s")
-   void servletRequestInitialized(ServletRequest request);
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet request destroyed: %s")
-   void servletRequestDestroyed(ServletRequest request);
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet response initialized: %s")
-   void servletResponseInitialized(ServletResponse response);
-   
-   @LogMessage(level = Level.TRACE) @Message("Servlet response destroyed: %s")
-   void servletResponseDestroyed(ServletResponse response);
-   
-   @LogMessage(level = Level.INFO) @Message("CDI BeanManager cannot be found. Not sending event %s with qualifiers %s")
-   void skippingEventNoBeanManager(Object payload, @SuppressWarnings("rawtypes") List qualifiers);
-   
-   @LogMessage(level = Level.INFO) @Message("Catch Integration for Servlets enabled")
-   void catchIntegrationEnabled();
-   
-   @LogMessage(level = Level.INFO) @Message("Could not locate CDI BeanManager. Catch Integration for Servlets disabled")
-   void catchIntegrationDisabledNoBeanManager();
+public interface ServletLog {
+    static String CATEGORY = "seam-servlet";
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet context initialized: %s")
+    void servletContextInitialized(ServletContext ctx);
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet context destroyed: %s")
+    void servletContextDestroyed(ServletContext ctx);
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet request initialized: %s")
+    void servletRequestInitialized(ServletRequest request);
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet request destroyed: %s")
+    void servletRequestDestroyed(ServletRequest request);
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet response initialized: %s")
+    void servletResponseInitialized(ServletResponse response);
+
+    @LogMessage(level = Level.TRACE)
+    @Message("Servlet response destroyed: %s")
+    void servletResponseDestroyed(ServletResponse response);
+
+    @LogMessage(level = Level.INFO)
+    @Message("CDI BeanManager cannot be found. Not sending event %s with qualifiers %s")
+    void skippingEventNoBeanManager(Object payload, @SuppressWarnings("rawtypes") List qualifiers);
+
+    @LogMessage(level = Level.INFO)
+    @Message("Catch Integration for Servlets enabled")
+    void catchIntegrationEnabled();
+
+    @LogMessage(level = Level.INFO)
+    @Message("Could not locate CDI BeanManager. Catch Integration for Servlets disabled")
+    void catchIntegrationDisabledNoBeanManager();
 }

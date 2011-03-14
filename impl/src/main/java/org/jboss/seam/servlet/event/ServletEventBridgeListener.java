@@ -38,88 +38,72 @@ import org.jboss.seam.servlet.event.literal.WillPassivateLiteral;
 
 /**
  * Propagates Servlet lifecycle events to the CDI event bus.
- *
- * <p>This listener is auto-registered in Servlet 3.0 environments. If CDI
- * injection is available into listeners, the BeanManager will be accessible to
- * this instance as an injected resource. Otherwise, the BeanManager will be
- * looked up using the BeanManager provider service.</p>
  * 
- * <p>The internal events are fired to ensure that the setup and tear down
- * routines happen around the main events. The event strategy is used to jump
- * from a Servlet component which may not be managed by CDI to an observe we
- * know to be a managed bean.</p>
+ * <p>
+ * This listener is auto-registered in Servlet 3.0 environments. If CDI injection is available into listeners, the BeanManager
+ * will be accessible to this instance as an injected resource. Otherwise, the BeanManager will be looked up using the
+ * BeanManager provider service.
+ * </p>
+ * 
+ * <p>
+ * The internal events are fired to ensure that the setup and tear down routines happen around the main events. The event
+ * strategy is used to jump from a Servlet component which may not be managed by CDI to an observe we know to be a managed bean.
+ * </p>
  * 
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class ServletEventBridgeListener extends AbstractServletEventBridge
-      implements HttpSessionActivationListener, HttpSessionListener, ServletContextListener, ServletRequestListener
-{
-   public void contextInitialized(final ServletContextEvent e)
-   {
-      fireEvent(new InternalServletContextEvent(e.getServletContext()), InitializedLiteral.INSTANCE);
-      WebApplication webapp = new WebApplication(e.getServletContext());
-      e.getServletContext().setAttribute(WEB_APPLICATION_ATTRIBUTE_NAME, webapp);
-      fireEvent(webapp, InitializedLiteral.INSTANCE);
-      fireEvent(e.getServletContext(), InitializedLiteral.INSTANCE);
-   }
-   
-   public void contextDestroyed(final ServletContextEvent e)
-   {
-      fireEvent(new InternalServletContextEvent(e.getServletContext()), DestroyedLiteral.INSTANCE);
-   }
-   
-   public void requestInitialized(final ServletRequestEvent e)
-   {
-      fireEvent(new InternalServletRequestEvent(e.getServletRequest()), InitializedLiteral.INSTANCE);
-      if (e.getServletRequest() instanceof HttpServletRequest)
-      {
-         HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
-         fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE,
-            new PathLiteral(httpRequest.getServletPath()),
-            new HttpMethodLiteral(httpRequest.getMethod()));
-      }
-      else
-      {
-         fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE);
-      }
-   }
-   
-   public void requestDestroyed(final ServletRequestEvent e)
-   {
-      if (e.getServletRequest() instanceof HttpServletRequest)
-      {
-         HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
-         fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE,
-            new PathLiteral(httpRequest.getServletPath()),
-            new HttpMethodLiteral(httpRequest.getMethod()));
-      }
-      else
-      {
-         fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE);
-      }
-      fireEvent(new InternalServletRequestEvent(e.getServletRequest()), DestroyedLiteral.INSTANCE);
-   }
-   
-   public void sessionCreated(final HttpSessionEvent e)
-   {
-      fireEvent(new InternalHttpSessionEvent(e.getSession()), InitializedLiteral.INSTANCE);
-      fireEvent(e.getSession(), InitializedLiteral.INSTANCE);
-   }
-   
-   public void sessionDestroyed(final HttpSessionEvent e)
-   {
-      fireEvent(e.getSession(), DestroyedLiteral.INSTANCE);
-      fireEvent(new InternalHttpSessionEvent(e.getSession()), DestroyedLiteral.INSTANCE);
-   }
+public class ServletEventBridgeListener extends AbstractServletEventBridge implements HttpSessionActivationListener,
+        HttpSessionListener, ServletContextListener, ServletRequestListener {
+    public void contextInitialized(final ServletContextEvent e) {
+        fireEvent(new InternalServletContextEvent(e.getServletContext()), InitializedLiteral.INSTANCE);
+        WebApplication webapp = new WebApplication(e.getServletContext());
+        e.getServletContext().setAttribute(WEB_APPLICATION_ATTRIBUTE_NAME, webapp);
+        fireEvent(webapp, InitializedLiteral.INSTANCE);
+        fireEvent(e.getServletContext(), InitializedLiteral.INSTANCE);
+    }
 
-   public void sessionDidActivate(final HttpSessionEvent e)
-   {
-      fireEvent(e.getSession(), DidActivateLiteral.INSTANCE);
-   }
+    public void contextDestroyed(final ServletContextEvent e) {
+        fireEvent(new InternalServletContextEvent(e.getServletContext()), DestroyedLiteral.INSTANCE);
+    }
 
-   public void sessionWillPassivate(final HttpSessionEvent e)
-   {
-      fireEvent(e.getSession(), WillPassivateLiteral.INSTANCE);
-   }
+    public void requestInitialized(final ServletRequestEvent e) {
+        fireEvent(new InternalServletRequestEvent(e.getServletRequest()), InitializedLiteral.INSTANCE);
+        if (e.getServletRequest() instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
+            fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE, new PathLiteral(httpRequest.getServletPath()),
+                    new HttpMethodLiteral(httpRequest.getMethod()));
+        } else {
+            fireEvent(e.getServletRequest(), InitializedLiteral.INSTANCE);
+        }
+    }
+
+    public void requestDestroyed(final ServletRequestEvent e) {
+        if (e.getServletRequest() instanceof HttpServletRequest) {
+            HttpServletRequest httpRequest = HttpServletRequest.class.cast(e.getServletRequest());
+            fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE, new PathLiteral(httpRequest.getServletPath()),
+                    new HttpMethodLiteral(httpRequest.getMethod()));
+        } else {
+            fireEvent(e.getServletRequest(), DestroyedLiteral.INSTANCE);
+        }
+        fireEvent(new InternalServletRequestEvent(e.getServletRequest()), DestroyedLiteral.INSTANCE);
+    }
+
+    public void sessionCreated(final HttpSessionEvent e) {
+        fireEvent(new InternalHttpSessionEvent(e.getSession()), InitializedLiteral.INSTANCE);
+        fireEvent(e.getSession(), InitializedLiteral.INSTANCE);
+    }
+
+    public void sessionDestroyed(final HttpSessionEvent e) {
+        fireEvent(e.getSession(), DestroyedLiteral.INSTANCE);
+        fireEvent(new InternalHttpSessionEvent(e.getSession()), DestroyedLiteral.INSTANCE);
+    }
+
+    public void sessionDidActivate(final HttpSessionEvent e) {
+        fireEvent(e.getSession(), DidActivateLiteral.INSTANCE);
+    }
+
+    public void sessionWillPassivate(final HttpSessionEvent e) {
+        fireEvent(e.getSession(), WillPassivateLiteral.INSTANCE);
+    }
 }

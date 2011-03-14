@@ -35,18 +35,14 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
  * A producer for a String bean qualified &#064;{@link CookieParam}.
  * 
  * <p>
- * Provides a producer method that retrieves the value of the specified cookie
- * from {@link HttpServletRequest#getCookies()} array and makes it available as
- * a dependent-scoped bean of type String qualified &#064;CookieParam. The name
- * of the cookie to lookup is either the value of the &#064;CookieParam
- * annotation or, if the annotation value is empty, the name of the injection
- * point (e.g., the field name).
+ * Provides a producer method that retrieves the value of the specified cookie from {@link HttpServletRequest#getCookies()}
+ * array and makes it available as a dependent-scoped bean of type String qualified &#064;CookieParam. The name of the cookie to
+ * lookup is either the value of the &#064;CookieParam annotation or, if the annotation value is empty, the name of the
+ * injection point (e.g., the field name).
  * </p>
  * <p>
- * If the cookie is not present, and the injection point is annotated with
- * &#064;DefaultValue, the value of the &#064;DefaultValue annotation is
- * returned instead. If &#064;DefaultValue is not present, <code>null</code> is
- * returned.
+ * If the cookie is not present, and the injection point is annotated with &#064;DefaultValue, the value of the
+ * &#064;DefaultValue annotation is returned instead. If &#064;DefaultValue is not present, <code>null</code> is returned.
  * </p>
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
@@ -54,106 +50,85 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
  * @see CookieParam
  * @see DefaultValue
  */
-public class CookieParamProducer
-{
-   @Inject
-   private HttpServletRequest request;
+public class CookieParamProducer {
+    @Inject
+    private HttpServletRequest request;
 
-   @Produces
-   @TypedParamValue
-   // FIXME find better place to cache the valueOf methods
-   protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext)
-   {
-      String cookieName = getCookieName(ip);
-      Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
-      if (t.equals(Cookie.class))
-      {
-         return getCookie(cookieName, ip);
-      }
-      
-      String v = getCookieValue(cookieName, ip);
-      if (t.equals(String.class))
-      {
-         return v;
-      }
-      try
-      {
-         Member converter = ext.getConverterMember(t);
-         return converter instanceof Constructor ?
-               ((Constructor<?>) converter).newInstance(v) : ((Method) converter).invoke(null, v);
-      }
-      // TODO should at least debug we couldn't convert the value
-      catch (Exception e) {}
-      return null;
-   }
+    @Produces
+    @TypedParamValue
+    // FIXME find better place to cache the valueOf methods
+    protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext) {
+        String cookieName = getCookieName(ip);
+        Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
+        if (t.equals(Cookie.class)) {
+            return getCookie(cookieName, ip);
+        }
 
-   private String getCookieName(InjectionPoint ip)
-   {
-      String headerName = ip.getAnnotated().getAnnotation(CookieParam.class).value();
-      if ("".equals(headerName))
-      {
-         headerName = ip.getMember().getName();
-      }
-      return headerName;
-   }
+        String v = getCookieValue(cookieName, ip);
+        if (t.equals(String.class)) {
+            return v;
+        }
+        try {
+            Member converter = ext.getConverterMember(t);
+            return converter instanceof Constructor ? ((Constructor<?>) converter).newInstance(v) : ((Method) converter)
+                    .invoke(null, v);
+        }
+        // TODO should at least debug we couldn't convert the value
+        catch (Exception e) {
+        }
+        return null;
+    }
 
-   private Cookie getCookie(String cookieName, InjectionPoint ip)
-   {
-      Cookie cookie = null;
-      for (Cookie c : request.getCookies())
-      {
-         if (c.getName().equals(cookieName))
-         {
-            cookie = c;
-            break;
-         }
-      }
-      
-      if (cookie == null)
-      {
-         String defaultValue = getDefaultValue(ip);
-         if (defaultValue != null)
-         {
-            cookie = new Cookie(cookieName, defaultValue);
-         }
-      }
-      
-      return cookie;
-   }
-   
-   private String getCookieValue(String cookieName, InjectionPoint ip)
-   {
-      // do we have to do any specific filtering here?
-      for (Cookie c : request.getCookies())
-      {
-         if (c.getName().equals(cookieName))
-         {
-            return c.getValue();
-         }
-      }
-      return getDefaultValue(ip);
-   }
+    private String getCookieName(InjectionPoint ip) {
+        String headerName = ip.getAnnotated().getAnnotation(CookieParam.class).value();
+        if ("".equals(headerName)) {
+            headerName = ip.getMember().getName();
+        }
+        return headerName;
+    }
 
-   private String getDefaultValue(InjectionPoint ip)
-   {
-      DefaultValue defaultValueAnnotation = ip.getAnnotated().getAnnotation(DefaultValue.class);
-      return defaultValueAnnotation == null ? null : defaultValueAnnotation.value();
-   }
-   
-   private Class<?> resolveExpectedType(final InjectionPoint ip)
-   {
-      Type t = ip.getType();
-      if (t instanceof ParameterizedType && ((ParameterizedType) t).getActualTypeArguments().length == 1)
-      {
-         return (Class<?>) ((ParameterizedType) t).getActualTypeArguments()[0];
-      }
-      else if (t instanceof Class)
-      {
-         return (Class<?>) t;
-      }
-      else
-      {
-         return Object.class;
-      }
-   }
+    private Cookie getCookie(String cookieName, InjectionPoint ip) {
+        Cookie cookie = null;
+        for (Cookie c : request.getCookies()) {
+            if (c.getName().equals(cookieName)) {
+                cookie = c;
+                break;
+            }
+        }
+
+        if (cookie == null) {
+            String defaultValue = getDefaultValue(ip);
+            if (defaultValue != null) {
+                cookie = new Cookie(cookieName, defaultValue);
+            }
+        }
+
+        return cookie;
+    }
+
+    private String getCookieValue(String cookieName, InjectionPoint ip) {
+        // do we have to do any specific filtering here?
+        for (Cookie c : request.getCookies()) {
+            if (c.getName().equals(cookieName)) {
+                return c.getValue();
+            }
+        }
+        return getDefaultValue(ip);
+    }
+
+    private String getDefaultValue(InjectionPoint ip) {
+        DefaultValue defaultValueAnnotation = ip.getAnnotated().getAnnotation(DefaultValue.class);
+        return defaultValueAnnotation == null ? null : defaultValueAnnotation.value();
+    }
+
+    private Class<?> resolveExpectedType(final InjectionPoint ip) {
+        Type t = ip.getType();
+        if (t instanceof ParameterizedType && ((ParameterizedType) t).getActualTypeArguments().length == 1) {
+            return (Class<?>) ((ParameterizedType) t).getActualTypeArguments()[0];
+        } else if (t instanceof Class) {
+            return (Class<?>) t;
+        } else {
+            return Object.class;
+        }
+    }
 }

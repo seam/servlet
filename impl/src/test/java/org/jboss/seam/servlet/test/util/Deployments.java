@@ -30,45 +30,36 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class Deployments
-{
-   public static JavaArchive createBeanArchive()
-   {
-      return ShrinkWrap.create(JavaArchive.class, "test.jar")
-         .addManifestResource(EmptyAsset.INSTANCE, "beans.xml");
-   }
-   
-   public static WebArchive createBeanWebArchive()
-   {
-      return ShrinkWrap.create(WebArchive.class, "test.war")
-         // add packages to include generated classes
-         .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
-         .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.Beta2"))
-         .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
-   }
-   
-   public static WebArchive createMockableBeanWebArchive()
-   {
-      return createBeanWebArchive().addLibrary(MavenArtifactResolver.resolve("org.mockito:mockito-all:1.8.4"));
-   }
-   
-   public static Filter<ArchivePath> exclude(final Class<?>... classes)
-   {
-      return new Filter<ArchivePath>()
-      {
-         public boolean include(ArchivePath ap)
-         {
-            String path = ap.get().replace('$', '=');
-            for (Class<?> c : classes)
-            {
-               if (path.matches("^/" + c.getName().replace('.', '/') + "(=[1-9])?.class$"))
-               {
-                  return false;
-               }
+public class Deployments {
+    public static JavaArchive createBeanArchive() {
+        return ShrinkWrap.create(JavaArchive.class, "test.jar").addManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
+
+    public static WebArchive createBeanWebArchive() {
+        return ShrinkWrap
+                .create(WebArchive.class, "test.war")
+                // add packages to include generated classes
+                .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
+                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.Beta2"))
+                .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
+    }
+
+    public static WebArchive createMockableBeanWebArchive() {
+        return createBeanWebArchive().addLibrary(MavenArtifactResolver.resolve("org.mockito:mockito-all:1.8.4"));
+    }
+
+    public static Filter<ArchivePath> exclude(final Class<?>... classes) {
+        return new Filter<ArchivePath>() {
+            public boolean include(ArchivePath ap) {
+                String path = ap.get().replace('$', '=');
+                for (Class<?> c : classes) {
+                    if (path.matches("^/" + c.getName().replace('.', '/') + "(=[1-9])?.class$")) {
+                        return false;
+                    }
+                }
+                return true;
             }
-            return true;
-         }
-         
-      };
-   }
+
+        };
+    }
 }

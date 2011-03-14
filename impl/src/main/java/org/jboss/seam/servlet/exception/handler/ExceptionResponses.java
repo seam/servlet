@@ -10,6 +10,5 @@ import org.jboss.seam.solder.serviceHandler.ServiceHandlerType;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @ServiceHandlerType(ExceptionResponseServiceHandler.class)
-public @interface ExceptionResponses
-{
+public @interface ExceptionResponses {
 }

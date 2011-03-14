@@ -29,8 +29,7 @@ import javax.inject.Qualifier;
 import org.jboss.seam.servlet.WebApplication;
 
 /**
- * Qualifies observer method parameters to select the event fired when 
- * the web application has started.
+ * Qualifies observer method parameters to select the event fired when the web application has started.
  * 
  * Intented to be used with the event parameter {@link WebApplication}
  * 
@@ -40,6 +39,5 @@ import org.jboss.seam.servlet.WebApplication;
 @Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-public @interface Started
-{
+public @interface Started {
 }

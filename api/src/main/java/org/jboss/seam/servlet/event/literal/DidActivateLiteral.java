@@ -20,11 +20,10 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.jboss.seam.servlet.event.DidActivate;
 
-/*
+/**
  * @author Nicklas Karlsson
  */
-public class DidActivateLiteral extends AnnotationLiteral<DidActivate> implements DidActivate
-{
-   private static final long serialVersionUID = -7542956885080035383L;
-   public static final DidActivate INSTANCE = new DidActivateLiteral();
+public class DidActivateLiteral extends AnnotationLiteral<DidActivate> implements DidActivate {
+    private static final long serialVersionUID = -7542956885080035383L;
+    public static final DidActivate INSTANCE = new DidActivateLiteral();
 }

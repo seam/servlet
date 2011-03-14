@@ -55,142 +55,152 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Arquillian.class)
 // TODO split up into individual tests for each param type
-public class RequestParamProducerTest
-{
-   private static final String IMPLICIT_PARAM = "implicit";
-   private static final String EXPLICIT_PARAM = "explicit";
-   private static final String MISSING_PARAM = "missing";
-   private static final String IMPLICIT_VALUE = IMPLICIT_PARAM + "Value";
-   private static final String EXPLICIT_VALUE = EXPLICIT_PARAM + "Value";
-   private static final String DEFAULT_VALUE = "defaultValue";
-   
-   @Deployment
-   public static Archive<?> createDeployment()
-   {
-      return Deployments.createMockableBeanWebArchive()
-         .addClasses(ServletExtension.class, Suit.class)
-         .addPackages(true, Deployments.exclude(
-               ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class, RedirectBuilderImpl.class),
-            TypedParamValue.class.getPackage())
-         .addServiceProvider(Extension.class, ServletExtension.class);
-   }
-   
-   @Inject @RequestParam(EXPLICIT_PARAM) Instance<String> explicit;
-   
-   @Inject @RequestParam Instance<String> implicit;
-   
-   @Inject @RequestParam(MISSING_PARAM) @DefaultValue(DEFAULT_VALUE) Instance<String> missing;
-   
-   @Inject @RequestParam(MISSING_PARAM) Instance<String> missingNoDefault;
-   
-   @Inject @RequestParam("pageSize") Instance<Integer> pageSize;
-   
-   @Inject @RequestParam("suit") Instance<Suit> suit;
-   
-   @Inject @RequestParam("airDate") Instance<Date> airDate;
-   
-   @Inject @HeaderParam("Cache-Control") Instance<String> cacheControl;
-   
-   @Inject @CookieParam Instance<String> chocolate;
-   
-   @Inject @CookieParam("chocolate") Instance<Cookie> chocolateCookie;
-   
-   @Test
-   public void should_inject_value_for_explicit_http_param()
-   {
-      Assert.assertEquals(EXPLICIT_VALUE, explicit.get());
-   }
-   
-   @Test
-   public void should_inject_value_for_implicit_http_param()
-   {
-      Assert.assertEquals(IMPLICIT_VALUE, implicit.get());
-   }
-   
-   @Test
-   public void should_inject_default_value_for_missing_http_param()
-   {
-      Assert.assertEquals(DEFAULT_VALUE, missing.get());
-   }
-   
-   @Test
-   public void should_inject_null_value_for_missing_http_param()
-   {
-      Assert.assertNull(missingNoDefault.get());
-   }
-   
-   @Test
-   public void should_inject_value_for_typed_http_param(@RequestParam("page") int page)
-   {
-      Assert.assertEquals((Integer) 25, pageSize.get());
-      Assert.assertEquals((Integer) 1, (Integer) page);
-   }
-   
-   @Test
-   public void should_inject_value_for_enum_http_param()
-   {
-      Assert.assertEquals(Suit.DIAMONDS, suit.get());
-   }
-   
-   @Test
-   public void should_inject_value_for_date_http_param()
-   {
-      Calendar cal = Calendar.getInstance();
-      cal.set(2010, 7, 1, 20, 0, 0);
-      cal.set(Calendar.MILLISECOND, 0);
-      Date value = airDate.get();
-      Assert.assertNotNull(value);
-      Assert.assertEquals(cal.getTime().getTime(), value.getTime());
-   }
-   
-   @Test
-   public void should_inject_value_for_header_param()
-   {
-      Assert.assertEquals("no-cache", cacheControl.get());
-   }
-   
-   @Test
-   public void should_inject_value_for_cookie_param()
-   {
-      Assert.assertEquals("chip", chocolate.get());
-   }
-   
-   @Test
-   public void should_inject_cookie_for_cookie_param()
-   {
-      Cookie c = chocolateCookie.get();
-      Assert.assertNotNull(c);
-      Assert.assertEquals("chip", c.getValue());
-   }
-   
-   @Produces
-   public HttpServletRequest getHttpServletRequest()
-   {
-      HttpServletRequest req = mock(HttpServletRequest.class);
-      
-      Map<String, String[]> parameters = new HashMap<String, String[]>();
-      parameters.put(IMPLICIT_PARAM, new String[] { IMPLICIT_VALUE });
-      parameters.put(EXPLICIT_PARAM, new String[] { EXPLICIT_VALUE });
-      parameters.put("page", new String[] { "1" });
-      parameters.put("pageSize", new String[] { "25" });
-      parameters.put("suit", new String[] { Suit.DIAMONDS.name() });
-      parameters.put("airDate", new String[] { "2010-08-01 20:00" });
-      when(req.getParameterMap()).thenReturn(parameters);
-      when(req.getParameter(IMPLICIT_PARAM)).thenReturn(IMPLICIT_VALUE);
-      when(req.getParameter(EXPLICIT_PARAM)).thenReturn(EXPLICIT_VALUE);
-      when(req.getParameter("page")).thenReturn("1");
-      when(req.getParameter("pageSize")).thenReturn("25");
-      when(req.getParameter("suit")).thenReturn(Suit.DIAMONDS.name());
-      when(req.getParameter("airDate")).thenReturn("2010-08-01 20:00");
-      
-      Vector<String> headerNames = new Vector<String>();
-      headerNames.add("Cache-Control");
-      when(req.getHeaderNames()).thenReturn(headerNames.elements());
-      when(req.getHeader("Cache-Control")).thenReturn("no-cache");
-      
-      Cookie[] cookies = new Cookie[] { new Cookie("chocolate", "chip") };
-      when(req.getCookies()).thenReturn(cookies);
-      
-      return req;
-   }
+public class RequestParamProducerTest {
+    private static final String IMPLICIT_PARAM = "implicit";
+    private static final String EXPLICIT_PARAM = "explicit";
+    private static final String MISSING_PARAM = "missing";
+    private static final String IMPLICIT_VALUE = IMPLICIT_PARAM + "Value";
+    private static final String EXPLICIT_VALUE = EXPLICIT_PARAM + "Value";
+    private static final String DEFAULT_VALUE = "defaultValue";
+
+    @Deployment
+    public static Archive<?> createDeployment() {
+        return Deployments
+                .createMockableBeanWebArchive()
+                .addClasses(ServletExtension.class, Suit.class)
+                .addPackages(
+                        true,
+                        Deployments.exclude(ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class,
+                                RedirectBuilderImpl.class), TypedParamValue.class.getPackage())
+                .addServiceProvider(Extension.class, ServletExtension.class);
+    }
+
+    @Inject
+    @RequestParam(EXPLICIT_PARAM)
+    Instance<String> explicit;
+
+    @Inject
+    @RequestParam
+    Instance<String> implicit;
+
+    @Inject
+    @RequestParam(MISSING_PARAM)
+    @DefaultValue(DEFAULT_VALUE)
+    Instance<String> missing;
+
+    @Inject
+    @RequestParam(MISSING_PARAM)
+    Instance<String> missingNoDefault;
+
+    @Inject
+    @RequestParam("pageSize")
+    Instance<Integer> pageSize;
+
+    @Inject
+    @RequestParam("suit")
+    Instance<Suit> suit;
+
+    @Inject
+    @RequestParam("airDate")
+    Instance<Date> airDate;
+
+    @Inject
+    @HeaderParam("Cache-Control")
+    Instance<String> cacheControl;
+
+    @Inject
+    @CookieParam
+    Instance<String> chocolate;
+
+    @Inject
+    @CookieParam("chocolate")
+    Instance<Cookie> chocolateCookie;
+
+    @Test
+    public void should_inject_value_for_explicit_http_param() {
+        Assert.assertEquals(EXPLICIT_VALUE, explicit.get());
+    }
+
+    @Test
+    public void should_inject_value_for_implicit_http_param() {
+        Assert.assertEquals(IMPLICIT_VALUE, implicit.get());
+    }
+
+    @Test
+    public void should_inject_default_value_for_missing_http_param() {
+        Assert.assertEquals(DEFAULT_VALUE, missing.get());
+    }
+
+    @Test
+    public void should_inject_null_value_for_missing_http_param() {
+        Assert.assertNull(missingNoDefault.get());
+    }
+
+    @Test
+    public void should_inject_value_for_typed_http_param(@RequestParam("page") int page) {
+        Assert.assertEquals((Integer) 25, pageSize.get());
+        Assert.assertEquals((Integer) 1, (Integer) page);
+    }
+
+    @Test
+    public void should_inject_value_for_enum_http_param() {
+        Assert.assertEquals(Suit.DIAMONDS, suit.get());
+    }
+
+    @Test
+    public void should_inject_value_for_date_http_param() {
+        Calendar cal = Calendar.getInstance();
+        cal.set(2010, 7, 1, 20, 0, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+        Date value = airDate.get();
+        Assert.assertNotNull(value);
+        Assert.assertEquals(cal.getTime().getTime(), value.getTime());
+    }
+
+    @Test
+    public void should_inject_value_for_header_param() {
+        Assert.assertEquals("no-cache", cacheControl.get());
+    }
+
+    @Test
+    public void should_inject_value_for_cookie_param() {
+        Assert.assertEquals("chip", chocolate.get());
+    }
+
+    @Test
+    public void should_inject_cookie_for_cookie_param() {
+        Cookie c = chocolateCookie.get();
+        Assert.assertNotNull(c);
+        Assert.assertEquals("chip", c.getValue());
+    }
+
+    @Produces
+    public HttpServletRequest getHttpServletRequest() {
+        HttpServletRequest req = mock(HttpServletRequest.class);
+
+        Map<String, String[]> parameters = new HashMap<String, String[]>();
+        parameters.put(IMPLICIT_PARAM, new String[] { IMPLICIT_VALUE });
+        parameters.put(EXPLICIT_PARAM, new String[] { EXPLICIT_VALUE });
+        parameters.put("page", new String[] { "1" });
+        parameters.put("pageSize", new String[] { "25" });
+        parameters.put("suit", new String[] { Suit.DIAMONDS.name() });
+        parameters.put("airDate", new String[] { "2010-08-01 20:00" });
+        when(req.getParameterMap()).thenReturn(parameters);
+        when(req.getParameter(IMPLICIT_PARAM)).thenReturn(IMPLICIT_VALUE);
+        when(req.getParameter(EXPLICIT_PARAM)).thenReturn(EXPLICIT_VALUE);
+        when(req.getParameter("page")).thenReturn("1");
+        when(req.getParameter("pageSize")).thenReturn("25");
+        when(req.getParameter("suit")).thenReturn(Suit.DIAMONDS.name());
+        when(req.getParameter("airDate")).thenReturn("2010-08-01 20:00");
+
+        Vector<String> headerNames = new Vector<String>();
+        headerNames.add("Cache-Control");
+        when(req.getHeaderNames()).thenReturn(headerNames.elements());
+        when(req.getHeader("Cache-Control")).thenReturn("no-cache");
+
+        Cookie[] cookies = new Cookie[] { new Cookie("chocolate", "chip") };
+        when(req.getCookies()).thenReturn(cookies);
+
+        return req;
+    }
 }

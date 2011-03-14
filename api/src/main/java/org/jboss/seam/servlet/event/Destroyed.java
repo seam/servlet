@@ -27,18 +27,16 @@ import java.lang.annotation.Target;
 import javax.inject.Qualifier;
 
 /**
- * Qualifies observer method parameters to select events that fire when HTTP
- * artifacts are being destroyed.
+ * Qualifies observer method parameters to select events that fire when HTTP artifacts are being destroyed.
  * 
- * The event parameter can be a {@link javax.servlet.ServletContext},
- * {@link javax.servlet.ServletRequest} or a {@link javax.servlet.http.HttpSession}.
+ * The event parameter can be a {@link javax.servlet.ServletContext}, {@link javax.servlet.ServletRequest} or a
+ * {@link javax.servlet.http.HttpSession}.
  * 
  * @author Nicklas Karlsson
  */
 @Qualifier
-@Target({FIELD, PARAMETER})
+@Target({ FIELD, PARAMETER })
 @Retention(RUNTIME)
 @Documented
-public @interface Destroyed
-{
+public @interface Destroyed {
 }

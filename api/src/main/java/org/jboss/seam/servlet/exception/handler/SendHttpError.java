@@ -9,9 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface SendHttpError
-{
-   int status() default HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
-   String message() default "";
-   boolean useExceptionMessageAsDefault() default true;
+public @interface SendHttpError {
+    int status() default HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
+
+    String message() default "";
+
+    boolean useExceptionMessageAsDefault() default true;
 }

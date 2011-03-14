@@ -32,62 +32,54 @@ import javax.servlet.http.HttpSession;
 import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder;
 
 /**
- * A producer for implicit HTTP Servlet objects, specifically the
- * {@link HttpServletRequest}, {@link HttpServletResponse} and {@link HttpSession}.
- * References are obtained from the {@link ImplicitServletObjectsHolder}.
+ * A producer for implicit HTTP Servlet objects, specifically the {@link HttpServletRequest}, {@link HttpServletResponse} and
+ * {@link HttpSession}. References are obtained from the {@link ImplicitServletObjectsHolder}.
  * 
  * TODO should probably throw IllegalStateException if accessed outside request
  * 
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class ImplicitHttpServletObjectsProducer implements Serializable
-{
-   @Inject
-   private ImplicitServletObjectsHolder holder;
-   
-   @Produces
-   @RequestScoped
-   protected HttpSession getHttpSession()
-   {
-      return holder.getHttpSession();
-   }
+public class ImplicitHttpServletObjectsProducer implements Serializable {
+    @Inject
+    private ImplicitServletObjectsHolder holder;
 
-   @Produces
-   @Typed(HttpServletRequestContext.class)
-   @RequestScoped
-   protected HttpServletRequestContext getHttpServletRequestContext()
-   {
-      return holder.getHttpServletRequestContext();
-   }
-   
-   @Produces
-   @Typed(HttpServletRequest.class)
-   @RequestScoped
-   protected HttpServletRequest getHttpServletRequest()
-   {
-      return holder.getHttpServletRequest();
-   }
-   
-   @Produces
-   @Typed(HttpServletResponse.class)
-   @RequestScoped
-   protected HttpServletResponse getHttpServletResponse()
-   {
-      return holder.getHttpServletResponse();
-   }
-   
-   @Produces
-   @RequestScoped
-   protected List<Cookie> getCookies()
-   {
-      return Arrays.asList(getHttpServletRequest().getCookies());
-   }
-   
-   @Produces
-   @ContextPath
-   protected String getContextPath()
-   {
-      return getHttpServletRequest().getContextPath();
-   }
+    @Produces
+    @RequestScoped
+    protected HttpSession getHttpSession() {
+        return holder.getHttpSession();
+    }
+
+    @Produces
+    @Typed(HttpServletRequestContext.class)
+    @RequestScoped
+    protected HttpServletRequestContext getHttpServletRequestContext() {
+        return holder.getHttpServletRequestContext();
+    }
+
+    @Produces
+    @Typed(HttpServletRequest.class)
+    @RequestScoped
+    protected HttpServletRequest getHttpServletRequest() {
+        return holder.getHttpServletRequest();
+    }
+
+    @Produces
+    @Typed(HttpServletResponse.class)
+    @RequestScoped
+    protected HttpServletResponse getHttpServletResponse() {
+        return holder.getHttpServletResponse();
+    }
+
+    @Produces
+    @RequestScoped
+    protected List<Cookie> getCookies() {
+        return Arrays.asList(getHttpServletRequest().getCookies());
+    }
+
+    @Produces
+    @ContextPath
+    protected String getContextPath() {
+        return getHttpServletRequest().getContextPath();
+    }
 }

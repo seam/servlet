@@ -16,107 +16,107 @@
   limitations under the License.
 --> 
 <!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN"
-   "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
+    "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd" []>
 <chapter id="servlet-installation">
 	<title>Installation</title>
 	<para>
-     To use the Seam Servlet module, you need to put the API and implementation JARs on the classpath of your web
-     application. Most of the features of Seam Servlet are enabled automatically when it's added to the classpath. Some
-     extra configuration, covered below, is required if you are not using a Servlet 3-compliant container.
-   </para>
+      To use the Seam Servlet module, you need to put the API and implementation JARs on the classpath of your web
+      application. Most of the features of Seam Servlet are enabled automatically when it's added to the classpath. Some
+      extra configuration, covered below, is required if you are not using a Servlet 3-compliant container.
+    </para>
 
-   <section id="servlet-installation.maven-dependencies">
-      <title>Maven dependency configuration</title>
-      <para>
-	   	If you are using <ulink url="http://maven.apache.org/">Maven</ulink> as your build tool, you can add the
-	   	following single dependency to your pom.xml file to include Seam Servlet:
-	   </para>
-	   <programlisting role="XML"><![CDATA[<dependency>
-   <groupId>org.jboss.seam.servlet</groupId>
-   <artifactId>seam-servlet</artifactId>
-   <version>${seam.servlet.version}</version>
+    <section id="servlet-installation.maven-dependencies">
+        <title>Maven dependency configuration</title>
+        <para>
+	    	If you are using <ulink url="http://maven.apache.org/">Maven</ulink> as your build tool, you can add the
+	    	following single dependency to your pom.xml file to include Seam Servlet:
+	    </para>
+	    <programlisting role="XML"><![CDATA[<dependency>
+    <groupId>org.jboss.seam.servlet</groupId>
+    <artifactId>seam-servlet</artifactId>
+    <version>${seam.servlet.version}</version>
 </dependency>]]></programlisting>
-	   <tip>
-	   	<para>
-            Substitute the expression ${seam.servlet.version} with the most recent or appropriate version of Seam Servlet.
-            Alternatively, you can create a <ulink
-            href="http://www.sonatype.com/books/mvnref-book/reference/resource-filtering-sect-properties.html#resource-filtering-sect-user-defined">Maven
-            user-defined property</ulink> to satisfy this substitution so you can centrally manage the version.
-         </para>
-	   </tip>
-      <para>
-         Alternatively, you can use the API at compile time and only include the implementation at runtime. This protects
-         you from inadvertantly depending on an implementation class.
-      </para>
-	   <programlisting role="XML"><![CDATA[<dependency>
-   <groupId>org.jboss.seam.servlet</groupId>
-   <artifactId>seam-servlet-api</artifactId>
-   <version>${seam.servlet.version}</version>
-   <scope>compile</scope>
+	    <tip>
+	    	<para>
+                Substitute the expression ${seam.servlet.version} with the most recent or appropriate version of Seam Servlet.
+                Alternatively, you can create a <ulink
+                href="http://www.sonatype.com/books/mvnref-book/reference/resource-filtering-sect-properties.html#resource-filtering-sect-user-defined">Maven
+                user-defined property</ulink> to satisfy this substitution so you can centrally manage the version.
+            </para>
+	    </tip>
+        <para>
+            Alternatively, you can use the API at compile time and only include the implementation at runtime. This protects
+            you from inadvertantly depending on an implementation class.
+        </para>
+	    <programlisting role="XML"><![CDATA[<dependency>
+    <groupId>org.jboss.seam.servlet</groupId>
+    <artifactId>seam-servlet-api</artifactId>
+    <version>${seam.servlet.version}</version>
+    <scope>compile</scope>
 </dependency>
 
 <dependency>
-   <groupId>org.jboss.seam.servlet</groupId>
-   <artifactId>seam-servlet-impl</artifactId>
-   <version>${seam.servlet.version}</version>
-   <scope>runtime</scope>
+    <groupId>org.jboss.seam.servlet</groupId>
+    <artifactId>seam-servlet-impl</artifactId>
+    <version>${seam.servlet.version}</version>
+    <scope>runtime</scope>
 </dependency>]]></programlisting>
-	   <para>
-         In a Servlet 3.0 or Java EE 6 environment, <emphasis>your configuration is now complete!</emphasis>
-      </para>
-   </section>
-   
-   <section id="installation.pre-servlet-3">
-      <title>Pre-Servlet 3.0 configuration</title>
-      <para>
-         <emphasis>If you are using Java EE 5 or some other Servlet 2.5 container</emphasis>, then you need to manually
-         register several Servlet components in your application's web.xml to activate the features provided by this
-         module:
-	   </para>
-	   <programlisting role="XML"><![CDATA[<listener>
-   <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
+	    <para>
+            In a Servlet 3.0 or Java EE 6 environment, <emphasis>your configuration is now complete!</emphasis>
+        </para>
+    </section>
+    
+    <section id="installation.pre-servlet-3">
+        <title>Pre-Servlet 3.0 configuration</title>
+        <para>
+            <emphasis>If you are using Java EE 5 or some other Servlet 2.5 container</emphasis>, then you need to manually
+            register several Servlet components in your application's web.xml to activate the features provided by this
+            module:
+	    </para>
+	    <programlisting role="XML"><![CDATA[<listener>
+    <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
 </listener>
 
 <servlet>
-   <servlet-name>Servlet Event Bridge Servlet</servlet-name>
-   <servlet-class>org.jboss.seam.servlet.event.ServletEventBridgeServlet</servlet-class>
+    <servlet-name>Servlet Event Bridge Servlet</servlet-name>
+    <servlet-class>org.jboss.seam.servlet.event.ServletEventBridgeServlet</servlet-class>
 </servlet>
 
 <filter>
-   <filter-name>Catch Exception Filter</filter-name>
-   <filter-class>org.jboss.seam.servlet.CatchExceptionFilter</filter-class>
+    <filter-name>Catch Exception Filter</filter-name>
+    <filter-class>org.jboss.seam.servlet.CatchExceptionFilter</filter-class>
 </filter>
 
 <filter-mapping>
-   <filter-name>Catch Exception Filter</filter-name>
-   <url-pattern>/*</url-pattern>
+    <filter-name>Catch Exception Filter</filter-name>
+    <url-pattern>/*</url-pattern>
 </filter-mapping>
 
 <filter>
-   <filter-name>Servlet Event Bridge Filter</filter-name>
-   <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
+    <filter-name>Servlet Event Bridge Filter</filter-name>
+    <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
 </filter>
 
 <filter-mapping>
-   <filter-name>Servlet Event Bridge Filter</filter-name>
-   <url-pattern>/*</url-pattern>
+    <filter-name>Servlet Event Bridge Filter</filter-name>
+    <url-pattern>/*</url-pattern>
 </filter-mapping>]]></programlisting>
-   </section>
+    </section>
 
-   <warning>
-      <para>
-         In order for the Seam Servlet event bridge to properly fire the ServletContext initialized event, the CDI
-         runtime must be started at the time the Seam Servlet listener is invoked. This ordering is guaranteed in a
-         compliant Java EE 6 environment. If you are using a CDI implementation in a Servlet environment (e.g., Weld
-         Servlet), and it relies on a Servlet listener to bootstrap, that listener must be registered
-         <emphasis>before</emphasis> any Seam Servlet listener in web.xml.
-     </para>
-   </warning>
+    <warning>
+        <para>
+            In order for the Seam Servlet event bridge to properly fire the ServletContext initialized event, the CDI
+            runtime must be started at the time the Seam Servlet listener is invoked. This ordering is guaranteed in a
+            compliant Java EE 6 environment. If you are using a CDI implementation in a Servlet environment (e.g., Weld
+            Servlet), and it relies on a Servlet listener to bootstrap, that listener must be registered
+            <emphasis>before</emphasis> any Seam Servlet listener in web.xml.
+      </para>
+    </warning>
 
-   <para>
-      You're now ready to dive into the Servlet enhancements provided for you by the Seam Servlet module!
-   </para>
+    <para>
+        You're now ready to dive into the Servlet enhancements provided for you by the Seam Servlet module!
+    </para>
 <!--
-vim:et:ts=3:sw=3:tw=120
+vim:et:ts=4:sw=4:tw=128
 -->
 </chapter>

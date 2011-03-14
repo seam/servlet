@@ -23,8 +23,7 @@ import org.jboss.seam.servlet.event.Started;
 /**
  * @author Dan Allen
  */
-public class StartedLiteral extends AnnotationLiteral<Started> implements Started
-{
-   private static final long serialVersionUID = 3140645410138322634L;
-   public static final Started INSTANCE = new StartedLiteral();
+public class StartedLiteral extends AnnotationLiteral<Started> implements Started {
+    private static final long serialVersionUID = 3140645410138322634L;
+    public static final Started INSTANCE = new StartedLiteral();
 }

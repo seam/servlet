@@ -28,37 +28,30 @@ import javax.servlet.http.HttpSession;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @RequestScoped
-public class HttpSessionStatus
-{
-   @Inject
-   private HttpServletRequest request;
+public class HttpSessionStatus {
+    @Inject
+    private HttpServletRequest request;
 
-   /**
-    * Checks whether there is an active HttpSession associated with the current
-    * request.
-    * 
-    * @return Whether a valid session is associated with this request
-    */
-   public boolean isActive()
-   {
-      if (!request.isRequestedSessionIdValid())
-      {
-         return false;
-      }
-      
-      return request.getSession(false) != null;
-   }
+    /**
+     * Checks whether there is an active HttpSession associated with the current request.
+     * 
+     * @return Whether a valid session is associated with this request
+     */
+    public boolean isActive() {
+        if (!request.isRequestedSessionIdValid()) {
+            return false;
+        }
 
-   /**
-    * Returns the current HttpSession associated with this request. If a session
-    * is not associated with the current request, a new session is first
-    * initialized.
-    * 
-    * @return HttpSession The existing session, or a new session if one has not
-    *         yet been created
-    */
-   public HttpSession get()
-   {
-      return request.getSession();
-   }
+        return request.getSession(false) != null;
+    }
+
+    /**
+     * Returns the current HttpSession associated with this request. If a session is not associated with the current request, a
+     * new session is first initialized.
+     * 
+     * @return HttpSession The existing session, or a new session if one has not yet been created
+     */
+    public HttpSession get() {
+        return request.getSession();
+    }
 }

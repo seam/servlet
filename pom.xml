@@ -16,357 +16,357 @@
   limitations under the License.
 --> 
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-   <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-   <parent>
-      <groupId>org.jboss.seam</groupId>
-      <artifactId>seam-parent</artifactId>
-      <version>9</version>
-   </parent>
+    <parent>
+        <groupId>org.jboss.seam</groupId>
+        <artifactId>seam-parent</artifactId>
+        <version>9</version>
+    </parent>
 
-   <groupId>org.jboss.seam.servlet</groupId>
-   <artifactId>seam-servlet-parent</artifactId>
-   <packaging>pom</packaging>
-   <version>3.0.0-SNAPSHOT</version>
+    <groupId>org.jboss.seam.servlet</groupId>
+    <artifactId>seam-servlet-parent</artifactId>
+    <packaging>pom</packaging>
+    <version>3.0.0-SNAPSHOT</version>
 
-   <name>Seam Servlet Module</name>
-   <description>Additional CDI integration and other enhancements to the Servlet API</description>
+    <name>Seam Servlet Module</name>
+    <description>Additional CDI integration and other enhancements to the Servlet API</description>
 
-   <url>http://seamframework.org/Seam3/ServletModule</url>
+    <url>http://seamframework.org/Seam3/Servlet</url>
 
-   <licenses>
-      <license>
-         <name>Apache License, Version 2.0</name>
-         <distribution>repo</distribution>
-         <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
-      </license>
-   </licenses>
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <distribution>repo</distribution>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.html</url>
+        </license>
+    </licenses>
 
-   <modules>
-      <module>api</module>
-      <module>impl</module>
-      <module>combined</module>
-   </modules>
-   
-   <properties>
-      <seam.version>3.0.0.CR1</seam.version>
-      <emma.version>2.0.5312</emma.version>
-   </properties>
+    <modules>
+        <module>api</module>
+        <module>impl</module>
+        <module>combined</module>
+    </modules>
+    
+    <properties>
+        <seam.version>3.0.0.CR1</seam.version>
+        <emma.version>2.0.5312</emma.version>
+    </properties>
 
-   <dependencyManagement>
-      <dependencies>
-         <dependency>
-            <groupId>org.jboss.seam</groupId>
-            <artifactId>seam-bom</artifactId>
-            <version>${seam.version}</version>
-            <scope>import</scope>
-            <type>pom</type>
-         </dependency>
-
-         <!-- Override submodule versions from org.jboss.seam:seam-bom -->
-         <dependency>
-            <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet-impl</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet-api</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-
-         <dependency>
-            <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet</artifactId>
-            <version>${project.version}</version>
-         </dependency>
-         
-      </dependencies>
-   </dependencyManagement>
-
-   <profiles>
-      <profile>
-         <id>default</id>
-         <activation>
-            <property>
-               <name>!arquillian</name>
-            </property>
-         </activation>
-         <dependencies>
+    <dependencyManagement>
+        <dependencies>
             <dependency>
-               <!-- Required until the Servlet 3.0 API can be resolved in Central -->
-               <groupId>org.jboss.spec.javax.servlet</groupId>
-               <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-               <scope>provided</scope>
+                <groupId>org.jboss.seam</groupId>
+                <artifactId>seam-bom</artifactId>
+                <version>${seam.version}</version>
+                <scope>import</scope>
+                <type>pom</type>
             </dependency>
-            <dependency>
-               <groupId>javax.enterprise</groupId>
-               <artifactId>cdi-api</artifactId>
-               <scope>provided</scope>
-            </dependency>
-            <dependency>
-               <groupId>org.jboss.spec.javax.annotation</groupId>
-               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
-               <scope>provided</scope>
-            </dependency>
-         </dependencies>
-         <!-- skipping tests for the moment -->
-         <build>
-            <plugins>
-               <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-surefire-plugin</artifactId>
-                  <configuration>
-                     <skip>true</skip>
-                  </configuration>
-               </plugin>
-            </plugins>
-         </build>
-      </profile>
-      <profile>
-         <id>arq-jbossas-remote</id>
-         <activation>
-            <property>
-               <name>arquillian</name>
-               <value>jbossas-remote</value>
-            </property>
-         </activation>
-         <dependencies>
-            <dependency>
-               <!-- Required until the Servlet 3.0 API can be resolved in Central -->
-               <groupId>org.jboss.spec.javax.servlet</groupId>
-               <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-               <scope>provided</scope>
-            </dependency>
-            <dependency>
-               <groupId>javax.enterprise</groupId>
-               <artifactId>cdi-api</artifactId>
-               <scope>provided</scope>
-            </dependency>
-            <dependency>
-               <groupId>org.jboss.spec.javax.annotation</groupId>
-               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
-               <scope>provided</scope>
-            </dependency>
-         </dependencies>
-      </profile>
-      <profile>
-         <id>arq-jbossas-managed</id>
-         <activation>
-            <property>
-               <name>arquillian</name>
-               <value>jbossas-managed</value>
-            </property>
-         </activation>
-         <dependencies>
-            <dependency>
-               <!-- Required until the Servlet 3.0 API can be resolved in Central -->
-               <groupId>org.jboss.spec.javax.servlet</groupId>
-               <artifactId>jboss-servlet-api_3.0_spec</artifactId>
-               <scope>provided</scope>
-            </dependency>
-            <dependency>
-               <groupId>javax.enterprise</groupId>
-               <artifactId>cdi-api</artifactId>
-               <scope>provided</scope>
-            </dependency>
-            <dependency>
-               <groupId>org.jboss.spec.javax.annotation</groupId>
-               <artifactId>jboss-annotations-api_1.1_spec</artifactId>
-               <scope>provided</scope>
-            </dependency>
-         </dependencies>
-      </profile>
-      <profile>
-         <id>arq-glassfish-embedded</id>
-         <activation>
-            <property>
-               <name>arquillian</name>
-               <value>glassfish-embedded</value>
-            </property>
-         </activation>
-         <dependencies>
-            <!-- This imports the Java EE 6 runtime libraries provided by GlassFish Embedded -->
-            <dependency>
-               <groupId>org.glassfish.extras</groupId>
-               <artifactId>glassfish-embedded-all</artifactId>
-               <!-- TODO move version to seam-parent -->
-               <version>3.0.1</version>
-               <scope>provided</scope>
-            </dependency>
-         </dependencies>
-      </profile>
-      <profile>
-         <id>distribution</id>
-         <activation>
-            <property>
-               <name>release</name>
-            </property>
-         </activation>
-         <modules>
-            <module>docs</module>
-            <module>dist</module>
-         </modules>
-      </profile>
-      <profile>
-         <id>jboss-public-repository</id>
-         <activation>
-            <property>
-               <name>jboss-public-repository</name>
-               <value>!false</value>
-            </property>
-         </activation>
-         <repositories>
-            <repository>
-               <id>jboss-public-repository-group</id>
-               <name>JBoss Public Maven Repository Group</name>
-               <url>http://repository.jboss.org/nexus/content/groups/public</url>
-               <releases>
-                  <enabled>true</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </releases>
-               <snapshots>
-                  <enabled>true</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </snapshots>
-            </repository>
-         </repositories>
-         <pluginRepositories>
-            <pluginRepository>
-               <id>jboss-public-repository-group</id>
-               <name>JBoss Public Maven Repository Group</name>
-               <url>http://repository.jboss.org/nexus/content/groups/public</url>
-               <releases>
-                  <enabled>true</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </releases>
-               <snapshots>
-                  <enabled>false</enabled>
-                  <updatePolicy>never</updatePolicy>
-               </snapshots>
-            </pluginRepository>
-         </pluginRepositories>
-      </profile>
-      <profile>
-         <id>code-coverage</id>
-         <dependencies>
-            <dependency>
-               <groupId>emma</groupId>
-               <artifactId>emma</artifactId>
-               <version>${emma.version}</version>
-            </dependency>
-         </dependencies>
-         <build>
-            <pluginManagement>
-               <plugins>
-                  <plugin>
-                     <groupId>org.apache.maven.plugins</groupId>
-                     <artifactId>maven-dependency-plugin</artifactId>
-                     <executions>
-                        <execution>
-                           <id>deploy-emma-jar</id>
-                           <phase>process-test-sources</phase>
-                           <goals>
-                              <goal>copy</goal>
-                           </goals>
-                           <configuration>
-                              <artifactItems>
-                                 <artifactItem>
-                                    <groupId>emma</groupId>
-                                    <artifactId>emma</artifactId>
-                                    <version>${emma.version}</version>
-                                    <type>jar</type>
-                                    <overWrite>true</overWrite>
-                                    <outputDirectory>${env.JBOSS_HOME}/server/default/lib</outputDirectory>
-                                 </artifactItem>
-                              </artifactItems>
-                           </configuration>
-                        </execution>
-                     </executions>
-                  </plugin>
-                  <plugin>
-                     <groupId>org.apache.maven.plugins</groupId>
-                     <artifactId>maven-antrun-plugin</artifactId>
-                     <executions>
-                        <execution>
-                           <id>retrieve-coverage-file</id>
-                           <phase>test</phase>
-                           <goals>
-                              <goal>run</goal>
-                           </goals>
-                           <configuration>
-                              <tasks>
-                                 <move file="${env.JBOSS_HOME}/bin/coverage.ec"
-                                    todir="${basedir}" failonerror="false" />
-                              </tasks>
-                           </configuration>
-                        </execution>
-                     </executions>
-                  </plugin>
-                  <plugin>
-                     <artifactId>maven-clean-plugin</artifactId>
-                     <configuration>
-                        <filesets>
-                           <fileset>
-                              <directory>${basedir}/</directory>
-                              <includes>
-                                 <include>**/*.ec</include>
-                                 <include>**/*.em</include>
-                                 <include>**/transaction.log</include>
-                              </includes>
-                              <followSymlinks>false</followSymlinks>
-                           </fileset>
-                        </filesets>
-                     </configuration>
-                  </plugin>
-               </plugins>
-            </pluginManagement>
-         </build>
-      </profile>
-   </profiles>
 
-   <scm>
-      <connection>scm:git:git://github.com/seam/servlet.git</connection>
-      <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
-      <url>http://github.com/seam/servlet</url>
-   </scm>
+            <!-- Override submodule versions from org.jboss.seam:seam-bom -->
+            <dependency>
+                <groupId>org.jboss.seam.servlet</groupId>
+                <artifactId>seam-servlet-impl</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-   <issueManagement>
-      <system>JIRA</system>
-      <url>http://issues.jboss.org/browse/SEAMSERVLET</url>
-   </issueManagement>
+            <dependency>
+                <groupId>org.jboss.seam.servlet</groupId>
+                <artifactId>seam-servlet-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
 
-   <developers>
-      <developer>
-         <name>Dan Allen</name>
-         <email>dan.j.allen@gmail.com</email>
-         <url>http://mojavelinux.com</url>
-         <organization>JBoss, by Red Hat</organization>
-         <organizationUrl>http://jboss.org</organizationUrl>
-         <timezone>EST</timezone>
-         <roles>
-            <role>Project Lead</role>
-         </roles>
-      </developer>
-      <developer>
-         <name>Nicklas Karlsson</name>
-         <email>nickarls@gmail.com</email>
-         <roles>
-            <role>Committer</role>
-         </roles>
-      </developer>
-      <developer>
-         <name>Lincoln Baxter, III</name>
-         <email>lincolnbaxter@gmail.com</email>
-         <url>http://ocpsoft.com</url>
-         <organization>JBoss, by Red Hat</organization>
-         <organizationUrl>http://jboss.org</organizationUrl>
-         <timezone>EST</timezone>
-         <roles>
-            <role>Contributor</role>
-         </roles>
-      </developer>
-   </developers>
+            <dependency>
+                <groupId>org.jboss.seam.servlet</groupId>
+                <artifactId>seam-servlet</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>default</id>
+            <activation>
+                <property>
+                    <name>!arquillian</name>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.annotation</groupId>
+                    <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+            <!-- skipping tests for the moment -->
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-surefire-plugin</artifactId>
+                        <configuration>
+                            <skip>true</skip>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>arq-jbossas-remote</id>
+            <activation>
+                <property>
+                    <name>arquillian</name>
+                    <value>jbossas-remote</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.annotation</groupId>
+                    <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>arq-jbossas-managed</id>
+            <activation>
+                <property>
+                    <name>arquillian</name>
+                    <value>jbossas-managed</value>
+                </property>
+            </activation>
+            <dependencies>
+                <dependency>
+                    <!-- Required until the Servlet 3.0 API can be resolved in Central -->
+                    <groupId>org.jboss.spec.javax.servlet</groupId>
+                    <artifactId>jboss-servlet-api_3.0_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>javax.enterprise</groupId>
+                    <artifactId>cdi-api</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+                <dependency>
+                    <groupId>org.jboss.spec.javax.annotation</groupId>
+                    <artifactId>jboss-annotations-api_1.1_spec</artifactId>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>arq-glassfish-embedded</id>
+            <activation>
+                <property>
+                    <name>arquillian</name>
+                    <value>glassfish-embedded</value>
+                </property>
+            </activation>
+            <dependencies>
+                <!-- This imports the Java EE 6 runtime libraries provided by GlassFish Embedded -->
+                <dependency>
+                    <groupId>org.glassfish.extras</groupId>
+                    <artifactId>glassfish-embedded-all</artifactId>
+                    <!-- TODO move version to seam-parent -->
+                    <version>3.0.1</version>
+                    <scope>provided</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
+            <id>distribution</id>
+            <activation>
+                <property>
+                    <name>release</name>
+                </property>
+            </activation>
+            <modules>
+                <module>docs</module>
+                <module>dist</module>
+            </modules>
+        </profile>
+        <profile>
+            <id>jboss-public-repository</id>
+            <activation>
+                <property>
+                    <name>jboss-public-repository</name>
+                    <value>!false</value>
+                </property>
+            </activation>
+            <repositories>
+                <repository>
+                    <id>jboss-public-repository-group</id>
+                    <name>JBoss Public Maven Repository Group</name>
+                    <url>http://repository.jboss.org/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>jboss-public-repository-group</id>
+                    <name>JBoss Public Maven Repository Group</name>
+                    <url>http://repository.jboss.org/nexus/content/groups/public</url>
+                    <releases>
+                        <enabled>true</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </releases>
+                    <snapshots>
+                        <enabled>false</enabled>
+                        <updatePolicy>never</updatePolicy>
+                    </snapshots>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+        <profile>
+            <id>code-coverage</id>
+            <dependencies>
+                <dependency>
+                    <groupId>emma</groupId>
+                    <artifactId>emma</artifactId>
+                    <version>${emma.version}</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-dependency-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>deploy-emma-jar</id>
+                                    <phase>process-test-sources</phase>
+                                    <goals>
+                                        <goal>copy</goal>
+                                    </goals>
+                                    <configuration>
+                                        <artifactItems>
+                                            <artifactItem>
+                                                <groupId>emma</groupId>
+                                                <artifactId>emma</artifactId>
+                                                <version>${emma.version}</version>
+                                                <type>jar</type>
+                                                <overWrite>true</overWrite>
+                                                <outputDirectory>${env.JBOSS_HOME}/server/default/lib</outputDirectory>
+                                            </artifactItem>
+                                        </artifactItems>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-antrun-plugin</artifactId>
+                            <executions>
+                                <execution>
+                                    <id>retrieve-coverage-file</id>
+                                    <phase>test</phase>
+                                    <goals>
+                                        <goal>run</goal>
+                                    </goals>
+                                    <configuration>
+                                        <tasks>
+                                            <move file="${env.JBOSS_HOME}/bin/coverage.ec"
+                                                todir="${basedir}" failonerror="false" />
+                                        </tasks>
+                                    </configuration>
+                                </execution>
+                            </executions>
+                        </plugin>
+                        <plugin>
+                            <artifactId>maven-clean-plugin</artifactId>
+                            <configuration>
+                                <filesets>
+                                    <fileset>
+                                        <directory>${basedir}/</directory>
+                                        <includes>
+                                            <include>**/*.ec</include>
+                                            <include>**/*.em</include>
+                                            <include>**/transaction.log</include>
+                                        </includes>
+                                        <followSymlinks>false</followSymlinks>
+                                    </fileset>
+                                </filesets>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
+
+    <scm>
+        <connection>scm:git:git://github.com/seam/servlet.git</connection>
+        <developerConnection>scm:git:git@github.com:seam/servlet.git</developerConnection>
+        <url>http://github.com/seam/servlet</url>
+    </scm>
+
+    <issueManagement>
+        <system>JIRA</system>
+        <url>http://issues.jboss.org/browse/SEAMSERVLET</url>
+    </issueManagement>
+
+    <developers>
+        <developer>
+            <name>Dan Allen</name>
+            <email>dan.j.allen@gmail.com</email>
+            <url>http://mojavelinux.com</url>
+            <organization>JBoss, by Red Hat</organization>
+            <organizationUrl>http://jboss.org</organizationUrl>
+            <timezone>EST</timezone>
+            <roles>
+                <role>Project Lead</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Nicklas Karlsson</name>
+            <email>nickarls@gmail.com</email>
+            <roles>
+                <role>Committer</role>
+            </roles>
+        </developer>
+        <developer>
+            <name>Lincoln Baxter, III</name>
+            <email>lincolnbaxter@gmail.com</email>
+            <url>http://ocpsoft.com</url>
+            <organization>JBoss, by Red Hat</organization>
+            <organizationUrl>http://jboss.org</organizationUrl>
+            <timezone>EST</timezone>
+            <roles>
+                <role>Contributor</role>
+            </roles>
+        </developer>
+    </developers>
 
 </project>

@@ -30,32 +30,43 @@ import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
 /**
- * Qualifies injection points that should have their values fetched from
- * a corresponding HTTP request parameter (i.e., query string or form parameter).
- * 
- * <p>Example explicit usage, assuming a servlet path /book.jsf?id=3</p>
- * 
- * <pre>
- * &#064;Inject &#064;RequestParam(&quot;id&quot;)
- * private String bookId;</pre>
- * 
- * <p>Example implicit usage, assuming the same servlet path</p>
- * 
- * <pre>
- * &#064;Inject &#064;RequestParam
- * private String id;</pre>
- * 
- * <p>Example explicit usage with default value</p>
- * 
- * <pre>
- * &#064;Inject &#064;RequestParam(&quot;id&quot;) &#064;DefaultValue(&quot;1&quot;)
- * private String bookId;</pre>
+ * Qualifies injection points that should have their values fetched from a corresponding HTTP request parameter (i.e., query
+ * string or form parameter).
  * 
  * <p>
- * Because the bean produced is dependent-scoped, use of this annotation on
- * class fields and bean properties is only safe for request-scoped beans. Beans
- * with longer scopes should wrap this bean in a provider and retrieve the value
- * on demand.
+ * Example explicit usage, assuming a servlet path /book.jsf?id=3
+ * </p>
+ * 
+ * <pre>
+ * &#064;Inject
+ * &#064;RequestParam(&quot;id&quot;)
+ * private String bookId;
+ * </pre>
+ * 
+ * <p>
+ * Example implicit usage, assuming the same servlet path
+ * </p>
+ * 
+ * <pre>
+ * &#064;Inject
+ * &#064;RequestParam
+ * private String id;
+ * </pre>
+ * 
+ * <p>
+ * Example explicit usage with default value
+ * </p>
+ * 
+ * <pre>
+ * &#064;Inject
+ * &#064;RequestParam(&quot;id&quot;)
+ * &#064;DefaultValue(&quot;1&quot;)
+ * private String bookId;
+ * </pre>
+ * 
+ * <p>
+ * Because the bean produced is dependent-scoped, use of this annotation on class fields and bean properties is only safe for
+ * request-scoped beans. Beans with longer scopes should wrap this bean in a provider and retrieve the value on demand.
  * </p>
  * 
  * <pre>
@@ -64,7 +75,8 @@ import javax.inject.Qualifier;
  * 
  * ...
  * 
- * String bookId = bookIdProvider.get();</pre>
+ * String bookId = bookIdProvider.get();
+ * </pre>
  * 
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
@@ -73,8 +85,7 @@ import javax.inject.Qualifier;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface RequestParam
-{
-   @Nonbinding
-   public String value() default "";
+public @interface RequestParam {
+    @Nonbinding
+    public String value() default "";
 }

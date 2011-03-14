@@ -9,41 +9,33 @@ import org.jboss.seam.servlet.event.Initialized;
 /**
  * @author Dan Allen
  */
-public class CharacterEncodingConfig
-{
-   private String encoding;
-   
-   private boolean override = false;
+public class CharacterEncodingConfig {
+    private String encoding;
 
-   protected void apply(@Observes @Initialized ServletResponse response, ServletRequest request) throws Exception
-   {
-      if (encoding != null && (override || request.getCharacterEncoding() == null))
-      {
-         request.setCharacterEncoding(encoding);
-         if (override)
-         {
-            response.setCharacterEncoding(encoding);
-         }
-      }
-   }
-   
-   public String getEncoding()
-   {
-      return encoding;
-   }
+    private boolean override = false;
 
-   public void setEncoding(String encoding)
-   {
-      this.encoding = encoding;
-   }
+    protected void apply(@Observes @Initialized ServletResponse response, ServletRequest request) throws Exception {
+        if (encoding != null && (override || request.getCharacterEncoding() == null)) {
+            request.setCharacterEncoding(encoding);
+            if (override) {
+                response.setCharacterEncoding(encoding);
+            }
+        }
+    }
 
-   public boolean isOverride()
-   {
-      return override;
-   }
+    public String getEncoding() {
+        return encoding;
+    }
 
-   public void setOverride(boolean override)
-   {
-      this.override = override;
-   }
+    public void setEncoding(String encoding) {
+        this.encoding = encoding;
+    }
+
+    public boolean isOverride() {
+        return override;
+    }
+
+    public void setOverride(boolean override) {
+        this.override = override;
+    }
 }

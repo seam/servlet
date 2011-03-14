@@ -30,26 +30,32 @@ import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
 /**
- * Qualifies injection points that should have their values fetched from
- * a corresponding HTTP header.
- *
- * <p>Example usage:</p>
- *
- * <pre>
- * &#064;Inject &#064;HeaderParam(&quot;Cache-Control&quot;)
- * private String cacheControl;</pre>
- *
- * <p>Example usage with default value</p>
- * 
- * <pre>
- * &#064;Inject &#064;HeaderParam(&quot;Cache-Control&quot;) &#064;DefaultValue(&quot;no-cache&quot;)
- * private String cacheControl;</pre>
+ * Qualifies injection points that should have their values fetched from a corresponding HTTP header.
  * 
  * <p>
- * Because the bean produced is dependent-scoped, use of this annotation on
- * class fields and bean properties is only safe for request-scoped beans. Beans
- * with longer scopes should wrap this bean in a provider and retrieve the value
- * on demand.
+ * Example usage:
+ * </p>
+ * 
+ * <pre>
+ * &#064;Inject
+ * &#064;HeaderParam(&quot;Cache-Control&quot;)
+ * private String cacheControl;
+ * </pre>
+ * 
+ * <p>
+ * Example usage with default value
+ * </p>
+ * 
+ * <pre>
+ * &#064;Inject
+ * &#064;HeaderParam(&quot;Cache-Control&quot;)
+ * &#064;DefaultValue(&quot;no-cache&quot;)
+ * private String cacheControl;
+ * </pre>
+ * 
+ * <p>
+ * Because the bean produced is dependent-scoped, use of this annotation on class fields and bean properties is only safe for
+ * request-scoped beans. Beans with longer scopes should wrap this bean in a provider and retrieve the value on demand.
  * </p>
  * 
  * <pre>
@@ -58,7 +64,8 @@ import javax.inject.Qualifier;
  * 
  * ...
  * 
- * String cacheControl = cacheControlProvider.get();</pre>
+ * String cacheControl = cacheControlProvider.get();
+ * </pre>
  * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
@@ -66,8 +73,7 @@ import javax.inject.Qualifier;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-public @interface HeaderParam
-{
-   @Nonbinding
-   public String value() default "";
+public @interface HeaderParam {
+    @Nonbinding
+    public String value() default "";
 }

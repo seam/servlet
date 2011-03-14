@@ -26,24 +26,20 @@ import org.jboss.seam.servlet.http.RequestParam;
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
-public class RequestParamLiteral extends AnnotationLiteral<RequestParam> implements RequestParam
-{
-   private final String value;
-   
-   public RequestParamLiteral()
-   {
-      this("");
-   }
-   
-   public RequestParamLiteral(String value)
-   {
-      this.value = value;
-   }
-   
-   public String value()
-   {
-      return value;
-   }
-   
-   public static final RequestParamLiteral INSTANCE = new RequestParamLiteral();
+public class RequestParamLiteral extends AnnotationLiteral<RequestParam> implements RequestParam {
+    private final String value;
+
+    public RequestParamLiteral() {
+        this("");
+    }
+
+    public RequestParamLiteral(String value) {
+        this.value = value;
+    }
+
+    public String value() {
+        return value;
+    }
+
+    public static final RequestParamLiteral INSTANCE = new RequestParamLiteral();
 }

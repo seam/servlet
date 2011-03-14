@@ -20,11 +20,10 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.jboss.seam.servlet.event.WillPassivate;
 
-/*
+/**
  * @author Nicklas Karlsson
  */
-public class WillPassivateLiteral extends AnnotationLiteral<WillPassivate> implements WillPassivate
-{
-   private static final long serialVersionUID = 1008760745325853191L;
-   public static final WillPassivate INSTANCE = new WillPassivateLiteral();
+public class WillPassivateLiteral extends AnnotationLiteral<WillPassivate> implements WillPassivate {
+    private static final long serialVersionUID = 1008760745325853191L;
+    public static final WillPassivate INSTANCE = new WillPassivateLiteral();
 }

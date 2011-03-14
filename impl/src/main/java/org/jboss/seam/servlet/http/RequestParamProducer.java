@@ -34,18 +34,14 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
  * A producer for a String bean qualified &#064;{@link RequestParam}.
  * 
  * <p>
- * Provides a producer method that retrieves the value of the specified request
- * parameter from {@link HttpServletRequest#getParameter(String)} and makes it
- * available as a dependent-scoped bean of type String qualified
- * &#064;RequestParam. The name of the request parameter to lookup is either the
- * value of the &#064;RequestParam annotation or, if the annotation value is
- * empty, the name of the injection point (e.g., the field name).
+ * Provides a producer method that retrieves the value of the specified request parameter from
+ * {@link HttpServletRequest#getParameter(String)} and makes it available as a dependent-scoped bean of type String qualified
+ * &#064;RequestParam. The name of the request parameter to lookup is either the value of the &#064;RequestParam annotation or,
+ * if the annotation value is empty, the name of the injection point (e.g., the field name).
  * </p>
  * <p>
- * If the request parameter is not present, and the injection point is annotated
- * with &#064;DefaultValue, the value of the &#064;DefaultValue annotation is
- * returned instead. If &#064;DefaultValue is not present, <code>null</code> is
- * returned.
+ * If the request parameter is not present, and the injection point is annotated with &#064;DefaultValue, the value of the
+ * &#064;DefaultValue annotation is returned instead. If &#064;DefaultValue is not present, <code>null</code> is returned.
  * </p>
  * 
  * @author Nicklas Karlsson
@@ -54,74 +50,60 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
  * @see RequestParam
  * @see DefaultValue
  */
-public class RequestParamProducer
-{
-   @Inject
-   private HttpServletRequest request;
+public class RequestParamProducer {
+    @Inject
+    private HttpServletRequest request;
 
-   @Produces
-   @TypedParamValue
-   // FIXME find better place to cache the valueOf methods
-   // TODO support collection values
-   protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext)
-   {
-      String v = getParameterValue(getParameterName(ip), ip);
-      Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
-      if (t.equals(String.class))
-      {
-         return v;
-      }
-      try
-      {
-         Member converter = ext.getConverterMember(t);
-         return converter instanceof Constructor ?
-               ((Constructor<?>) converter).newInstance(v) : ((Method) converter).invoke(null, v);
-      }
-      // TODO should at least debug we couldn't convert the value
-      catch (Exception e) {}
-      return null;
-   }
+    @Produces
+    @TypedParamValue
+    // FIXME find better place to cache the valueOf methods
+    // TODO support collection values
+    protected Object getTypedParamValue(InjectionPoint ip, ServletExtension ext) {
+        String v = getParameterValue(getParameterName(ip), ip);
+        Class<?> t = PrimitiveTypes.box(resolveExpectedType(ip));
+        if (t.equals(String.class)) {
+            return v;
+        }
+        try {
+            Member converter = ext.getConverterMember(t);
+            return converter instanceof Constructor ? ((Constructor<?>) converter).newInstance(v) : ((Method) converter)
+                    .invoke(null, v);
+        }
+        // TODO should at least debug we couldn't convert the value
+        catch (Exception e) {
+        }
+        return null;
+    }
 
-   private String getParameterName(InjectionPoint ip)
-   {
-      String parameterName = ip.getAnnotated().getAnnotation(RequestParam.class).value();
-      if ("".equals(parameterName))
-      {
-         parameterName = ip.getMember().getName();
-      }
-      return parameterName;
-   }
+    private String getParameterName(InjectionPoint ip) {
+        String parameterName = ip.getAnnotated().getAnnotation(RequestParam.class).value();
+        if ("".equals(parameterName)) {
+            parameterName = ip.getMember().getName();
+        }
+        return parameterName;
+    }
 
-   private String getParameterValue(String parameterName, InjectionPoint ip)
-   {
-      return isParameterInRequest(parameterName) ? request.getParameter(parameterName) : getDefaultValue(ip);
-   }
+    private String getParameterValue(String parameterName, InjectionPoint ip) {
+        return isParameterInRequest(parameterName) ? request.getParameter(parameterName) : getDefaultValue(ip);
+    }
 
-   private boolean isParameterInRequest(String parameterName)
-   {
-      return request.getParameterMap().containsKey(parameterName);
-   }
+    private boolean isParameterInRequest(String parameterName) {
+        return request.getParameterMap().containsKey(parameterName);
+    }
 
-   private String getDefaultValue(InjectionPoint ip)
-   {
-      DefaultValue defaultValueAnnotation = ip.getAnnotated().getAnnotation(DefaultValue.class);
-      return defaultValueAnnotation == null ? null : defaultValueAnnotation.value();
-   }
-   
-   private Class<?> resolveExpectedType(final InjectionPoint ip)
-   {
-      Type t = ip.getType();
-      if (t instanceof ParameterizedType && ((ParameterizedType) t).getActualTypeArguments().length == 1)
-      {
-         return (Class<?>) ((ParameterizedType) t).getActualTypeArguments()[0];
-      }
-      else if (t instanceof Class)
-      {
-         return (Class<?>) t;
-      }
-      else
-      {
-         return Object.class;
-      }
-   }
+    private String getDefaultValue(InjectionPoint ip) {
+        DefaultValue defaultValueAnnotation = ip.getAnnotated().getAnnotation(DefaultValue.class);
+        return defaultValueAnnotation == null ? null : defaultValueAnnotation.value();
+    }
+
+    private Class<?> resolveExpectedType(final InjectionPoint ip) {
+        Type t = ip.getType();
+        if (t instanceof ParameterizedType && ((ParameterizedType) t).getActualTypeArguments().length == 1) {
+            return (Class<?>) ((ParameterizedType) t).getActualTypeArguments()[0];
+        } else if (t instanceof Class) {
+            return (Class<?>) t;
+        } else {
+            return Object.class;
+        }
+    }
 }

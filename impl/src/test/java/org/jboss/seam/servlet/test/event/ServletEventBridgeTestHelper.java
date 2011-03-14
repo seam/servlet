@@ -49,225 +49,180 @@ import org.junit.Assert;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @ApplicationScoped
-public class ServletEventBridgeTestHelper
-{
-   private Map<String, List<Object>> observations = new HashMap<String, List<Object>>();
+public class ServletEventBridgeTestHelper {
+    private Map<String, List<Object>> observations = new HashMap<String, List<Object>>();
 
-   private void recordObservation(String id, Object observation)
-   {
-      List<Object> observed = observations.get(id);
-      if (observed == null)
-      {
-         observed = new ArrayList<Object>();
-         observations.put(id, observed);
-      }
-      observed.add(observation);
-   }
+    private void recordObservation(String id, Object observation) {
+        List<Object> observed = observations.get(id);
+        if (observed == null) {
+            observed = new ArrayList<Object>();
+            observations.put(id, observed);
+        }
+        observed.add(observation);
+    }
 
-   public Map<String, List<Object>> getObservations()
-   {
-      return observations;
-   }
-   
-   public void reset()
-   {
-      observations.clear();
-   }
-   
-   public void assertObservations(String id, Object... observations)
-   {
-      List<Object> observed = this.observations.get(id);
-      
-      if (observations.length > 0)
-      {
-         Assert.assertNotNull("Observer [@Observes " + id + "] was never notified", observed);
-      }
-      else
-      {
-         Assert.assertEquals("Observer [@Observes " + id + "] should not have been called", 0, (observed != null ? observed.size() : 0));
-         return;
-      }
-      
-      for (Object o : observations)
-      {
-         if (!observed.remove(o))
-         {
-            Assert.fail("Observer [@Observes " + id + "] notified too few times; expected payload: " + o);
-         }
-      }
-      
-      if (observed.size() > 0)
-      {
-         Assert.fail("Observer [@Observes " + id + "] notified too many times; extra payload: " + observed);
-      }
-   }
+    public Map<String, List<Object>> getObservations() {
+        return observations;
+    }
 
-   public void observeServletRequest(@Observes ServletRequest req)
-   {
-      recordObservation("ServletRequest", req);
-   }
+    public void reset() {
+        observations.clear();
+    }
 
-   public void observeServletRequestInitialized(@Observes @Initialized ServletRequest req)
-   {
-      recordObservation("@Initialized ServletRequest", req);
-   }
+    public void assertObservations(String id, Object... observations) {
+        List<Object> observed = this.observations.get(id);
 
-   public void observeServletRequestDestroyed(@Observes @Destroyed ServletRequest req)
-   {
-      recordObservation("@Destroyed ServletRequest", req);
-   }
-   
-   public void observeWebApplication(@Observes WebApplication webapp)
-   {
-      recordObservation("WebApplication", webapp);
-   }
+        if (observations.length > 0) {
+            Assert.assertNotNull("Observer [@Observes " + id + "] was never notified", observed);
+        } else {
+            Assert.assertEquals("Observer [@Observes " + id + "] should not have been called", 0,
+                    (observed != null ? observed.size() : 0));
+            return;
+        }
 
-   public void observeWebApplicationInitialized(@Observes @Initialized WebApplication webapp)
-   {
-      recordObservation("@Initialized WebApplication", webapp);
-   }
-   
-   public void observeWebApplicationStarted(@Observes @Started WebApplication webapp)
-   {
-      recordObservation("@Started WebApplication", webapp);
-   }
+        for (Object o : observations) {
+            if (!observed.remove(o)) {
+                Assert.fail("Observer [@Observes " + id + "] notified too few times; expected payload: " + o);
+            }
+        }
 
-   public void observeWebApplicationDestroyed(@Observes @Destroyed WebApplication webapp)
-   {
-      recordObservation("@Destroyed WebApplication", webapp);
-   }
-   
-   public void observeHttpServletRequest(@Observes HttpServletRequest req)
-   {
-      recordObservation("HttpServletRequest", req);
-   }
+        if (observed.size() > 0) {
+            Assert.fail("Observer [@Observes " + id + "] notified too many times; extra payload: " + observed);
+        }
+    }
 
-   public void observeHttpServletRequestInitialized(@Observes @Initialized HttpServletRequest req)
-   {
-      recordObservation("@Initialized HttpServletRequest", req);
-   }
+    public void observeServletRequest(@Observes ServletRequest req) {
+        recordObservation("ServletRequest", req);
+    }
 
-   public void observeHttpServletRequestDestroyed(@Observes @Destroyed HttpServletRequest req)
-   {
-      recordObservation("@Destroyed HttpServletRequest", req);
-   }
+    public void observeServletRequestInitialized(@Observes @Initialized ServletRequest req) {
+        recordObservation("@Initialized ServletRequest", req);
+    }
 
-   public void observeServletResponse(@Observes ServletResponse res)
-   {
-      recordObservation("ServletResponse", res);
-   }
+    public void observeServletRequestDestroyed(@Observes @Destroyed ServletRequest req) {
+        recordObservation("@Destroyed ServletRequest", req);
+    }
 
-   public void observeServletResponseInitialized(@Observes @Initialized ServletResponse res)
-   {
-      recordObservation("@Initialized ServletResponse", res);
-   }
+    public void observeWebApplication(@Observes WebApplication webapp) {
+        recordObservation("WebApplication", webapp);
+    }
 
-   public void observeServletResponseDestroyed(@Observes @Destroyed ServletResponse res)
-   {
-      recordObservation("@Destroyed ServletResponse", res);
-   }
-   
-   public void observeHttpServletResponse(@Observes HttpServletResponse res)
-   {
-      recordObservation("HttpServletResponse", res);
-   }
+    public void observeWebApplicationInitialized(@Observes @Initialized WebApplication webapp) {
+        recordObservation("@Initialized WebApplication", webapp);
+    }
 
-   public void observeHttpServletResponseInitialized(@Observes @Initialized HttpServletResponse res)
-   {
-      recordObservation("@Initialized HttpServletResponse", res);
-   }
+    public void observeWebApplicationStarted(@Observes @Started WebApplication webapp) {
+        recordObservation("@Started WebApplication", webapp);
+    }
 
-   public void observeHttpServletResponseDestroyed(@Observes @Destroyed HttpServletResponse res)
-   {
-      recordObservation("@Destroyed HttpServletResponse", res);
-   }
-   
-   public void observeServletRequestContext(@Observes ServletRequestContext ctx)
-   {
-      recordObservation("ServletRequestContext", ctx);
-   }
-   
-   public void observeServletRequestContextInitialized(@Observes @Initialized ServletRequestContext ctx)
-   {
-      recordObservation("@Initialized ServletRequestContext", ctx);
-   }
-   
-   public void observeServletRequestContextDestroyed(@Observes @Destroyed ServletRequestContext ctx)
-   {
-      recordObservation("@Destroyed ServletRequestContext", ctx);
-   }
-   
-   public void observeHttpServletRequestContext(@Observes HttpServletRequestContext ctx)
-   {
-      recordObservation("HttpServletRequestContext", ctx);
-   }
-   
-   public void observeHttpServletRequestContextInitialized(@Observes @Initialized HttpServletRequestContext ctx)
-   {
-      recordObservation("@Initialized HttpServletRequestContext", ctx);
-   }
-   
-   public void observeHttpServletRequestContextDestroyed(@Observes @Destroyed HttpServletRequestContext ctx)
-   {
-      recordObservation("@Destroyed HttpServletRequestContext", ctx);
-   }
-   
-   public void observeHttpSession(@Observes HttpSession sess)
-   {
-      recordObservation("HttpSession", sess);
-   }
+    public void observeWebApplicationDestroyed(@Observes @Destroyed WebApplication webapp) {
+        recordObservation("@Destroyed WebApplication", webapp);
+    }
 
-   public void observeHttpSessionDidActivate(@Observes @DidActivate HttpSession sess)
-   {
-      recordObservation("@DidActivate HttpSession", sess);
-   }
+    public void observeHttpServletRequest(@Observes HttpServletRequest req) {
+        recordObservation("HttpServletRequest", req);
+    }
 
-   public void observeSessionWillPassivate(@Observes @WillPassivate HttpSession sess)
-   {
-      recordObservation("@WillPassivate HttpSession", sess);
-   }
+    public void observeHttpServletRequestInitialized(@Observes @Initialized HttpServletRequest req) {
+        recordObservation("@Initialized HttpServletRequest", req);
+    }
 
-   public void observeSessionInitialized(@Observes @Initialized HttpSession sess)
-   {
-      recordObservation("@Initialized HttpSession", sess);
-   }
+    public void observeHttpServletRequestDestroyed(@Observes @Destroyed HttpServletRequest req) {
+        recordObservation("@Destroyed HttpServletRequest", req);
+    }
 
-   public void observeSessionDestroyed(@Observes @Destroyed HttpSession sess)
-   {
-      recordObservation("@Destroyed HttpSession", sess);
-   }
+    public void observeServletResponse(@Observes ServletResponse res) {
+        recordObservation("ServletResponse", res);
+    }
 
-   public void observeServletContext(@Observes ServletContext ctx)
-   {
-      recordObservation("ServletContext", ctx);
-   }
+    public void observeServletResponseInitialized(@Observes @Initialized ServletResponse res) {
+        recordObservation("@Initialized ServletResponse", res);
+    }
 
-   public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx)
-   {
-      recordObservation("@Initialized ServletContext", ctx);
-   }
+    public void observeServletResponseDestroyed(@Observes @Destroyed ServletResponse res) {
+        recordObservation("@Destroyed ServletResponse", res);
+    }
 
-   public void observeServletContextDestroyed(@Observes @Destroyed ServletContext ctx)
-   {
-      recordObservation("@Destroyed ServletContext", ctx);
-   }
-   
-   public void observeHttpServletRequestInitializedForPathA(@Observes @Initialized @Path("pathA") HttpServletRequest req)
-   {
-      recordObservation("@Initialized @Path(\"pathA\") HttpServletRequest", req);
-   }
-   
-   public void observeHttpServletRequestInitializedForPathB(@Observes @Initialized @Path("pathB") HttpServletRequest req)
-   {
-      recordObservation("@Initialized @Path(\"pathB\") HttpServletRequest", req);
-   }
-   
-   public static class NoOpFilterChain implements FilterChain
-   {
-      public static final FilterChain INSTANCE = new NoOpFilterChain();
-      
-      public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException
-      {
-      }
-   }
+    public void observeHttpServletResponse(@Observes HttpServletResponse res) {
+        recordObservation("HttpServletResponse", res);
+    }
+
+    public void observeHttpServletResponseInitialized(@Observes @Initialized HttpServletResponse res) {
+        recordObservation("@Initialized HttpServletResponse", res);
+    }
+
+    public void observeHttpServletResponseDestroyed(@Observes @Destroyed HttpServletResponse res) {
+        recordObservation("@Destroyed HttpServletResponse", res);
+    }
+
+    public void observeServletRequestContext(@Observes ServletRequestContext ctx) {
+        recordObservation("ServletRequestContext", ctx);
+    }
+
+    public void observeServletRequestContextInitialized(@Observes @Initialized ServletRequestContext ctx) {
+        recordObservation("@Initialized ServletRequestContext", ctx);
+    }
+
+    public void observeServletRequestContextDestroyed(@Observes @Destroyed ServletRequestContext ctx) {
+        recordObservation("@Destroyed ServletRequestContext", ctx);
+    }
+
+    public void observeHttpServletRequestContext(@Observes HttpServletRequestContext ctx) {
+        recordObservation("HttpServletRequestContext", ctx);
+    }
+
+    public void observeHttpServletRequestContextInitialized(@Observes @Initialized HttpServletRequestContext ctx) {
+        recordObservation("@Initialized HttpServletRequestContext", ctx);
+    }
+
+    public void observeHttpServletRequestContextDestroyed(@Observes @Destroyed HttpServletRequestContext ctx) {
+        recordObservation("@Destroyed HttpServletRequestContext", ctx);
+    }
+
+    public void observeHttpSession(@Observes HttpSession sess) {
+        recordObservation("HttpSession", sess);
+    }
+
+    public void observeHttpSessionDidActivate(@Observes @DidActivate HttpSession sess) {
+        recordObservation("@DidActivate HttpSession", sess);
+    }
+
+    public void observeSessionWillPassivate(@Observes @WillPassivate HttpSession sess) {
+        recordObservation("@WillPassivate HttpSession", sess);
+    }
+
+    public void observeSessionInitialized(@Observes @Initialized HttpSession sess) {
+        recordObservation("@Initialized HttpSession", sess);
+    }
+
+    public void observeSessionDestroyed(@Observes @Destroyed HttpSession sess) {
+        recordObservation("@Destroyed HttpSession", sess);
+    }
+
+    public void observeServletContext(@Observes ServletContext ctx) {
+        recordObservation("ServletContext", ctx);
+    }
+
+    public void observeServletContextInitialized(@Observes @Initialized ServletContext ctx) {
+        recordObservation("@Initialized ServletContext", ctx);
+    }
+
+    public void observeServletContextDestroyed(@Observes @Destroyed ServletContext ctx) {
+        recordObservation("@Destroyed ServletContext", ctx);
+    }
+
+    public void observeHttpServletRequestInitializedForPathA(@Observes @Initialized @Path("pathA") HttpServletRequest req) {
+        recordObservation("@Initialized @Path(\"pathA\") HttpServletRequest", req);
+    }
+
+    public void observeHttpServletRequestInitializedForPathB(@Observes @Initialized @Path("pathB") HttpServletRequest req) {
+        recordObservation("@Initialized @Path(\"pathB\") HttpServletRequest", req);
+    }
+
+    public static class NoOpFilterChain implements FilterChain {
+        public static final FilterChain INSTANCE = new NoOpFilterChain();
+
+        public void doFilter(ServletRequest request, ServletResponse response) throws IOException, ServletException {
+        }
+    }
 }

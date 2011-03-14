@@ -20,28 +20,22 @@ import javax.enterprise.util.AnnotationLiteral;
 
 import org.jboss.seam.servlet.event.Path;
 
-/*
+/**
  * @author Dan Allen
  */
-public class PathLiteral extends AnnotationLiteral<Path> implements Path
-{
-   private static final long serialVersionUID = -6004283842766030539L;
-   private final String value;
+public class PathLiteral extends AnnotationLiteral<Path> implements Path {
+    private static final long serialVersionUID = -6004283842766030539L;
+    private final String value;
 
-   public String value()
-   {
-      return value;
-   }
+    public String value() {
+        return value;
+    }
 
-   public PathLiteral(final String value)
-   {
-      if (value != null)
-      {
-         this.value = (value.indexOf('/') == 0 ? value.substring(1) : value);
-      }
-      else
-      {
-         this.value = "";
-      }
-   }
+    public PathLiteral(final String value) {
+        if (value != null) {
+            this.value = (value.indexOf('/') == 0 ? value.substring(1) : value);
+        } else {
+            this.value = "";
+        }
+    }
 }
