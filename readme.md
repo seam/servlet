@@ -12,7 +12,7 @@ Seam Servlet is independent of CDI implementation and fully portable between
 Java EE 6 and Servlet environments enhanced with CDI. The use of Servlet 3.0 is
 recommended, but not required.
 
-For more information, see the [Seam Servlet project page](http://seamframework.org/Seam3/ServletModule).
+For more information, see the [Seam Servlet project page](http://seamframework.org/Seam3/Servlet).
 
 ##Building
 
