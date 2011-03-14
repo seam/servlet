@@ -38,7 +38,7 @@
  Seam Servlet URLs
  =================
 
- Seam 3 Servlet Module: http://sfwk.org/Seam3/ServletModule
+ Seam 3 Servlet Module: http://sfwk.org/Seam3/Servlet
  Seam 3 project:        http://sfwk.org/Seam3
  Downloads:             http://sfwk.org/Seam3/DistributionDownloads
  Forums:                http://sfwk.org/Community/Seam3Users
