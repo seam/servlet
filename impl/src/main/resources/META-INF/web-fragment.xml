@@ -22,14 +22,18 @@
    <name>SeamServlet</name>
 
    <!--
-      If there are multiple documents stating "before others", they will all be
-      at the beginning of the list of sorted documents, but the ordering within
-      the group of such documents is unspecified.
+      According to section 8.2.2 of the Servlet 3.0 specification (JSR-215), if there are multiple documents stating
+      <before><others/></before>, they will all be at the beginning of the list of sorted documents, but the ordering
+      within the group of such documents is unspecified.
    -->
    <ordering>
+      <!--
+         It would be nice to guarantee that we come after the web-fragment.xml for any known CDI implementation, but this causes
+         deployment errors on GlassFish 3.1 and Tomcat 7 if one of the web fragments referenced here does not exist.
       <after>
          <name>WeldServlet</name>
       </after>
+      -->
       <before>
          <others/>
       </before>
