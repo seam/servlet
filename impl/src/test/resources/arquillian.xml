@@ -27,7 +27,7 @@
     -->
     
     <jboss:container>
-        <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m -Djboss.i18n.generate-proxies=true</javaVmArguments>
+        <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m</javaVmArguments>
     </jboss:container>
 
 </arquillian>
