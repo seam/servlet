@@ -41,11 +41,8 @@ import org.jboss.seam.solder.log.Category;
  */
 @ApplicationScoped
 public class ImplicitServletObjectsHolder {
-    // TODO re-enable injection of ServletLog and all log.xxx() methods in this class
-    // once typesafe logging isn't so broken
-
-    // @Inject @Category(ServletLog.CATEGORY)
-    // private ServletLog log;
+    @Inject @Category(ServletLog.CATEGORY)
+    private ServletLog log;
 
     private ServletContext servletCtx;
 
@@ -58,20 +55,20 @@ public class ImplicitServletObjectsHolder {
 
     protected void contextInitialized(@Observes @Initialized final InternalServletContextEvent e, BeanManager beanManager) {
         ServletContext ctx = e.getServletContext();
-        // log.servletContextInitialized(ctx);
+        log.servletContextInitialized(ctx);
         ctx.setAttribute(BeanManager.class.getName(), beanManager);
         ServletContextAttributeProvider.setServletContext(ctx);
         servletCtx = ctx;
     }
 
     protected void contextDestroyed(@Observes @Destroyed final InternalServletContextEvent e) {
-        // log.servletContextDestroyed(e.getServletContext());
+        log.servletContextDestroyed(e.getServletContext());
         servletCtx = null;
     }
 
     protected void requestInitialized(@Observes @Initialized final InternalServletRequestEvent e) {
         ServletRequest req = e.getServletRequest();
-        // log.servletRequestInitialized(req);
+        log.servletRequestInitialized(req);
         if (req instanceof HttpServletRequest) {
             requestCtx.set(new HttpServletRequestContext(req));
         } else {
@@ -80,13 +77,13 @@ public class ImplicitServletObjectsHolder {
     }
 
     protected void requestDestroyed(@Observes @Destroyed final InternalServletRequestEvent e) {
-        // log.servletRequestDestroyed(e.getServletRequest());
+        log.servletRequestDestroyed(e.getServletRequest());
         requestCtx.set(null);
     }
 
     protected void responseInitialized(@Observes @Initialized final InternalServletResponseEvent e) {
         ServletResponse res = e.getServletResponse();
-        // log.servletResponseInitialized(res);
+        log.servletResponseInitialized(res);
         if (res instanceof HttpServletResponse) {
             requestCtx.set(new HttpServletRequestContext(requestCtx.get().getRequest(), res));
         } else {
@@ -95,7 +92,7 @@ public class ImplicitServletObjectsHolder {
     }
 
     protected void responseDestroyed(@Observes @Destroyed final InternalServletResponseEvent e) {
-        // log.servletResponseDestroyed(e.getServletResponse());
+        log.servletResponseDestroyed(e.getServletResponse());
         if (requestCtx.get() instanceof HttpServletRequestContext) {
             requestCtx.set(new HttpServletRequestContext(requestCtx.get().getRequest()));
         } else {
