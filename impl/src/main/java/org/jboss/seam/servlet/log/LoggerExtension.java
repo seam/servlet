@@ -39,6 +39,8 @@ import org.jboss.seam.solder.logging.MessageLogger;
  * Adds LoggerProducers to the deployment, and detects and installs beans for any
  * typed loggers defined.
  * 
+ * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
+ * 
  * @author Pete Muir
  */
 public class LoggerExtension implements Extension
@@ -47,25 +49,29 @@ public class LoggerExtension implements Extension
    private final Collection<AnnotatedType<?>> messageBundleTypes;
    private Bean<Object> loggerProducerBean;
    private Bean<Object> bundleProducerBean;
+   private boolean isGlassFish = false;
 
    LoggerExtension()
    {
       this.messageLoggerTypes = new HashSet<AnnotatedType<?>>();
       this.messageBundleTypes = new HashSet<AnnotatedType<?>>();
+      isGlassFish = System.getProperty("glassfish.version") != null;
    }
 
    void detectInterfaces(@Observes ProcessAnnotatedType<?> event, BeanManager beanManager)
    {
-      AnnotatedType<?> type = event.getAnnotatedType();
-      if (type.getJavaClass().getPackage().getName().startsWith("org.jboss.seam.servlet."))
-      {
-          if (type.isAnnotationPresent(MessageLogger.class))
+      if (isGlassFish) {
+          AnnotatedType<?> type = event.getAnnotatedType();
+          if (type.getJavaClass().getPackage().getName().startsWith("org.jboss.seam.servlet."))
           {
-             messageLoggerTypes.add(type);
-          }
-          if (type.isAnnotationPresent(MessageBundle.class))
-          {
-             messageBundleTypes.add(type);
+              if (type.isAnnotationPresent(MessageLogger.class))
+              {
+                 messageLoggerTypes.add(type);
+              }
+              if (type.isAnnotationPresent(MessageBundle.class))
+              {
+                 messageBundleTypes.add(type);
+              }
           }
       }
    }
@@ -87,25 +93,31 @@ public class LoggerExtension implements Extension
    @SuppressWarnings("unchecked")
    void captureProducers(AnnotatedMethod<?> method, Bean<?> bean)
    {
-      if (method.isAnnotationPresent(TypedLogger.class))
+      if (isGlassFish)
       {
-         this.loggerProducerBean = (Bean<Object>) bean;
-      }
-      if (method.isAnnotationPresent(TypedMessageBundle.class))
-      {
-         this.bundleProducerBean = (Bean<Object>) bean;
+          if (method.isAnnotationPresent(TypedLogger.class))
+          {
+             this.loggerProducerBean = (Bean<Object>) bean;
+          }
+          if (method.isAnnotationPresent(TypedMessageBundle.class))
+          {
+             this.bundleProducerBean = (Bean<Object>) bean;
+          }
       }
    }
 
    void installBeans(@Observes AfterBeanDiscovery event, BeanManager beanManager)
    {
-      for (AnnotatedType<?> type : messageLoggerTypes)
+      if (isGlassFish)
       {
-         event.addBean(createMessageLoggerBean(loggerProducerBean, type, beanManager));
-      }
-      for (AnnotatedType<?> type : messageBundleTypes)
-      {
-         event.addBean(createMessageBundleBean(bundleProducerBean, type, beanManager));
+          for (AnnotatedType<?> type : messageLoggerTypes)
+          {
+             event.addBean(createMessageLoggerBean(loggerProducerBean, type, beanManager));
+          }
+          for (AnnotatedType<?> type : messageBundleTypes)
+          {
+             event.addBean(createMessageBundleBean(bundleProducerBean, type, beanManager));
+          }
       }
    }
    

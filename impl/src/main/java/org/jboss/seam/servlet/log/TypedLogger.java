@@ -32,6 +32,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Internal-qualifier used to identify the typed logger producer for the
  * wrapping bean.
  * 
+ * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
+ * 
  * @author Pete Muir
  * 
  */

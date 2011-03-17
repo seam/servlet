@@ -32,6 +32,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * Internal-qualifier used to identify the typed message bundle producer for the
  * wrapping bean.
  * 
+ * <strong>TEMPORARY UNTIL GLASSFISH-15735</strong>
+ * 
  * @author Pete Muir
  * 
  */

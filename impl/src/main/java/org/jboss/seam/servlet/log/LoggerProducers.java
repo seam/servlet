@@ -36,6 +36,8 @@ import org.jboss.seam.solder.log.TypedCategory;
  * The <code>LoggerProducers</code> provides a producer method for all
  * injected loggers and injected typed loggers.
  * 
+ * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
+ * 
  * @author David Allen
  * @author Pete Muir
  */
