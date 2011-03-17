@@ -40,7 +40,7 @@ public class Deployments {
                 .create(WebArchive.class, "test.war")
                 // add packages to include generated classes
                 .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
-                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.CR1"))
+                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.CR2"))
                 .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
