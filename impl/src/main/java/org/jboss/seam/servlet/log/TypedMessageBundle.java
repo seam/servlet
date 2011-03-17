@@ -29,8 +29,7 @@ import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
- * Internal-qualifier used to identify the typed message bundle producer for the
- * wrapping bean.
+ * Internal-qualifier used to identify the typed message bundle producer for the wrapping bean.
  * 
  * <strong>TEMPORARY UNTIL GLASSFISH-15735</strong>
  * 
@@ -41,7 +40,5 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({ TYPE, METHOD, PARAMETER, FIELD })
 @Retention(RUNTIME)
 @Documented
-@interface TypedMessageBundle
-{
-
+@interface TypedMessageBundle {
 }

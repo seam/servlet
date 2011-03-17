@@ -33,79 +33,61 @@ import org.jboss.seam.solder.log.Locale;
 import org.jboss.seam.solder.log.TypedCategory;
 
 /**
- * The <code>LoggerProducers</code> provides a producer method for all
- * injected loggers and injected typed loggers.
+ * The <code>LoggerProducers</code> provides a producer method for all injected loggers and injected typed loggers.
  * 
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
  * 
  * @author David Allen
  * @author Pete Muir
  */
-class LoggerProducers implements Serializable
-{
-   @Produces
-   @TypedLogger
-   Object produceTypedLogger(InjectionPoint injectionPoint)
-   {
-      Annotated annotated = injectionPoint.getAnnotated();
-      if (annotated.isAnnotationPresent(Category.class))
-      {
-         if (annotated.isAnnotationPresent(Locale.class))
-         {         
-            return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(Category.class).value(), toLocale(annotated.getAnnotation(Locale.class).value()));
-         }
-         else
-         {
-            return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(Category.class).value());
-         }   
-      }
-      else if (annotated.isAnnotationPresent(TypedCategory.class))
-      {
-         if (annotated.isAnnotationPresent(Locale.class))
-         {         
-            return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(TypedCategory.class).value().getName(), toLocale(annotated.getAnnotation(Locale.class).value()));
-         }
-         else
-         {
-            return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(TypedCategory.class).value().getName());
-         }
-      }
-      else
-      {
-         throw new IllegalStateException("Must specify @Category or @TypedCategory for typed loggers at [" + injectionPoint + "]");
-      }
-   }
-   
-   @Produces
-   @TypedMessageBundle
-   Object produceTypedMessageBundle(InjectionPoint injectionPoint)
-   {
-      Annotated annotated = injectionPoint.getAnnotated();
-      if (annotated.isAnnotationPresent(Locale.class))
-      {         
-         return getBundle(getRawType(injectionPoint.getType()), toLocale(annotated.getAnnotation(Locale.class).value()));
-      }
-      else
-      {
-         return getBundle(getRawType(injectionPoint.getType()));
-      }
-   }
-   
-   private Class<?> getInjectionPointRawType(InjectionPoint injectionPoint)
-   {
-      return getRawType(injectionPoint.getType());
-   }
-   
-   private Class<?> getDeclaringRawType(InjectionPoint injectionPoint)
-   {
-      if (injectionPoint.getBean() != null)
-      {
-         return getRawType(injectionPoint.getBean().getBeanClass());
-      }
-      else
-      {
-         return getRawType(injectionPoint.getMember().getDeclaringClass());
-      }
-   }
-   
+class LoggerProducers implements Serializable {
+    @Produces
+    @TypedLogger
+    Object produceTypedLogger(InjectionPoint injectionPoint) {
+        Annotated annotated = injectionPoint.getAnnotated();
+        if (annotated.isAnnotationPresent(Category.class)) {
+            if (annotated.isAnnotationPresent(Locale.class)) {
+                return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(Category.class)
+                        .value(), toLocale(annotated.getAnnotation(Locale.class).value()));
+            } else {
+                return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(Category.class)
+                        .value());
+            }
+        } else if (annotated.isAnnotationPresent(TypedCategory.class)) {
+            if (annotated.isAnnotationPresent(Locale.class)) {
+                return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(TypedCategory.class)
+                        .value().getName(), toLocale(annotated.getAnnotation(Locale.class).value()));
+            } else {
+                return getMessageLogger(getInjectionPointRawType(injectionPoint), annotated.getAnnotation(TypedCategory.class)
+                        .value().getName());
+            }
+        } else {
+            throw new IllegalStateException("Must specify @Category or @TypedCategory for typed loggers at [" + injectionPoint
+                    + "]");
+        }
+    }
+
+    @Produces
+    @TypedMessageBundle
+    Object produceTypedMessageBundle(InjectionPoint injectionPoint) {
+        Annotated annotated = injectionPoint.getAnnotated();
+        if (annotated.isAnnotationPresent(Locale.class)) {
+            return getBundle(getRawType(injectionPoint.getType()), toLocale(annotated.getAnnotation(Locale.class).value()));
+        } else {
+            return getBundle(getRawType(injectionPoint.getType()));
+        }
+    }
+
+    private Class<?> getInjectionPointRawType(InjectionPoint injectionPoint) {
+        return getRawType(injectionPoint.getType());
+    }
+
+    private Class<?> getDeclaringRawType(InjectionPoint injectionPoint) {
+        if (injectionPoint.getBean() != null) {
+            return getRawType(injectionPoint.getBean().getBeanClass());
+        } else {
+            return getRawType(injectionPoint.getMember().getDeclaringClass());
+        }
+    }
+
 }

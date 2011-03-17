@@ -36,106 +36,91 @@ import org.jboss.seam.solder.logging.MessageBundle;
 import org.jboss.seam.solder.logging.MessageLogger;
 
 /**
- * Adds LoggerProducers to the deployment, and detects and installs beans for any
- * typed loggers defined.
+ * Adds LoggerProducers to the deployment, and detects and installs beans for any typed loggers defined.
  * 
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
  * 
  * @author Pete Muir
  */
-public class LoggerExtension implements Extension
-{
-   private final Collection<AnnotatedType<?>> messageLoggerTypes;
-   private final Collection<AnnotatedType<?>> messageBundleTypes;
-   private Bean<Object> loggerProducerBean;
-   private Bean<Object> bundleProducerBean;
-   private boolean isGlassFish = false;
+public class LoggerExtension implements Extension {
+    private final Collection<AnnotatedType<?>> messageLoggerTypes;
+    private final Collection<AnnotatedType<?>> messageBundleTypes;
+    private Bean<Object> loggerProducerBean;
+    private Bean<Object> bundleProducerBean;
+    private boolean processTypesInModule = false;
+    private static final String MODULE_PACKAGE_PREFIX = "org.jboss.seam.servlet.";
 
-   LoggerExtension()
-   {
-      this.messageLoggerTypes = new HashSet<AnnotatedType<?>>();
-      this.messageBundleTypes = new HashSet<AnnotatedType<?>>();
-      isGlassFish = System.getProperty("glassfish.version") != null;
-   }
+    LoggerExtension() {
+        this.messageLoggerTypes = new HashSet<AnnotatedType<?>>();
+        this.messageBundleTypes = new HashSet<AnnotatedType<?>>();
+        Package cdi = BeanManager.class.getPackage();
+        processTypesInModule = System.getProperty("glassfish.version") != null && cdi.getImplementationTitle().contains("Weld")
+                && cdi.getImplementationVersion().equals("20110114-1644");
+    }
 
-   void detectInterfaces(@Observes ProcessAnnotatedType<?> event, BeanManager beanManager)
-   {
-      if (isGlassFish) {
-          AnnotatedType<?> type = event.getAnnotatedType();
-          if (type.getJavaClass().getPackage().getName().startsWith("org.jboss.seam.servlet."))
-          {
-              if (type.isAnnotationPresent(MessageLogger.class))
-              {
-                 messageLoggerTypes.add(type);
-              }
-              if (type.isAnnotationPresent(MessageBundle.class))
-              {
-                 messageBundleTypes.add(type);
-              }
-          }
-      }
-   }
-   
-   // according to the Java EE 6 javadoc (the authority according to the powers that be),
-   // this is the correct order of type parameters
-   void detectProducers(@Observes ProcessProducerMethod<Object, LoggerProducers> event)
-   {
-      captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
-   }
+    void detectInterfaces(@Observes ProcessAnnotatedType<?> event, BeanManager beanManager) {
+        if (processTypesInModule) {
+            AnnotatedType<?> type = event.getAnnotatedType();
+            if (type.getJavaClass().getPackage().getName().startsWith(MODULE_PACKAGE_PREFIX)) {
+                if (type.isAnnotationPresent(MessageLogger.class)) {
+                    messageLoggerTypes.add(type);
+                }
+                if (type.isAnnotationPresent(MessageBundle.class)) {
+                    messageBundleTypes.add(type);
+                }
+            }
+        }
+    }
 
-   // according to JSR-299 spec, this is the correct order of type parameters
-   @Deprecated
-   void detectProducersInverted(@Observes ProcessProducerMethod<LoggerProducers, Object> event)
-   {
-      captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
-   }
-   
-   @SuppressWarnings("unchecked")
-   void captureProducers(AnnotatedMethod<?> method, Bean<?> bean)
-   {
-      if (isGlassFish)
-      {
-          if (method.isAnnotationPresent(TypedLogger.class))
-          {
-             this.loggerProducerBean = (Bean<Object>) bean;
-          }
-          if (method.isAnnotationPresent(TypedMessageBundle.class))
-          {
-             this.bundleProducerBean = (Bean<Object>) bean;
-          }
-      }
-   }
+    // according to the Java EE 6 javadoc (the authority according to the powers that be),
+    // this is the correct order of type parameters
+    void detectProducers(@Observes ProcessProducerMethod<Object, LoggerProducers> event) {
+        captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
+    }
 
-   void installBeans(@Observes AfterBeanDiscovery event, BeanManager beanManager)
-   {
-      if (isGlassFish)
-      {
-          for (AnnotatedType<?> type : messageLoggerTypes)
-          {
-             event.addBean(createMessageLoggerBean(loggerProducerBean, type, beanManager));
-          }
-          for (AnnotatedType<?> type : messageBundleTypes)
-          {
-             event.addBean(createMessageBundleBean(bundleProducerBean, type, beanManager));
-          }
-      }
-   }
-   
-   private static <T> Bean<T> createMessageLoggerBean(Bean<Object> delegate, AnnotatedType<T> type, BeanManager beanManager)
-   {
-      return new NarrowingBeanBuilder<T>(delegate, beanManager).readFromType(type).types(type.getBaseType(), Object.class).create();
-   }
-   
-   private static <T> Bean<T> createMessageBundleBean(Bean<Object> delegate, AnnotatedType<T> type, BeanManager beanManager)
-   {
-      return new NarrowingBeanBuilder<T>(delegate, beanManager).readFromType(type).types(type.getBaseType(), Object.class).addQualifier(MessageBundleLiteral.INSTANCE).create();
-   }
-   
-   void cleanup(@Observes AfterDeploymentValidation event)
-   {
-      // defensively clear the set to help with gc
-      this.messageLoggerTypes.clear();
-      this.messageBundleTypes.clear();
-   }
+    // according to JSR-299 spec, this is the correct order of type parameters
+    @Deprecated
+    void detectProducersInverted(@Observes ProcessProducerMethod<LoggerProducers, Object> event) {
+        captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
+    }
+
+    @SuppressWarnings("unchecked")
+    void captureProducers(AnnotatedMethod<?> method, Bean<?> bean) {
+        if (processTypesInModule) {
+            if (method.isAnnotationPresent(TypedLogger.class)) {
+                this.loggerProducerBean = (Bean<Object>) bean;
+            }
+            if (method.isAnnotationPresent(TypedMessageBundle.class)) {
+                this.bundleProducerBean = (Bean<Object>) bean;
+            }
+        }
+    }
+
+    void installBeans(@Observes AfterBeanDiscovery event, BeanManager beanManager) {
+        if (processTypesInModule) {
+            for (AnnotatedType<?> type : messageLoggerTypes) {
+                event.addBean(createMessageLoggerBean(loggerProducerBean, type, beanManager));
+            }
+            for (AnnotatedType<?> type : messageBundleTypes) {
+                event.addBean(createMessageBundleBean(bundleProducerBean, type, beanManager));
+            }
+        }
+    }
+
+    private static <T> Bean<T> createMessageLoggerBean(Bean<Object> delegate, AnnotatedType<T> type, BeanManager beanManager) {
+        return new NarrowingBeanBuilder<T>(delegate, beanManager).readFromType(type).types(type.getBaseType(), Object.class)
+                .create();
+    }
+
+    private static <T> Bean<T> createMessageBundleBean(Bean<Object> delegate, AnnotatedType<T> type, BeanManager beanManager) {
+        return new NarrowingBeanBuilder<T>(delegate, beanManager).readFromType(type).types(type.getBaseType(), Object.class)
+                .addQualifier(MessageBundleLiteral.INSTANCE).create();
+    }
+
+    void cleanup(@Observes AfterDeploymentValidation event) {
+        // defensively clear the set to help with gc
+        this.messageLoggerTypes.clear();
+        this.messageBundleTypes.clear();
+    }
 
 }
