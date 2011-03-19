@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.log;
+package org.jboss.seam.servlet.logging;
 
 import java.util.Collection;
 import java.util.HashSet;
@@ -32,17 +32,17 @@ import javax.enterprise.inject.spi.ProcessProducerMethod;
 
 import org.jboss.seam.solder.bean.NarrowingBeanBuilder;
 import org.jboss.seam.solder.literal.MessageBundleLiteral;
-import org.jboss.seam.solder.logging.MessageBundle;
 import org.jboss.seam.solder.logging.MessageLogger;
+import org.jboss.seam.solder.messages.MessageBundle;
 
 /**
- * Adds LoggerProducers to the deployment, and detects and installs beans for any typed loggers defined.
+ * Adds TypedMessageBundleAndLoggerProducers to the deployment, and detects and installs beans for any typed loggers defined.
  * 
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
  * 
  * @author Pete Muir
  */
-public class LoggerExtension implements Extension {
+public class TypedMessageBundleAndLoggerExtension implements Extension {
     private final Collection<AnnotatedType<?>> messageLoggerTypes;
     private final Collection<AnnotatedType<?>> messageBundleTypes;
     private Bean<Object> loggerProducerBean;
@@ -50,7 +50,7 @@ public class LoggerExtension implements Extension {
     private boolean processTypesInModule = false;
     private static final String MODULE_PACKAGE_PREFIX = "org.jboss.seam.servlet.";
 
-    LoggerExtension() {
+    TypedMessageBundleAndLoggerExtension() {
         this.messageLoggerTypes = new HashSet<AnnotatedType<?>>();
         this.messageBundleTypes = new HashSet<AnnotatedType<?>>();
         Package cdi = BeanManager.class.getPackage();
@@ -74,20 +74,20 @@ public class LoggerExtension implements Extension {
 
     // according to the Java EE 6 javadoc (the authority according to the powers that be),
     // this is the correct order of type parameters
-    void detectProducers(@Observes ProcessProducerMethod<Object, LoggerProducers> event) {
+    void detectProducers(@Observes ProcessProducerMethod<Object, TypedMessageBundleAndLoggerProducers> event) {
         captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
     }
 
     // according to JSR-299 spec, this is the correct order of type parameters
     @Deprecated
-    void detectProducersInverted(@Observes ProcessProducerMethod<LoggerProducers, Object> event) {
+    void detectProducersInverted(@Observes ProcessProducerMethod<TypedMessageBundleAndLoggerProducers, Object> event) {
         captureProducers(event.getAnnotatedProducerMethod(), event.getBean());
     }
 
     @SuppressWarnings("unchecked")
     void captureProducers(AnnotatedMethod<?> method, Bean<?> bean) {
         if (processTypesInModule) {
-            if (method.isAnnotationPresent(TypedLogger.class)) {
+            if (method.isAnnotationPresent(TypedMessageLogger.class)) {
                 this.loggerProducerBean = (Bean<Object>) bean;
             }
             if (method.isAnnotationPresent(TypedMessageBundle.class)) {

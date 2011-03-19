@@ -53,11 +53,11 @@ import org.jboss.seam.servlet.http.TypedParamValue;
 import org.jboss.seam.servlet.http.literal.CookieParamLiteral;
 import org.jboss.seam.servlet.http.literal.HeaderParamLiteral;
 import org.jboss.seam.servlet.http.literal.RequestParamLiteral;
-import org.jboss.seam.servlet.messages.ServletMessages;
+import org.jboss.seam.servlet.support.ServletMessages;
 import org.jboss.seam.solder.bean.NarrowingBeanBuilder;
 import org.jboss.seam.solder.literal.AnyLiteral;
 import org.jboss.seam.solder.literal.DefaultLiteral;
-import org.jboss.seam.solder.logging.Messages;
+import org.jboss.seam.solder.messages.Messages;
 import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**

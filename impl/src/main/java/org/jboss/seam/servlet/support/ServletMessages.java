@@ -14,12 +14,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.messages;
+package org.jboss.seam.servlet.support;
 
 import javax.enterprise.inject.spi.InjectionPoint;
 
-import org.jboss.seam.solder.logging.Message;
-import org.jboss.seam.solder.logging.MessageBundle;
+import org.jboss.seam.solder.messages.Message;
+import org.jboss.seam.solder.messages.MessageBundle;
 
 /**
  * Type-safe exception messages for the Seam Servlet module
