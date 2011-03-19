@@ -29,7 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.jboss.logging.Logger;
 import org.jboss.seam.exception.control.ExceptionToCatch;
 import org.jboss.seam.servlet.literal.WebRequestLiteral;
-import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.seam.servlet.support.ServletLogger;
 import org.jboss.seam.solder.beanManager.BeanManagerAware;
 import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
 import org.jboss.seam.solder.core.Requires;
@@ -41,7 +41,7 @@ import org.jboss.seam.solder.core.Requires;
  */
 @Requires("org.jboss.seam.exception.control.extension.CatchExtension")
 public class CatchExceptionFilter extends BeanManagerAware implements Filter {
-    private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
+    private transient ServletLogger log = Logger.getMessageLogger(ServletLogger.class, ServletLogger.CATEGORY);
 
     private boolean enabled = false;
 

@@ -16,8 +16,7 @@
  */
 package org.jboss.seam.servlet.test.util;
 
-import org.jboss.seam.servlet.log.ServletLog;
-import org.jboss.seam.servlet.messages.ServletMessages;
+import org.jboss.seam.servlet.support.ServletMessages;
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Filter;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
@@ -39,8 +38,8 @@ public class Deployments {
         return ShrinkWrap
                 .create(WebArchive.class, "test.war")
                 // add packages to include generated classes
-                .addPackages(false, ServletMessages.class.getPackage(), ServletLog.class.getPackage())
-                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.CR2"))
+                .addPackages(false, ServletMessages.class.getPackage())
+                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0-SNAPSHOT"))
                 .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 

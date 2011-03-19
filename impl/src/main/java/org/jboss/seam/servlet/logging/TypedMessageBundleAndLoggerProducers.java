@@ -15,10 +15,10 @@
  * limitations under the License.
  */
 
-package org.jboss.seam.servlet.log;
+package org.jboss.seam.servlet.logging;
 
 import static org.jboss.logging.Logger.getMessageLogger;
-import static org.jboss.seam.solder.logging.Messages.getBundle;
+import static org.jboss.seam.solder.messages.Messages.getBundle;
 import static org.jboss.seam.solder.reflection.Reflections.getRawType;
 import static org.jboss.seam.solder.util.Locales.toLocale;
 
@@ -28,21 +28,21 @@ import javax.enterprise.inject.Produces;
 import javax.enterprise.inject.spi.Annotated;
 import javax.enterprise.inject.spi.InjectionPoint;
 
-import org.jboss.seam.solder.log.Category;
-import org.jboss.seam.solder.log.Locale;
-import org.jboss.seam.solder.log.TypedCategory;
+import org.jboss.seam.solder.logging.Category;
+import org.jboss.seam.solder.logging.TypedCategory;
+import org.jboss.seam.solder.messages.Locale;
 
 /**
- * The <code>LoggerProducers</code> provides a producer method for all injected loggers and injected typed loggers.
+ * The <code>TypedMessageBundleAndLoggerProducers</code> provides a producer method for all injected loggers and injected typed loggers.
  * 
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
  * 
  * @author David Allen
  * @author Pete Muir
  */
-class LoggerProducers implements Serializable {
+class TypedMessageBundleAndLoggerProducers implements Serializable {
     @Produces
-    @TypedLogger
+    @TypedMessageLogger
     Object produceTypedLogger(InjectionPoint injectionPoint) {
         Annotated annotated = injectionPoint.getAnnotated();
         if (annotated.isAnnotationPresent(Category.class)) {
@@ -81,13 +81,4 @@ class LoggerProducers implements Serializable {
     private Class<?> getInjectionPointRawType(InjectionPoint injectionPoint) {
         return getRawType(injectionPoint.getType());
     }
-
-    private Class<?> getDeclaringRawType(InjectionPoint injectionPoint) {
-        if (injectionPoint.getBean() != null) {
-            return getRawType(injectionPoint.getBean().getBeanClass());
-        } else {
-            return getRawType(injectionPoint.getMember().getDeclaringClass());
-        }
-    }
-
 }

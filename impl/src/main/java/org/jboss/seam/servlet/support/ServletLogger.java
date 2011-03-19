@@ -14,7 +14,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.jboss.seam.servlet.log;
+package org.jboss.seam.servlet.support;
 
 import java.util.List;
 
@@ -23,9 +23,9 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
 import org.jboss.logging.Logger.Level;
-import org.jboss.seam.solder.logging.LogMessage;
-import org.jboss.seam.solder.logging.Message;
+import org.jboss.seam.solder.logging.Log;
 import org.jboss.seam.solder.logging.MessageLogger;
+import org.jboss.seam.solder.messages.Message;
 
 /**
  * Type-safe log messages for the Seam Servlet module
@@ -33,42 +33,42 @@ import org.jboss.seam.solder.logging.MessageLogger;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @MessageLogger
-public interface ServletLog {
+public interface ServletLogger {
     static String CATEGORY = "seam-servlet";
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet context initialized: %s")
     void servletContextInitialized(ServletContext ctx);
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet context destroyed: %s")
     void servletContextDestroyed(ServletContext ctx);
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet request initialized: %s")
     void servletRequestInitialized(ServletRequest request);
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet request destroyed: %s")
     void servletRequestDestroyed(ServletRequest request);
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet response initialized: %s")
     void servletResponseInitialized(ServletResponse response);
 
-    @LogMessage(level = Level.TRACE)
+    @Log(level = Level.TRACE)
     @Message("Servlet response destroyed: %s")
     void servletResponseDestroyed(ServletResponse response);
 
-    @LogMessage(level = Level.INFO)
+    @Log(level = Level.INFO)
     @Message("CDI BeanManager cannot be found. Not sending event %s with qualifiers %s")
     void skippingEventNoBeanManager(Object payload, @SuppressWarnings("rawtypes") List qualifiers);
 
-    @LogMessage(level = Level.INFO)
+    @Log(level = Level.INFO)
     @Message("Catch Integration for Servlets enabled")
     void catchIntegrationEnabled();
 
-    @LogMessage(level = Level.INFO)
+    @Log(level = Level.INFO)
     @Message("Could not locate CDI BeanManager. Catch Integration for Servlets disabled")
     void catchIntegrationDisabledNoBeanManager();
 }

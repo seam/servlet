@@ -21,7 +21,7 @@ import java.util.Arrays;
 
 import org.jboss.logging.Logger;
 import org.jboss.seam.servlet.WebApplication;
-import org.jboss.seam.servlet.log.ServletLog;
+import org.jboss.seam.servlet.support.ServletLogger;
 import org.jboss.seam.solder.beanManager.BeanManagerAware;
 import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
 
@@ -32,7 +32,7 @@ import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public abstract class AbstractServletEventBridge extends BeanManagerAware {
-    private transient ServletLog log = Logger.getMessageLogger(ServletLog.class, ServletLog.CATEGORY);
+    private transient ServletLogger log = Logger.getMessageLogger(ServletLogger.class, ServletLogger.CATEGORY);
 
     public static String WEB_APPLICATION_ATTRIBUTE_NAME = WebApplication.class.getName();
 

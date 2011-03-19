@@ -1,2 +1,2 @@
 org.jboss.seam.servlet.ServletExtension
-org.jboss.seam.servlet.log.LoggerExtension
+org.jboss.seam.servlet.logging.TypedMessageBundleAndLoggerExtension
