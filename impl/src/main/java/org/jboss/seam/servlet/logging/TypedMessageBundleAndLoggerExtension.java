@@ -50,7 +50,7 @@ public class TypedMessageBundleAndLoggerExtension implements Extension {
     private boolean processTypesInModule = false;
     private static final String MODULE_PACKAGE_PREFIX = "org.jboss.seam.servlet.";
 
-    TypedMessageBundleAndLoggerExtension() {
+    public TypedMessageBundleAndLoggerExtension() {
         this.messageLoggerTypes = new HashSet<AnnotatedType<?>>();
         this.messageBundleTypes = new HashSet<AnnotatedType<?>>();
         Package cdi = BeanManager.class.getPackage();

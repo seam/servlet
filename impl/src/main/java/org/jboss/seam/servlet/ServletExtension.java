@@ -71,7 +71,7 @@ public class ServletExtension implements Extension {
     private final Map<Class<? extends Annotation>, TypedParamProducerBlueprint> producerBlueprints;
     private final Map<Class<?>, Member> converterMembersByType;
 
-    ServletExtension() {
+    public ServletExtension() {
         producerBlueprints = new HashMap<Class<? extends Annotation>, TypedParamProducerBlueprint>();
         producerBlueprints.put(RequestParam.class, new TypedParamProducerBlueprint(RequestParamLiteral.INSTANCE));
         producerBlueprints.put(HeaderParam.class, new TypedParamProducerBlueprint(HeaderParamLiteral.INSTANCE));
