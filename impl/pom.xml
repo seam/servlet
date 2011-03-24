@@ -64,8 +64,6 @@
         <dependency>
             <groupId>org.jboss.seam.catch</groupId>
             <artifactId>seam-catch-api</artifactId>
-            <!-- FIX THIS -->
-            <version>3.0.0.CR2</version>
             <scope>provided</scope>
         </dependency>
 
