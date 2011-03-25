@@ -46,7 +46,7 @@ public class ImplicitServletObjectsHolder {
 
     private ServletContext servletCtx;
 
-    private final ThreadLocal<ServletRequestContext> requestCtx = new ThreadLocal<ServletRequestContext>() {
+    private final ThreadLocal<ServletRequestContext> requestCtx = new InheritableThreadLocal<ServletRequestContext>() {
         @Override
         protected ServletRequestContext initialValue() {
             return null;
