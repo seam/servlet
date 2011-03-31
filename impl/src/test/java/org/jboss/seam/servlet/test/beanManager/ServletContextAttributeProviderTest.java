@@ -53,7 +53,7 @@ public class ServletContextAttributeProviderTest {
                 .addClasses(ServletContextAttributeProvider.class, HttpServletRequestContext.class)
                 .addPackage(ImplicitServletObjectsProducer.class.getPackage())
                 .addPackages(true, ServletEventBridgeListener.class.getPackage())
-                .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
+                .addAsServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
     }
 
     @Inject

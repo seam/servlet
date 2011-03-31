@@ -47,6 +47,9 @@ import org.jboss.seam.servlet.http.RequestParam;
 import org.jboss.seam.servlet.http.TypedParamValue;
 import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -65,14 +68,19 @@ public class RequestParamProducerTest {
 
     @Deployment
     public static Archive<?> createDeployment() {
-        return Deployments
-                .createMockableBeanWebArchive()
+        return Deployments.createMockableBeanWebArchive().addAsLibrary(createSeamServlet());
+    }
+
+    public static JavaArchive createSeamServlet() {
+        return ShrinkWrap
+                .create(JavaArchive.class)
                 .addClasses(ServletExtension.class, Suit.class)
                 .addPackages(
                         true,
                         Deployments.exclude(ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class,
                                 RedirectBuilderImpl.class), TypedParamValue.class.getPackage())
-                .addServiceProvider(Extension.class, ServletExtension.class);
+                .addAsServiceProvider(Extension.class, ServletExtension.class)
+                .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     @Inject
