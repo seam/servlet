@@ -21,7 +21,7 @@ import javax.servlet.ServletContext;
 /**
  * Information about the current web application. This object can be used to observe the startup and shutdown events without
  * tying to the servlet API.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class WebApplication {

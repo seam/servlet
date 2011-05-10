@@ -31,11 +31,11 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * A qualifier used to distinguish resources (such as exception handlers) that are appropriate for an HTTP request not handled
  * by a more specific Servlet (such as JAX-RS or JSF).
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Qualifier
-@Target({ TYPE, METHOD, PARAMETER, FIELD })
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
 public @interface WebRequest {

@@ -28,7 +28,7 @@ import org.jboss.seam.solder.beanManager.BeanManagerUnavailableException;
 /**
  * An abstract class that handles sending events to the CDI event bus with support for environments where injection into the
  * Servlet component is not available.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public abstract class AbstractServletEventBridge extends BeanManagerAware {

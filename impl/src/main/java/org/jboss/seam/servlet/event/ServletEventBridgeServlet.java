@@ -17,7 +17,7 @@ import org.jboss.seam.servlet.event.literal.StartedLiteral;
  * Leverages the lifecycle of a Servlet to generate a CDI when the web application has been fully deployed and when it is
  * undeployed. This Servlet is assigned a high load-on-startup value (99999) in this module's web-fragment.xml to ensure it
  * comes last in the list of ordered Servlets.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ServletEventBridgeServlet extends AbstractServletEventBridge implements Servlet {

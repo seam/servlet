@@ -36,12 +36,13 @@ import org.jboss.seam.solder.logging.Category;
 /**
  * A manager for tracking the contextual Servlet objects, specifically the {@link ServletContext}, {@link HttpServletRequest}
  * and {@link HttpServletResponse}.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @ApplicationScoped
 public class ImplicitServletObjectsHolder {
-    @Inject @Category(ServletLogger.CATEGORY)
+    @Inject
+    @Category(ServletLogger.CATEGORY)
     private ServletLogger log;
 
     private ServletContext servletCtx;

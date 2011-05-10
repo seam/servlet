@@ -16,12 +16,6 @@
  */
 package org.jboss.seam.servlet.http;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -29,60 +23,66 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
  * Qualifies injection points that should have their values fetched from a corresponding HTTP request parameter (i.e., query
  * string or form parameter).
- * 
+ * <p/>
  * <p>
  * Example explicit usage, assuming a servlet path /book.jsf?id=3
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject
  * &#064;RequestParam(&quot;id&quot;)
  * private String bookId;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Example implicit usage, assuming the same servlet path
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject
  * &#064;RequestParam
  * private String id;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Example explicit usage with default value
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject
  * &#064;RequestParam(&quot;id&quot;)
  * &#064;DefaultValue(&quot;1&quot;)
  * private String bookId;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Because the bean produced is dependent-scoped, use of this annotation on class fields and bean properties is only safe for
  * request-scoped beans. Beans with longer scopes should wrap this bean in a provider and retrieve the value on demand.
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject &#064;RequestParam(&quot;id&quot;)
  * private Instance&lt;String&gt; bookIdProvider;
- * 
+ *
  * ...
- * 
+ *
  * String bookId = bookIdProvider.get();
  * </pre>
- * 
+ *
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Qualifier
-@Target({ TYPE, METHOD, PARAMETER, FIELD })
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
 public @interface RequestParam {

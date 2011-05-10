@@ -16,12 +16,6 @@
  */
 package org.jboss.seam.servlet.http;
 
-import static java.lang.annotation.ElementType.TYPE;
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.METHOD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -29,48 +23,54 @@ import java.lang.annotation.Target;
 import javax.enterprise.util.Nonbinding;
 import javax.inject.Qualifier;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
  * Qualifies injection points that should have their values fetched from a corresponding HTTP header.
- * 
+ * <p/>
  * <p>
  * Example usage:
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject
  * &#064;HeaderParam(&quot;Cache-Control&quot;)
  * private String cacheControl;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Example usage with default value
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject
  * &#064;HeaderParam(&quot;Cache-Control&quot;)
  * &#064;DefaultValue(&quot;no-cache&quot;)
  * private String cacheControl;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Because the bean produced is dependent-scoped, use of this annotation on class fields and bean properties is only safe for
  * request-scoped beans. Beans with longer scopes should wrap this bean in a provider and retrieve the value on demand.
  * </p>
- * 
+ * <p/>
  * <pre>
  * &#064;Inject &#064;HeaderParam(&quot;Cache-Control&quot;)
  * private Instance&lt;String&gt; cacheControlProvider;
- * 
+ *
  * ...
- * 
+ *
  * String cacheControl = cacheControlProvider.get();
  * </pre>
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Qualifier
-@Target({ TYPE, METHOD, PARAMETER, FIELD })
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
 public @interface HeaderParam {

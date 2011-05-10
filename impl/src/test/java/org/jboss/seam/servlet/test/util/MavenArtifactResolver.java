@@ -20,31 +20,31 @@ import java.io.File;
 
 /**
  * A temporary resolver that converts a Maven artifact reference into a {@link java.io.File} object.
- * 
+ * <p/>
  * <p>
  * This approach is an interim solution for Maven projects until the open feature request to add formally add artifacts to a
  * test (<a href="https://jira.jboss.org/browse/ARQ-66">ARQ-66</a>) is implementated.
  * </p>
- * 
+ * <p/>
  * <p>
  * The testCompile goal will resolve any test dependencies and put them in your local Maven repository. By the time the test
  * executes, you can be sure that the JAR files you need will be in your local repository.
  * </p>
- * 
+ * <p/>
  * <p>
  * Example usage:
  * </p>
- * 
+ * <p/>
  * <pre>
  * WebArchive war = ShrinkWrap.create(&quot;test.war&quot;, WebArchive.class).addLibrary(
  *         MavenArtifactResolver.resolve(&quot;commons-lang:commons-lang:2.5&quot;));
  * </pre>
- * 
+ * <p/>
  * <p>
  * If you are using an alternate local Maven repository, you need to pass it to the Maven surefire plugin using the following
  * stanza in the plugin configuration element:
  * </p>
- * 
+ * <p/>
  * <pre>
  * &lt;systemProperties&gt;
  *    &lt;property&gt;
@@ -53,11 +53,11 @@ import java.io.File;
  *    &lt;/property&gt;
  * &lt;/systemProperties&gt;
  * </pre>
- * 
+ * <p/>
  * <p>
  * Another approach to pull in a library is to add packages recursively from the root library package.
  * </p>
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class MavenArtifactResolver {

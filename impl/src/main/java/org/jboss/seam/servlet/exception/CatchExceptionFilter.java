@@ -36,7 +36,7 @@ import org.jboss.seam.solder.core.Requires;
 
 /**
  * A bridge that forwards unhandled exceptions to the Seam exception handling facility (Seam Catch).
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Requires("org.jboss.seam.exception.control.extension.CatchExtension")

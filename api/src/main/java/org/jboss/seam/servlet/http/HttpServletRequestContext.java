@@ -13,7 +13,7 @@ import org.jboss.seam.solder.core.Veto;
 /**
  * Encapsulates the {@link HttpServletRequest} and {@link HttpServletResponse} for the current request and dually provides
  * access to the {@link ServletContext} and {@link HttpSession}, which are accessed from the {@link HttpServletRequest} object.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 @Veto

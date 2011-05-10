@@ -23,7 +23,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  * A helper bean that can be injected to check the status of the HttpSession and acquiring it
- * 
+ *
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
@@ -34,7 +34,7 @@ public class HttpSessionStatus {
 
     /**
      * Checks whether there is an active HttpSession associated with the current request.
-     * 
+     *
      * @return Whether a valid session is associated with this request
      */
     public boolean isActive() {
@@ -48,7 +48,7 @@ public class HttpSessionStatus {
     /**
      * Returns the current HttpSession associated with this request. If a session is not associated with the current request, a
      * new session is first initialized.
-     * 
+     *
      * @return HttpSession The existing session, or a new session if one has not yet been created
      */
     public HttpSession get() {

@@ -16,10 +16,6 @@
  */
 package org.jboss.seam.servlet.event;
 
-import static java.lang.annotation.ElementType.FIELD;
-import static java.lang.annotation.ElementType.PARAMETER;
-import static java.lang.annotation.RetentionPolicy.RUNTIME;
-
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -28,15 +24,19 @@ import javax.inject.Qualifier;
 
 import org.jboss.seam.servlet.WebApplication;
 
+import static java.lang.annotation.ElementType.FIELD;
+import static java.lang.annotation.ElementType.PARAMETER;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
 /**
  * Qualifies observer method parameters to select the event fired when the web application has started.
- * 
+ * <p/>
  * Intented to be used with the event parameter {@link WebApplication}
- * 
+ *
  * @author Dan Allen
  */
 @Qualifier
-@Target({ FIELD, PARAMETER })
+@Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Documented
 public @interface Started {

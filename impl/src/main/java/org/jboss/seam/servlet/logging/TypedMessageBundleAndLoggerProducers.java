@@ -17,11 +17,6 @@
 
 package org.jboss.seam.servlet.logging;
 
-import static org.jboss.logging.Logger.getMessageLogger;
-import static org.jboss.seam.solder.messages.Messages.getBundle;
-import static org.jboss.seam.solder.reflection.Reflections.getRawType;
-import static org.jboss.seam.solder.util.Locales.toLocale;
-
 import java.io.Serializable;
 
 import javax.enterprise.inject.Produces;
@@ -32,11 +27,16 @@ import org.jboss.seam.solder.logging.Category;
 import org.jboss.seam.solder.logging.TypedCategory;
 import org.jboss.seam.solder.messages.Locale;
 
+import static org.jboss.logging.Logger.getMessageLogger;
+import static org.jboss.seam.solder.messages.Messages.getBundle;
+import static org.jboss.seam.solder.reflection.Reflections.getRawType;
+import static org.jboss.seam.solder.util.Locales.toLocale;
+
 /**
  * The <code>TypedMessageBundleAndLoggerProducers</code> provides a producer method for all injected loggers and injected typed loggers.
- * 
+ * <p/>
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
- * 
+ *
  * @author David Allen
  * @author Pete Muir
  */

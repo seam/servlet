@@ -16,9 +16,6 @@
  */
 package org.jboss.seam.servlet.test.http;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -33,7 +30,6 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.Assert;
-
 import org.jboss.arquillian.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.servlet.ServletExtension;
@@ -49,6 +45,9 @@ import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
@@ -179,12 +178,12 @@ public class RequestParamProducerTest {
         HttpServletRequest req = mock(HttpServletRequest.class);
 
         Map<String, String[]> parameters = new HashMap<String, String[]>();
-        parameters.put(IMPLICIT_PARAM, new String[] { IMPLICIT_VALUE });
-        parameters.put(EXPLICIT_PARAM, new String[] { EXPLICIT_VALUE });
-        parameters.put("page", new String[] { "1" });
-        parameters.put("pageSize", new String[] { "25" });
-        parameters.put("suit", new String[] { Suit.DIAMONDS.name() });
-        parameters.put("airDate", new String[] { "2010-08-01 20:00" });
+        parameters.put(IMPLICIT_PARAM, new String[]{IMPLICIT_VALUE});
+        parameters.put(EXPLICIT_PARAM, new String[]{EXPLICIT_VALUE});
+        parameters.put("page", new String[]{"1"});
+        parameters.put("pageSize", new String[]{"25"});
+        parameters.put("suit", new String[]{Suit.DIAMONDS.name()});
+        parameters.put("airDate", new String[]{"2010-08-01 20:00"});
         when(req.getParameterMap()).thenReturn(parameters);
         when(req.getParameter(IMPLICIT_PARAM)).thenReturn(IMPLICIT_VALUE);
         when(req.getParameter(EXPLICIT_PARAM)).thenReturn(EXPLICIT_VALUE);
@@ -198,7 +197,7 @@ public class RequestParamProducerTest {
         when(req.getHeaderNames()).thenReturn(headerNames.elements());
         when(req.getHeader("Cache-Control")).thenReturn("no-cache");
 
-        Cookie[] cookies = new Cookie[] { new Cookie("chocolate", "chip") };
+        Cookie[] cookies = new Cookie[]{new Cookie("chocolate", "chip")};
         when(req.getCookies()).thenReturn(cookies);
 
         return req;

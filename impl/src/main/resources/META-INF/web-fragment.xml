@@ -14,10 +14,10 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---> 
+-->
 <web-fragment version="3.0" xmlns="http://java.sun.com/xml/ns/javaee"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
+              xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd">
 
     <name>SeamServlet</name>
 
@@ -40,12 +40,12 @@
             <others/>
         </before>
     </ordering>
-    
+
     <listener>
         <display-name>Servlet Event Bridge Listener</display-name>
         <listener-class>org.jboss.seam.servlet.event.ServletEventBridgeListener</listener-class>
     </listener>
-    
+
     <servlet>
         <display-name>Servlet Event Bridge Servlet</display-name>
         <servlet-name>Servlet Event Bridge Servlet</servlet-name>
@@ -59,21 +59,21 @@
         <filter-name>Servlet Event Bridge Filter</filter-name>
         <filter-class>org.jboss.seam.servlet.event.ServletEventBridgeFilter</filter-class>
     </filter>
-    
+
     <filter-mapping>
         <filter-name>Servlet Event Bridge Filter</filter-name>
         <url-pattern>/*</url-pattern>
-    </filter-mapping> 
-    
+    </filter-mapping>
+
     <filter>
         <filter-name>Catch Exception Filter</filter-name>
         <filter-class>org.jboss.seam.servlet.exception.CatchExceptionFilter</filter-class>
     </filter>
-    
+
     <filter-mapping>
         <filter-name>Catch Exception Filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 
-    
+
 </web-fragment>

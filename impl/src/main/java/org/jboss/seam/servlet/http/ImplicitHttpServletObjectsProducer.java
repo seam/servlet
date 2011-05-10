@@ -34,9 +34,9 @@ import org.jboss.seam.servlet.event.ImplicitServletObjectsHolder;
 /**
  * A producer for implicit HTTP Servlet objects, specifically the {@link HttpServletRequest}, {@link HttpServletResponse} and
  * {@link HttpSession}. References are obtained from the {@link ImplicitServletObjectsHolder}.
- * 
+ * <p/>
  * TODO should probably throw IllegalStateException if accessed outside request
- * 
+ *
  * @author Nicklas Karlsson
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */

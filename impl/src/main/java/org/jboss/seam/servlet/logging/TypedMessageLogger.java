@@ -30,16 +30,15 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Internal-qualifier used to identify the typed logger producer for the wrapping bean.
- * 
+ * <p/>
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
- * 
+ *
  * @author Pete Muir
- * 
  */
 @Qualifier
-@Target({ TYPE, METHOD, PARAMETER, FIELD })
+@Target({TYPE, METHOD, PARAMETER, FIELD})
 @Retention(RUNTIME)
 @Documented
-@interface TypedMessageLogger {
+        @interface TypedMessageLogger {
 
 }

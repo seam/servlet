@@ -16,9 +16,6 @@
  */
 package org.jboss.seam.servlet.test.event;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-
 import javax.inject.Inject;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletConfig;
@@ -47,6 +44,9 @@ import org.jboss.seam.servlet.test.util.Deployments;
 import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * @author Nicklas Karlsson

@@ -33,7 +33,7 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
  * A producer for a String bean qualified &#064;{@link CookieParam}.
- * 
+ * <p/>
  * <p>
  * Provides a producer method that retrieves the value of the specified cookie from {@link HttpServletRequest#getCookies()}
  * array and makes it available as a dependent-scoped bean of type String qualified &#064;CookieParam. The name of the cookie to
@@ -44,9 +44,8 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
  * If the cookie is not present, and the injection point is annotated with &#064;DefaultValue, the value of the
  * &#064;DefaultValue annotation is returned instead. If &#064;DefaultValue is not present, <code>null</code> is returned.
  * </p>
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
- * 
  * @see CookieParam
  * @see DefaultValue
  */

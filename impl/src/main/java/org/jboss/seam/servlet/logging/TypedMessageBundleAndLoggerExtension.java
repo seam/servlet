@@ -37,9 +37,9 @@ import org.jboss.seam.solder.messages.MessageBundle;
 
 /**
  * Adds TypedMessageBundleAndLoggerProducers to the deployment, and detects and installs beans for any typed loggers defined.
- * 
+ * <p/>
  * <strong>TEMPORARY UNTIL GLASSFISH-15735 is resolved</strong>
- * 
+ *
  * @author Pete Muir
  */
 public class TypedMessageBundleAndLoggerExtension implements Extension {

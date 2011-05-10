@@ -16,12 +16,6 @@
  */
 package org.jboss.seam.servlet.test.beanManager;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import javax.enterprise.inject.Instance;
 import javax.enterprise.inject.spi.BeanManager;
 import javax.inject.Inject;
@@ -36,11 +30,17 @@ import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
 import org.jboss.seam.servlet.event.ServletEventBridgeListener;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.test.util.Deployments;
-import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.seam.solder.beanManager.BeanManagerLocator;
 import org.jboss.seam.solder.beanManager.BeanManagerProvider;
+import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 /**
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>

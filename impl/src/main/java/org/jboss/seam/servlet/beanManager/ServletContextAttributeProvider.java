@@ -23,9 +23,8 @@ import org.jboss.seam.solder.beanManager.BeanManagerProvider;
 
 /**
  * A BeanManager provider for the Servlet Context attribute "javax.enterprise.inject.spi.BeanManager"
- * 
+ *
  * @author Nicklas Karlsson
- * 
  * @see org.jboss.seam.servlet.ImplicitServletObjectsProducer
  */
 public class ServletContextAttributeProvider implements BeanManagerProvider {

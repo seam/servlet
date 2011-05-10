@@ -62,7 +62,7 @@ import org.jboss.seam.solder.reflection.PrimitiveTypes;
 
 /**
  * Generates producers to map to the type at an HTTP parameter injection point.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class ServletExtension implements Extension {
@@ -210,7 +210,7 @@ public class ServletExtension implements Extension {
     }
 
     private <T> Bean<T> createTypedParamProducer(Bean<Object> delegate, Class<T> targetType, Annotation qualifier,
-            BeanManager beanManager) {
+                                                 BeanManager beanManager) {
         return new NarrowingBeanBuilder<T>(delegate, beanManager).readFromType(beanManager.createAnnotatedType(targetType))
                 .qualifiers(qualifier).create();
     }
@@ -237,7 +237,7 @@ public class ServletExtension implements Extension {
         }
 
         // unchecked operation to support inverted observer type params
-        @SuppressWarnings({ "rawtypes", "unchecked" })
+        @SuppressWarnings({"rawtypes", "unchecked"})
         public void setProducer(Bean producer) {
             this.producer = producer;
         }

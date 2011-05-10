@@ -21,9 +21,9 @@ import javax.servlet.http.Cookie;
 /**
  * A builder, similar in style to the ResponseBuilder from JAX-RS, that simplifies the task of sending a redirect URL to the
  * client.
- * 
+ * <p/>
  * <strong>This is a proposed API and is subject to change</strong>
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public interface RedirectBuilder {

@@ -14,10 +14,10 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---> 
+-->
 <arquillian xmlns="http://jboss.com/arquillian"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:jboss="urn:arq:org.jboss.arquillian.container.jbossas.managed_6">
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:jboss="urn:arq:org.jboss.arquillian.container.jbossas.managed_6">
 
     <!-- Uncomment to have test archives exported to the file system for inspection -->
     <!--
@@ -25,7 +25,7 @@
         <deploymentExportPath>target/</deploymentExportPath>
     </engine>
     -->
-    
+
     <jboss:container>
         <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m</javaVmArguments>
     </jboss:container>

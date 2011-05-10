@@ -26,7 +26,7 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 
 /**
  * A utility class to create seed archives for Arquillian tests.
- * 
+ *
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class Deployments {
@@ -37,7 +37,7 @@ public class Deployments {
     public static WebArchive createBeanWebArchive() {
         return ShrinkWrap
                 .create(WebArchive.class, "test.war")
-                // add packages to include generated classes
+                        // add packages to include generated classes
                 .addPackages(false, ServletMessages.class.getPackage())
                 .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.CR4"))
                 .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
