@@ -26,7 +26,9 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-
+/**
+ * @author Martin Gencur
+ */
 @RunWith(Arquillian.class)
 public class CharacterEncodingObserverTest
 {
