@@ -16,8 +16,7 @@
   limitations under the License.
 -->
 <arquillian xmlns="http://jboss.com/arquillian"
-            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-            xmlns:jboss="urn:arq:org.jboss.arquillian.container.jbossas.managed_6">
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <!-- Uncomment to have test archives exported to the file system for inspection -->
     <!--
@@ -26,8 +25,13 @@
     </engine>
     -->
 
-    <jboss:container>
-        <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m</javaVmArguments>
-    </jboss:container>
+    <container qualifier="jbossas" default="true">
+        <configuration>
+            <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m</javaVmArguments>
+        </configuration>
+        <protocol type="jmx-as7">
+            <property name="executionType">REMOTE</property>
+        </protocol>
+    </container>
 
 </arquillian>

@@ -17,34 +17,47 @@
 package org.jboss.seam.servlet.test.util;
 
 import org.jboss.seam.servlet.support.ServletMessages;
+import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ArchivePath;
 import org.jboss.shrinkwrap.api.Filter;
+import org.jboss.shrinkwrap.api.GenericArchive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.DependencyResolvers;
+import org.jboss.shrinkwrap.resolver.api.maven.MavenDependencyResolver;
 
 /**
  * A utility class to create seed archives for Arquillian tests.
- *
+ * 
  * @author <a href="http://community.jboss.org/people/dan.j.allen">Dan Allen</a>
  */
 public class Deployments {
+
+    public static final Archive<?>[] SEAM_SOLDER = DependencyResolvers.use(MavenDependencyResolver.class)
+            .loadReposFromPom("pom.xml").artifact("org.jboss.seam.solder:seam-solder").exclusion("*")
+            .resolveAs(GenericArchive.class).toArray(new Archive<?>[0]);
+
+    public static final Archive<?>[] MOCKITO = DependencyResolvers.use(MavenDependencyResolver.class)
+            .loadReposFromPom("pom.xml").artifact("org.mockito:mockito-all").exclusion("*")
+            .resolveAs(GenericArchive.class).toArray(new Archive<?>[0]);
+
     public static JavaArchive createBeanArchive() {
-        return ShrinkWrap.create(JavaArchive.class, "test.jar").addManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+        return ShrinkWrap.create(JavaArchive.class, "test.jar").addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     public static WebArchive createBeanWebArchive() {
         return ShrinkWrap
                 .create(WebArchive.class, "test.war")
-                        // add packages to include generated classes
+                // add packages to include generated classes
                 .addPackages(false, ServletMessages.class.getPackage())
-                .addLibrary(MavenArtifactResolver.resolve("org.jboss.seam.solder:seam-solder:3.0.0.CR4"))
-                .addWebResource(EmptyAsset.INSTANCE, "beans.xml");
+                .addAsLibraries(SEAM_SOLDER)
+                .addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
     }
 
     public static WebArchive createMockableBeanWebArchive() {
-        return createBeanWebArchive().addLibrary(MavenArtifactResolver.resolve("org.mockito:mockito-all:1.8.4"));
+        return createBeanWebArchive().addAsLibraries(MOCKITO);
     }
 
     public static Filter<ArchivePath> exclude(final Class<?>... classes) {

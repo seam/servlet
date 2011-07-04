@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 
-import org.jboss.arquillian.api.Deployment;
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.servlet.ImplicitServletObjectsProducer;
 import org.jboss.seam.servlet.ServerInfo;
@@ -53,7 +53,7 @@ public class ServletContextAttributeProviderTest {
                 .addClasses(ServletContextAttributeProvider.class, HttpServletRequestContext.class)
                 .addPackage(ImplicitServletObjectsProducer.class.getPackage())
                 .addPackages(true, ServletEventBridgeListener.class.getPackage())
-                .addServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
+                .addAsServiceProvider(BeanManagerProvider.class, ServletContextAttributeProvider.class);
     }
 
     @Inject

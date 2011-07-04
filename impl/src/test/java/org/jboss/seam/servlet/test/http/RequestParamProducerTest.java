@@ -30,9 +30,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
 import junit.framework.Assert;
-import org.jboss.arquillian.api.Deployment;
+
+import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.seam.servlet.ServletExtension;
+import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.http.CookieParam;
 import org.jboss.seam.servlet.http.DefaultValue;
 import org.jboss.seam.servlet.http.HeaderParam;
@@ -71,7 +73,8 @@ public class RequestParamProducerTest {
                         true,
                         Deployments.exclude(ImplicitHttpServletObjectsProducer.class, RedirectBuilder.class,
                                 RedirectBuilderImpl.class), TypedParamValue.class.getPackage())
-                .addServiceProvider(Extension.class, ServletExtension.class);
+                .addPackage(ServletRequestContext.class.getPackage())
+                .addAsServiceProvider(Extension.class, ServletExtension.class);
     }
 
     @Inject
