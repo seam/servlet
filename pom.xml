@@ -45,7 +45,6 @@
     <modules>
         <module>api</module>
         <module>impl</module>
-        <module>combined</module>
     </modules>
     
     <properties>
@@ -64,12 +63,6 @@
             </dependency>
 
             <!-- Override submodule versions from org.jboss.seam:seam-bom -->
-            <dependency>
-                <groupId>org.jboss.seam.servlet</groupId>
-                <artifactId>seam-servlet-impl</artifactId>
-                <version>${project.version}</version>
-            </dependency>
-
             <dependency>
                 <groupId>org.jboss.seam.servlet</groupId>
                 <artifactId>seam-servlet-api</artifactId>
