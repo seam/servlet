@@ -21,7 +21,7 @@
     <parent>
         <groupId>org.jboss.seam.servlet</groupId>
         <artifactId>seam-servlet-parent</artifactId>
-        <version>3.0.1-SNAPSHOT</version>
+        <version>3.1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -38,12 +38,6 @@
         <dependency>
             <groupId>org.jboss.seam.servlet</groupId>
             <artifactId>seam-servlet-api</artifactId>
-            <optional>false</optional>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet-impl</artifactId>
             <optional>false</optional>
         </dependency>
 
@@ -71,7 +65,7 @@
 
         <dependency>
             <groupId>org.jboss.seam.servlet</groupId>
-            <artifactId>seam-servlet-impl</artifactId>
+            <artifactId>seam-servlet</artifactId>
             <version>${project.version}</version>
             <classifier>sources</classifier>
         </dependency>
