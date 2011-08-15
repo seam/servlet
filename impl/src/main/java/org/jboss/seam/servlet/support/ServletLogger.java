@@ -22,7 +22,7 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
-import org.jboss.logging.Logger.Level;
+import org.jboss.seam.solder.logging.Logger.Level;
 import org.jboss.seam.solder.logging.Log;
 import org.jboss.seam.solder.logging.MessageLogger;
 import org.jboss.seam.solder.messages.Message;

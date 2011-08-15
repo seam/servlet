@@ -26,7 +26,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 
-import org.jboss.logging.Logger;
+import org.jboss.seam.solder.logging.Logger;
 import org.jboss.seam.exception.control.ExceptionToCatch;
 import org.jboss.seam.servlet.literal.WebRequestLiteral;
 import org.jboss.seam.servlet.support.ServletLogger;

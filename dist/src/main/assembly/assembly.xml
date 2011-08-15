@@ -46,6 +46,7 @@
             <outputDirectory>artifacts</outputDirectory>
             <useProjectArtifact>false</useProjectArtifact>
             <includes>
+                <include>org.jboss.seam.servlet:seam-servlet-api</include>
                 <include>org.jboss.seam.servlet:seam-servlet</include>
             </includes>
             <excludes>
