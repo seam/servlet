@@ -19,7 +19,7 @@ package org.jboss.seam.servlet.event;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 
-import org.jboss.logging.Logger;
+import org.jboss.seam.solder.logging.Logger;
 import org.jboss.seam.servlet.WebApplication;
 import org.jboss.seam.servlet.support.ServletLogger;
 import org.jboss.seam.solder.beanManager.BeanManagerAware;

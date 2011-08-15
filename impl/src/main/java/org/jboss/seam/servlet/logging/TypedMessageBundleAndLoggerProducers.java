@@ -27,7 +27,7 @@ import org.jboss.seam.solder.logging.Category;
 import org.jboss.seam.solder.logging.TypedCategory;
 import org.jboss.seam.solder.messages.Locale;
 
-import static org.jboss.logging.Logger.getMessageLogger;
+import static org.jboss.seam.solder.logging.Logger.getMessageLogger;
 import static org.jboss.seam.solder.messages.Messages.getBundle;
 import static org.jboss.seam.solder.reflection.Reflections.getRawType;
 import static org.jboss.seam.solder.util.Locales.toLocale;
