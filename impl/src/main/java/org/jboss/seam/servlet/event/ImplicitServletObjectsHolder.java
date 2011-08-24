@@ -31,7 +31,7 @@ import org.jboss.seam.servlet.ServletRequestContext;
 import org.jboss.seam.servlet.beanManager.ServletContextAttributeProvider;
 import org.jboss.seam.servlet.http.HttpServletRequestContext;
 import org.jboss.seam.servlet.support.ServletLogger;
-import org.jboss.seam.solder.logging.Category;
+import org.jboss.seam.logging.Category;
 
 /**
  * A manager for tracking the contextual Servlet objects, specifically the {@link ServletContext}, {@link HttpServletRequest}
