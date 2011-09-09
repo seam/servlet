@@ -27,7 +27,7 @@
 
     <container qualifier="jbossas" default="true">
         <configuration>
-            <javaVmArguments>-Xmx512m -XX:MaxPermSize=128m</javaVmArguments>
+            <property name="javaVmArguments">-Xmx1024m -XX:MaxPermSize=512m</property>
         </configuration>
         <protocol type="jmx-as7">
             <property name="executionType">REMOTE</property>
